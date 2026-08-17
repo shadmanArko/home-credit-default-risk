@@ -54,6 +54,7 @@ access_token
 # ============================================================
 
 data/raw/*
+data/raw/.complete/
 data/interim/*
 data/processed/*
 

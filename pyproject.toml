@@ -30,6 +30,7 @@ build-backend = "uv_build"
 line-length = 88
 target-version = "py312"
 
+
 [tool.ruff.lint]
 select = [
     "E",
@@ -38,6 +39,7 @@ select = [
     "UP",
     "B",
 ]
+extend-fixable = ["I"]
 
 [tool.ruff.format]
 quote-style = "double"
