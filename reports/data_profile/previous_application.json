@@ -1,0 +1,767 @@
+{
+  "table": "previous_application.csv",
+  "row_count": 1670214,
+  "column_count": 37,
+  "columns": {
+    "SK_ID_PREV": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1670214,
+      "min": 1000001,
+      "max": 2845382,
+      "avg": 1923089.1353305625,
+      "median": 1923109
+    },
+    "SK_ID_CURR": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 338857,
+      "min": 100001,
+      "max": 456255,
+      "avg": 278357.1740986484,
+      "median": 278743
+    },
+    "NAME_CONTRACT_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": "Cash loans",
+          "count": 747553
+        },
+        {
+          "value": "Consumer loans",
+          "count": 729151
+        },
+        {
+          "value": "Revolving loans",
+          "count": 193164
+        },
+        {
+          "value": "XNA",
+          "count": 346
+        }
+      ]
+    },
+    "AMT_ANNUITY": {
+      "dtype": "DOUBLE",
+      "null_count": 372235,
+      "null_pct": 22.2867,
+      "distinct_count": 357959,
+      "min": 0.0,
+      "max": 418058.145,
+      "avg": 15955.120659452168,
+      "median": 11229.138422932225
+    },
+    "AMT_APPLICATION": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 93885,
+      "min": 0.0,
+      "max": 6905160.0,
+      "avg": 175233.86036043006,
+      "median": 71285.23912568392
+    },
+    "AMT_CREDIT": {
+      "dtype": "DOUBLE",
+      "null_count": 1,
+      "null_pct": 0.0001,
+      "distinct_count": 86803,
+      "min": 0.0,
+      "max": 6905160.0,
+      "avg": 196114.02121797958,
+      "median": 80195.3200643911
+    },
+    "AMT_DOWN_PAYMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 895844,
+      "null_pct": 53.6365,
+      "distinct_count": 29278,
+      "min": -0.9,
+      "max": 3060045.0,
+      "avg": 6697.402138796693,
+      "median": 1371.1001631451502
+    },
+    "AMT_GOODS_PRICE": {
+      "dtype": "DOUBLE",
+      "null_count": 385515,
+      "null_pct": 23.0818,
+      "distinct_count": 93885,
+      "min": 0.0,
+      "max": 6905160.0,
+      "avg": 227847.27928334597,
+      "median": 110800.02851857095
+    },
+    "WEEKDAY_APPR_PROCESS_START": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 7,
+      "top_values": [
+        {
+          "value": "TUESDAY",
+          "count": 255118
+        },
+        {
+          "value": "WEDNESDAY",
+          "count": 255010
+        },
+        {
+          "value": "MONDAY",
+          "count": 253557
+        },
+        {
+          "value": "FRIDAY",
+          "count": 252048
+        },
+        {
+          "value": "THURSDAY",
+          "count": 249099
+        },
+        {
+          "value": "SATURDAY",
+          "count": 240631
+        },
+        {
+          "value": "SUNDAY",
+          "count": 164751
+        }
+      ]
+    },
+    "HOUR_APPR_PROCESS_START": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 24,
+      "min": 0,
+      "max": 23,
+      "avg": 12.484181667738385,
+      "median": 12
+    },
+    "FLAG_LAST_APPL_PER_CONTRACT": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "top_values": [
+        {
+          "value": "Y",
+          "count": 1661739
+        },
+        {
+          "value": "N",
+          "count": 8475
+        }
+      ]
+    },
+    "NFLAG_LAST_APPL_IN_DAY": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.9964675185335532,
+      "median": 1
+    },
+    "RATE_DOWN_PAYMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 895844,
+      "null_pct": 53.6365,
+      "distinct_count": 207033,
+      "min": -1.4978763414307847e-05,
+      "max": 1.0,
+      "avg": 0.07963681542840431,
+      "median": 0.048381984647428745
+    },
+    "RATE_INTEREST_PRIMARY": {
+      "dtype": "DOUBLE",
+      "null_count": 1664263,
+      "null_pct": 99.6437,
+      "distinct_count": 148,
+      "min": 0.03478125354187918,
+      "max": 1.0,
+      "avg": 0.18835688954982105,
+      "median": 0.18912422823228275
+    },
+    "RATE_INTEREST_PRIVILEGED": {
+      "dtype": "DOUBLE",
+      "null_count": 1664263,
+      "null_pct": 99.6437,
+      "distinct_count": 25,
+      "min": 0.3731501057082452,
+      "max": 1.0,
+      "avg": 0.7735025434991827,
+      "median": 0.8350951374207188
+    },
+    "NAME_CASH_LOAN_PURPOSE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 25,
+      "top_values": [
+        {
+          "value": "XAP",
+          "count": 922661
+        },
+        {
+          "value": "XNA",
+          "count": 677918
+        },
+        {
+          "value": "Repairs",
+          "count": 23765
+        },
+        {
+          "value": "Other",
+          "count": 15608
+        },
+        {
+          "value": "Urgent needs",
+          "count": 8412
+        },
+        {
+          "value": "Buying a used car",
+          "count": 2888
+        },
+        {
+          "value": "Building a house or an annex",
+          "count": 2693
+        },
+        {
+          "value": "Everyday expenses",
+          "count": 2416
+        },
+        {
+          "value": "Medicine",
+          "count": 2174
+        },
+        {
+          "value": "Payments on other loans",
+          "count": 1931
+        }
+      ]
+    },
+    "NAME_CONTRACT_STATUS": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": "Approved",
+          "count": 1036781
+        },
+        {
+          "value": "Canceled",
+          "count": 316319
+        },
+        {
+          "value": "Refused",
+          "count": 290678
+        },
+        {
+          "value": "Unused offer",
+          "count": 26436
+        }
+      ]
+    },
+    "DAYS_DECISION": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2922,
+      "min": -2922,
+      "max": -1,
+      "avg": -880.6796679946402,
+      "median": -582
+    },
+    "NAME_PAYMENT_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": "Cash through the bank",
+          "count": 1033552
+        },
+        {
+          "value": "XNA",
+          "count": 627384
+        },
+        {
+          "value": "Non-cash from your account",
+          "count": 8193
+        },
+        {
+          "value": "Cashless from the account of the employer",
+          "count": 1085
+        }
+      ]
+    },
+    "CODE_REJECT_REASON": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 9,
+      "top_values": [
+        {
+          "value": "XAP",
+          "count": 1353093
+        },
+        {
+          "value": "HC",
+          "count": 175231
+        },
+        {
+          "value": "LIMIT",
+          "count": 55680
+        },
+        {
+          "value": "SCO",
+          "count": 37467
+        },
+        {
+          "value": "CLIENT",
+          "count": 26436
+        },
+        {
+          "value": "SCOFR",
+          "count": 12811
+        },
+        {
+          "value": "XNA",
+          "count": 5244
+        },
+        {
+          "value": "VERIF",
+          "count": 3535
+        },
+        {
+          "value": "SYSTEM",
+          "count": 717
+        }
+      ]
+    },
+    "NAME_TYPE_SUITE": {
+      "dtype": "VARCHAR",
+      "null_count": 820405,
+      "null_pct": 49.1198,
+      "distinct_count": 7,
+      "top_values": [
+        {
+          "value": null,
+          "count": 820405
+        },
+        {
+          "value": "Unaccompanied",
+          "count": 508970
+        },
+        {
+          "value": "Family",
+          "count": 213263
+        },
+        {
+          "value": "Spouse, partner",
+          "count": 67069
+        },
+        {
+          "value": "Children",
+          "count": 31566
+        },
+        {
+          "value": "Other_B",
+          "count": 17624
+        },
+        {
+          "value": "Other_A",
+          "count": 9077
+        },
+        {
+          "value": "Group of people",
+          "count": 2240
+        }
+      ]
+    },
+    "NAME_CLIENT_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": "Repeater",
+          "count": 1231261
+        },
+        {
+          "value": "New",
+          "count": 301363
+        },
+        {
+          "value": "Refreshed",
+          "count": 135649
+        },
+        {
+          "value": "XNA",
+          "count": 1941
+        }
+      ]
+    },
+    "NAME_GOODS_CATEGORY": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 28,
+      "top_values": [
+        {
+          "value": "XNA",
+          "count": 950809
+        },
+        {
+          "value": "Mobile",
+          "count": 224708
+        },
+        {
+          "value": "Consumer Electronics",
+          "count": 121576
+        },
+        {
+          "value": "Computers",
+          "count": 105769
+        },
+        {
+          "value": "Audio/Video",
+          "count": 99441
+        },
+        {
+          "value": "Furniture",
+          "count": 53656
+        },
+        {
+          "value": "Photo / Cinema Equipment",
+          "count": 25021
+        },
+        {
+          "value": "Construction Materials",
+          "count": 24995
+        },
+        {
+          "value": "Clothing and Accessories",
+          "count": 23554
+        },
+        {
+          "value": "Auto Accessories",
+          "count": 7381
+        }
+      ]
+    },
+    "NAME_PORTFOLIO": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "top_values": [
+        {
+          "value": "POS",
+          "count": 691011
+        },
+        {
+          "value": "Cash",
+          "count": 461563
+        },
+        {
+          "value": "XNA",
+          "count": 372230
+        },
+        {
+          "value": "Cards",
+          "count": 144985
+        },
+        {
+          "value": "Cars",
+          "count": 425
+        }
+      ]
+    },
+    "NAME_PRODUCT_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": "XNA",
+          "count": 1063666
+        },
+        {
+          "value": "x-sell",
+          "count": 456287
+        },
+        {
+          "value": "walk-in",
+          "count": 150261
+        }
+      ]
+    },
+    "CHANNEL_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 8,
+      "top_values": [
+        {
+          "value": "Credit and cash offices",
+          "count": 719968
+        },
+        {
+          "value": "Country-wide",
+          "count": 494690
+        },
+        {
+          "value": "Stone",
+          "count": 212083
+        },
+        {
+          "value": "Regional / Local",
+          "count": 108528
+        },
+        {
+          "value": "Contact center",
+          "count": 71297
+        },
+        {
+          "value": "AP+ (Cash loan)",
+          "count": 57046
+        },
+        {
+          "value": "Channel of corporate sales",
+          "count": 6150
+        },
+        {
+          "value": "Car dealer",
+          "count": 452
+        }
+      ]
+    },
+    "SELLERPLACE_AREA": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2097,
+      "min": -1,
+      "max": 4000000,
+      "avg": 313.95111524630977,
+      "median": 3
+    },
+    "NAME_SELLER_INDUSTRY": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 11,
+      "top_values": [
+        {
+          "value": "XNA",
+          "count": 855720
+        },
+        {
+          "value": "Consumer electronics",
+          "count": 398265
+        },
+        {
+          "value": "Connectivity",
+          "count": 276029
+        },
+        {
+          "value": "Furniture",
+          "count": 57849
+        },
+        {
+          "value": "Construction",
+          "count": 29781
+        },
+        {
+          "value": "Clothing",
+          "count": 23949
+        },
+        {
+          "value": "Industry",
+          "count": 19194
+        },
+        {
+          "value": "Auto technology",
+          "count": 4990
+        },
+        {
+          "value": "Jewelry",
+          "count": 2709
+        },
+        {
+          "value": "MLM partners",
+          "count": 1215
+        }
+      ]
+    },
+    "CNT_PAYMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 372230,
+      "null_pct": 22.2864,
+      "distinct_count": 49,
+      "min": 0.0,
+      "max": 84.0,
+      "avg": 16.0540815603274,
+      "median": 12.0
+    },
+    "NAME_YIELD_GROUP": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "top_values": [
+        {
+          "value": "XNA",
+          "count": 517215
+        },
+        {
+          "value": "middle",
+          "count": 385532
+        },
+        {
+          "value": "high",
+          "count": 353331
+        },
+        {
+          "value": "low_normal",
+          "count": 322095
+        },
+        {
+          "value": "low_action",
+          "count": 92041
+        }
+      ]
+    },
+    "PRODUCT_COMBINATION": {
+      "dtype": "VARCHAR",
+      "null_count": 346,
+      "null_pct": 0.0207,
+      "distinct_count": 17,
+      "top_values": [
+        {
+          "value": "Cash",
+          "count": 285990
+        },
+        {
+          "value": "POS household with interest",
+          "count": 263622
+        },
+        {
+          "value": "POS mobile with interest",
+          "count": 220670
+        },
+        {
+          "value": "Cash X-Sell: middle",
+          "count": 143883
+        },
+        {
+          "value": "Cash X-Sell: low",
+          "count": 130248
+        },
+        {
+          "value": "Card Street",
+          "count": 112582
+        },
+        {
+          "value": "POS industry with interest",
+          "count": 98833
+        },
+        {
+          "value": "POS household without interest",
+          "count": 82908
+        },
+        {
+          "value": "Card X-Sell",
+          "count": 80582
+        },
+        {
+          "value": "Cash Street: high",
+          "count": 59639
+        }
+      ]
+    },
+    "DAYS_FIRST_DRAWING": {
+      "dtype": "DOUBLE",
+      "null_count": 673065,
+      "null_pct": 40.2981,
+      "distinct_count": 2838,
+      "min": -2922.0,
+      "max": 365243.0,
+      "avg": 342209.85503871535,
+      "median": 365243.0
+    },
+    "DAYS_FIRST_DUE": {
+      "dtype": "DOUBLE",
+      "null_count": 673065,
+      "null_pct": 40.2981,
+      "distinct_count": 2892,
+      "min": -2892.0,
+      "max": 365243.0,
+      "avg": 13826.269336879443,
+      "median": -830.9233938325295
+    },
+    "DAYS_LAST_DUE_1ST_VERSION": {
+      "dtype": "DOUBLE",
+      "null_count": 673065,
+      "null_pct": 40.2981,
+      "distinct_count": 4605,
+      "min": -2801.0,
+      "max": 365243.0,
+      "avg": 33767.77405382746,
+      "median": -360.95211952979076
+    },
+    "DAYS_LAST_DUE": {
+      "dtype": "DOUBLE",
+      "null_count": 673065,
+      "null_pct": 40.2981,
+      "distinct_count": 2873,
+      "min": -2889.0,
+      "max": 365243.0,
+      "avg": 76582.40306413585,
+      "median": -538.2421468815629
+    },
+    "DAYS_TERMINATION": {
+      "dtype": "DOUBLE",
+      "null_count": 673065,
+      "null_pct": 40.2981,
+      "distinct_count": 2830,
+      "min": -2874.0,
+      "max": 365243.0,
+      "avg": 81992.34383828295,
+      "median": -498.59384537725396
+    },
+    "NFLAG_INSURED_ON_APPROVAL": {
+      "dtype": "DOUBLE",
+      "null_count": 673065,
+      "null_pct": 40.2981,
+      "distinct_count": 2,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.3325701575190869,
+      "median": 0.0
+    }
+  },
+  "primary_key_check": {
+    "column": "SK_ID_PREV",
+    "duplicate_key_count": 0,
+    "is_unique": true
+  },
+  "foreign_key_check": {
+    "column": "SK_ID_CURR",
+    "references": "SK_ID_CURR spine (application_train + application_test)",
+    "orphan_key_count": 0
+  }
+}

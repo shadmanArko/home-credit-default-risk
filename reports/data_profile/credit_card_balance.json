@@ -1,0 +1,268 @@
+{
+  "table": "credit_card_balance.csv",
+  "row_count": 3840312,
+  "column_count": 23,
+  "columns": {
+    "SK_ID_PREV": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 104307,
+      "min": 1000018,
+      "max": 2843496,
+      "avg": 1904503.589899727,
+      "median": 1897880
+    },
+    "SK_ID_CURR": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 103558,
+      "min": 100006,
+      "max": 456250,
+      "avg": 278324.20728888694,
+      "median": 278561
+    },
+    "MONTHS_BALANCE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 96,
+      "min": -96,
+      "max": -1,
+      "avg": -34.52192061478338,
+      "median": -28
+    },
+    "AMT_BALANCE": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1347904,
+      "min": -420250.185,
+      "max": 1505902.185,
+      "avg": 58300.15526185745,
+      "median": 0.0
+    },
+    "AMT_CREDIT_LIMIT_ACTUAL": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 181,
+      "min": 0,
+      "max": 1350000,
+      "avg": 153807.95740033622,
+      "median": 121133
+    },
+    "AMT_DRAWINGS_ATM_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 749816,
+      "null_pct": 19.5249,
+      "distinct_count": 2267,
+      "min": -6827.31,
+      "max": 2115000.0,
+      "avg": 5961.324822059308,
+      "median": 0.0
+    },
+    "AMT_DRAWINGS_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 187005,
+      "min": -6211.62,
+      "max": 2287098.315,
+      "avg": 7433.388179202641,
+      "median": 0.0
+    },
+    "AMT_DRAWINGS_OTHER_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 749816,
+      "null_pct": 19.5249,
+      "distinct_count": 1832,
+      "min": 0.0,
+      "max": 1529847.0,
+      "avg": 288.16958242463346,
+      "median": 0.0
+    },
+    "AMT_DRAWINGS_POS_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 749816,
+      "null_pct": 19.5249,
+      "distinct_count": 168748,
+      "min": 0.0,
+      "max": 2239274.16,
+      "avg": 2968.8048476830213,
+      "median": 0.0
+    },
+    "AMT_INST_MIN_REGULARITY": {
+      "dtype": "DOUBLE",
+      "null_count": 305236,
+      "null_pct": 7.9482,
+      "distinct_count": 312266,
+      "min": 0.0,
+      "max": 202882.005,
+      "avg": 3540.2041285152054,
+      "median": 0.0009648129468725008
+    },
+    "AMT_PAYMENT_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 767988,
+      "null_pct": 19.9981,
+      "distinct_count": 163209,
+      "min": 0.0,
+      "max": 4289207.445,
+      "avg": 10280.537702000302,
+      "median": 2767.1409611836834
+    },
+    "AMT_PAYMENT_TOTAL_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 182957,
+      "min": 0.0,
+      "max": 4278315.69,
+      "avg": 7588.85673946413,
+      "median": 0.0
+    },
+    "AMT_RECEIVABLE_PRINCIPAL": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1195839,
+      "min": -423305.82,
+      "max": 1472316.795,
+      "avg": 55965.87690549745,
+      "median": 0.0
+    },
+    "AMT_RECIVABLE": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1338878,
+      "min": -420250.185,
+      "max": 1493338.185,
+      "avg": 58088.81117667352,
+      "median": 0.0
+    },
+    "AMT_TOTAL_RECEIVABLE": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1339008,
+      "min": -420250.185,
+      "max": 1493338.185,
+      "avg": 58098.28548873719,
+      "median": 0.0
+    },
+    "CNT_DRAWINGS_ATM_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 749816,
+      "null_pct": 19.5249,
+      "distinct_count": 44,
+      "min": 0.0,
+      "max": 51.0,
+      "avg": 0.3094490334237611,
+      "median": 0.0
+    },
+    "CNT_DRAWINGS_CURRENT": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 129,
+      "min": 0,
+      "max": 165,
+      "avg": 0.7031439112238798,
+      "median": 0
+    },
+    "CNT_DRAWINGS_OTHER_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 749816,
+      "null_pct": 19.5249,
+      "distinct_count": 11,
+      "min": 0.0,
+      "max": 12.0,
+      "avg": 0.004812496117128124,
+      "median": 0.0
+    },
+    "CNT_DRAWINGS_POS_CURRENT": {
+      "dtype": "DOUBLE",
+      "null_count": 749816,
+      "null_pct": 19.5249,
+      "distinct_count": 133,
+      "min": 0.0,
+      "max": 165.0,
+      "avg": 0.5594791256807968,
+      "median": 0.0
+    },
+    "CNT_INSTALMENT_MATURE_CUM": {
+      "dtype": "DOUBLE",
+      "null_count": 305236,
+      "null_pct": 7.9482,
+      "distinct_count": 121,
+      "min": 0.0,
+      "max": 120.0,
+      "avg": 20.825083817151313,
+      "median": 15.283895212271425
+    },
+    "NAME_CONTRACT_STATUS": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 7,
+      "top_values": [
+        {
+          "value": "Active",
+          "count": 3698436
+        },
+        {
+          "value": "Completed",
+          "count": 128918
+        },
+        {
+          "value": "Signed",
+          "count": 11058
+        },
+        {
+          "value": "Demand",
+          "count": 1365
+        },
+        {
+          "value": "Sent proposal",
+          "count": 513
+        },
+        {
+          "value": "Refused",
+          "count": 17
+        },
+        {
+          "value": "Approved",
+          "count": 5
+        }
+      ]
+    },
+    "SK_DPD": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 917,
+      "min": 0,
+      "max": 3260,
+      "avg": 9.283667316613858,
+      "median": 0
+    },
+    "SK_DPD_DEF": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 378,
+      "min": 0,
+      "max": 3260,
+      "avg": 0.3316220140446922,
+      "median": 0
+    }
+  },
+  "foreign_key_check": {
+    "column": "SK_ID_CURR",
+    "references": "SK_ID_CURR spine (application_train + application_test)",
+    "orphan_key_count": 0
+  }
+}

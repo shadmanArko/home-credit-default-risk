@@ -1,0 +1,27 @@
+{
+  "table": "sample_submission.csv",
+  "row_count": 48744,
+  "column_count": 2,
+  "columns": {
+    "SK_ID_CURR": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 48744,
+      "min": 100001,
+      "max": 456250,
+      "avg": 277796.67634990974,
+      "median": 277605
+    },
+    "TARGET": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1,
+      "min": 0.5,
+      "max": 0.5,
+      "avg": 0.5,
+      "median": 0.5
+    }
+  }
+}

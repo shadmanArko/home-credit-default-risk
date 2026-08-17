@@ -1,0 +1,1556 @@
+{
+  "table": "application_train.csv",
+  "row_count": 307511,
+  "column_count": 122,
+  "columns": {
+    "SK_ID_CURR": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 307511,
+      "min": 100002,
+      "max": 456255,
+      "avg": 278180.51857657125,
+      "median": 278221
+    },
+    "TARGET": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.08072881945686496,
+      "median": 0
+    },
+    "NAME_CONTRACT_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "top_values": [
+        {
+          "value": "Cash loans",
+          "count": 278232
+        },
+        {
+          "value": "Revolving loans",
+          "count": 29279
+        }
+      ]
+    },
+    "CODE_GENDER": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": "F",
+          "count": 202448
+        },
+        {
+          "value": "M",
+          "count": 105059
+        },
+        {
+          "value": "XNA",
+          "count": 4
+        }
+      ]
+    },
+    "FLAG_OWN_CAR": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "top_values": [
+        {
+          "value": "N",
+          "count": 202924
+        },
+        {
+          "value": "Y",
+          "count": 104587
+        }
+      ]
+    },
+    "FLAG_OWN_REALTY": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "top_values": [
+        {
+          "value": "Y",
+          "count": 213312
+        },
+        {
+          "value": "N",
+          "count": 94199
+        }
+      ]
+    },
+    "CNT_CHILDREN": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "min": 0,
+      "max": 19,
+      "avg": 0.4170517477423572,
+      "median": 0
+    },
+    "AMT_INCOME_TOTAL": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2548,
+      "min": 25650.0,
+      "max": 117000000.0,
+      "avg": 168797.9192969845,
+      "median": 146536.83446140215
+    },
+    "AMT_CREDIT": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5603,
+      "min": 45000.0,
+      "max": 4050000.0,
+      "avg": 599025.9997057016,
+      "median": 514071.92364046106
+    },
+    "AMT_ANNUITY": {
+      "dtype": "DOUBLE",
+      "null_count": 12,
+      "null_pct": 0.0039,
+      "distinct_count": 13672,
+      "min": 1615.5,
+      "max": 258025.5,
+      "avg": 27108.573909183444,
+      "median": 24914.099063019505
+    },
+    "AMT_GOODS_PRICE": {
+      "dtype": "DOUBLE",
+      "null_count": 278,
+      "null_pct": 0.0904,
+      "distinct_count": 1002,
+      "min": 40500.0,
+      "max": 4050000.0,
+      "avg": 538396.2074288895,
+      "median": 450001.0629823021
+    },
+    "NAME_TYPE_SUITE": {
+      "dtype": "VARCHAR",
+      "null_count": 1292,
+      "null_pct": 0.4201,
+      "distinct_count": 7,
+      "top_values": [
+        {
+          "value": "Unaccompanied",
+          "count": 248526
+        },
+        {
+          "value": "Family",
+          "count": 40149
+        },
+        {
+          "value": "Spouse, partner",
+          "count": 11370
+        },
+        {
+          "value": "Children",
+          "count": 3267
+        },
+        {
+          "value": "Other_B",
+          "count": 1770
+        },
+        {
+          "value": null,
+          "count": 1292
+        },
+        {
+          "value": "Other_A",
+          "count": 866
+        },
+        {
+          "value": "Group of people",
+          "count": 271
+        }
+      ]
+    },
+    "NAME_INCOME_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 8,
+      "top_values": [
+        {
+          "value": "Working",
+          "count": 158774
+        },
+        {
+          "value": "Commercial associate",
+          "count": 71617
+        },
+        {
+          "value": "Pensioner",
+          "count": 55362
+        },
+        {
+          "value": "State servant",
+          "count": 21703
+        },
+        {
+          "value": "Unemployed",
+          "count": 22
+        },
+        {
+          "value": "Student",
+          "count": 18
+        },
+        {
+          "value": "Businessman",
+          "count": 10
+        },
+        {
+          "value": "Maternity leave",
+          "count": 5
+        }
+      ]
+    },
+    "NAME_EDUCATION_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 5,
+      "top_values": [
+        {
+          "value": "Secondary / secondary special",
+          "count": 218391
+        },
+        {
+          "value": "Higher education",
+          "count": 74863
+        },
+        {
+          "value": "Incomplete higher",
+          "count": 10277
+        },
+        {
+          "value": "Lower secondary",
+          "count": 3816
+        },
+        {
+          "value": "Academic degree",
+          "count": 164
+        }
+      ]
+    },
+    "NAME_FAMILY_STATUS": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 6,
+      "top_values": [
+        {
+          "value": "Married",
+          "count": 196432
+        },
+        {
+          "value": "Single / not married",
+          "count": 45444
+        },
+        {
+          "value": "Civil marriage",
+          "count": 29775
+        },
+        {
+          "value": "Separated",
+          "count": 19770
+        },
+        {
+          "value": "Widow",
+          "count": 16088
+        },
+        {
+          "value": "Unknown",
+          "count": 2
+        }
+      ]
+    },
+    "NAME_HOUSING_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 6,
+      "top_values": [
+        {
+          "value": "House / apartment",
+          "count": 272868
+        },
+        {
+          "value": "With parents",
+          "count": 14840
+        },
+        {
+          "value": "Municipal apartment",
+          "count": 11183
+        },
+        {
+          "value": "Rented apartment",
+          "count": 4881
+        },
+        {
+          "value": "Office apartment",
+          "count": 2617
+        },
+        {
+          "value": "Co-op apartment",
+          "count": 1122
+        }
+      ]
+    },
+    "REGION_POPULATION_RELATIVE": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 81,
+      "min": 0.00029,
+      "max": 0.072508,
+      "avg": 0.020868112057780497,
+      "median": 0.018847296386365536
+    },
+    "DAYS_BIRTH": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 17460,
+      "min": -25229,
+      "max": -7489,
+      "avg": -16036.995066843137,
+      "median": -15749
+    },
+    "DAYS_EMPLOYED": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 12574,
+      "min": -17912,
+      "max": 365243,
+      "avg": 63815.04590404896,
+      "median": -1214
+    },
+    "DAYS_REGISTRATION": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15688,
+      "min": -24672.0,
+      "max": 0.0,
+      "avg": -4986.120327538418,
+      "median": -4506.324032823484
+    },
+    "DAYS_ID_PUBLISH": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 6168,
+      "min": -7197,
+      "max": 0,
+      "avg": -2994.2023732484367,
+      "median": -3256
+    },
+    "OWN_CAR_AGE": {
+      "dtype": "DOUBLE",
+      "null_count": 202929,
+      "null_pct": 65.9908,
+      "distinct_count": 62,
+      "min": 0.0,
+      "max": 91.0,
+      "avg": 12.061090818687727,
+      "median": 9.0
+    },
+    "FLAG_MOBIL": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.9999967480838083,
+      "median": 1
+    },
+    "FLAG_EMP_PHONE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.8198893698111612,
+      "median": 1
+    },
+    "FLAG_WORK_PHONE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.1993684778755882,
+      "median": 0
+    },
+    "FLAG_CONT_MOBILE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.9981334001060125,
+      "median": 1
+    },
+    "FLAG_PHONE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.28106636835755466,
+      "median": 0
+    },
+    "FLAG_EMAIL": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0567199222141647,
+      "median": 0
+    },
+    "OCCUPATION_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 96391,
+      "null_pct": 31.3455,
+      "distinct_count": 18,
+      "top_values": [
+        {
+          "value": null,
+          "count": 96391
+        },
+        {
+          "value": "Laborers",
+          "count": 55186
+        },
+        {
+          "value": "Sales staff",
+          "count": 32102
+        },
+        {
+          "value": "Core staff",
+          "count": 27570
+        },
+        {
+          "value": "Managers",
+          "count": 21371
+        },
+        {
+          "value": "Drivers",
+          "count": 18603
+        },
+        {
+          "value": "High skill tech staff",
+          "count": 11380
+        },
+        {
+          "value": "Accountants",
+          "count": 9813
+        },
+        {
+          "value": "Medicine staff",
+          "count": 8537
+        },
+        {
+          "value": "Security staff",
+          "count": 6721
+        }
+      ]
+    },
+    "CNT_FAM_MEMBERS": {
+      "dtype": "DOUBLE",
+      "null_count": 2,
+      "null_pct": 0.0007,
+      "distinct_count": 17,
+      "min": 1.0,
+      "max": 20.0,
+      "avg": 2.152665450442101,
+      "median": 2.0
+    },
+    "REGION_RATING_CLIENT": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "min": 1,
+      "max": 3,
+      "avg": 2.0524631639193394,
+      "median": 2
+    },
+    "REGION_RATING_CLIENT_W_CITY": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3,
+      "min": 1,
+      "max": 3,
+      "avg": 2.031520823645333,
+      "median": 2
+    },
+    "WEEKDAY_APPR_PROCESS_START": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 7,
+      "top_values": [
+        {
+          "value": "TUESDAY",
+          "count": 53901
+        },
+        {
+          "value": "WEDNESDAY",
+          "count": 51934
+        },
+        {
+          "value": "MONDAY",
+          "count": 50714
+        },
+        {
+          "value": "THURSDAY",
+          "count": 50591
+        },
+        {
+          "value": "FRIDAY",
+          "count": 50338
+        },
+        {
+          "value": "SATURDAY",
+          "count": 33852
+        },
+        {
+          "value": "SUNDAY",
+          "count": 16181
+        }
+      ]
+    },
+    "HOUR_APPR_PROCESS_START": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 24,
+      "min": 0,
+      "max": 23,
+      "avg": 12.063418869568894,
+      "median": 12
+    },
+    "REG_REGION_NOT_LIVE_REGION": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.015144173704355291,
+      "median": 0
+    },
+    "REG_REGION_NOT_WORK_REGION": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.05076891558350758,
+      "median": 0
+    },
+    "LIVE_REGION_NOT_WORK_REGION": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.04065870814377372,
+      "median": 0
+    },
+    "REG_CITY_NOT_LIVE_CITY": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.07817281333025486,
+      "median": 0
+    },
+    "REG_CITY_NOT_WORK_CITY": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.23045354475124466,
+      "median": 0
+    },
+    "LIVE_CITY_NOT_WORK_CITY": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.17955455252007246,
+      "median": 0
+    },
+    "ORGANIZATION_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 58,
+      "top_values": [
+        {
+          "value": "Business Entity Type 3",
+          "count": 67992
+        },
+        {
+          "value": "XNA",
+          "count": 55374
+        },
+        {
+          "value": "Self-employed",
+          "count": 38412
+        },
+        {
+          "value": "Other",
+          "count": 16683
+        },
+        {
+          "value": "Medicine",
+          "count": 11193
+        },
+        {
+          "value": "Business Entity Type 2",
+          "count": 10553
+        },
+        {
+          "value": "Government",
+          "count": 10404
+        },
+        {
+          "value": "School",
+          "count": 8893
+        },
+        {
+          "value": "Trade: type 7",
+          "count": 7831
+        },
+        {
+          "value": "Kindergarten",
+          "count": 6880
+        }
+      ]
+    },
+    "EXT_SOURCE_1": {
+      "dtype": "DOUBLE",
+      "null_count": 173378,
+      "null_pct": 56.3811,
+      "distinct_count": 114584,
+      "min": 0.014568132412445587,
+      "max": 0.9626927705613059,
+      "avg": 0.5021298056566634,
+      "median": 0.5059732065164682
+    },
+    "EXT_SOURCE_2": {
+      "dtype": "DOUBLE",
+      "null_count": 660,
+      "null_pct": 0.2146,
+      "distinct_count": 119831,
+      "min": 8.173616518884397e-08,
+      "max": 0.8549996664047012,
+      "avg": 0.5143926741308479,
+      "median": 0.565877650156717
+    },
+    "EXT_SOURCE_3": {
+      "dtype": "DOUBLE",
+      "null_count": 60965,
+      "null_pct": 19.8253,
+      "distinct_count": 814,
+      "min": 0.0005272652387098817,
+      "max": 0.8960095494948396,
+      "avg": 0.5108529061799467,
+      "median": 0.5358153439988796
+    },
+    "APARTMENTS_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 156061,
+      "null_pct": 50.7497,
+      "distinct_count": 2339,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.1174404991746446,
+      "median": 0.08752311920155341
+    },
+    "BASEMENTAREA_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 179943,
+      "null_pct": 58.516,
+      "distinct_count": 3780,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.08844221905180015,
+      "median": 0.07617174924648068
+    },
+    "YEARS_BEGINEXPLUATATION_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 150007,
+      "null_pct": 48.781,
+      "distinct_count": 285,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.9777348581622413,
+      "median": 0.9818336569912501
+    },
+    "YEARS_BUILD_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 204488,
+      "null_pct": 66.4978,
+      "distinct_count": 149,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.752471432592733,
+      "median": 0.7563167488687517
+    },
+    "COMMONAREA_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 214865,
+      "null_pct": 69.8723,
+      "distinct_count": 3181,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.04462071541135081,
+      "median": 0.02110167850135166
+    },
+    "ELEVATORS_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 163891,
+      "null_pct": 53.296,
+      "distinct_count": 257,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.07894151232417519,
+      "median": 0.0
+    },
+    "ENTRANCES_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 154828,
+      "null_pct": 50.3488,
+      "distinct_count": 285,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.1497246700680427,
+      "median": 0.1379
+    },
+    "FLOORSMAX_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 153020,
+      "null_pct": 49.7608,
+      "distinct_count": 403,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.22628190703663006,
+      "median": 0.1667
+    },
+    "FLOORSMIN_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 208642,
+      "null_pct": 67.8486,
+      "distinct_count": 305,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.2318935004905551,
+      "median": 0.2083
+    },
+    "LANDAREA_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 182590,
+      "null_pct": 59.3767,
+      "distinct_count": 3527,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.0663331841723973,
+      "median": 0.04814724796210201
+    },
+    "LIVINGAPARTMENTS_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 210199,
+      "null_pct": 68.355,
+      "distinct_count": 1868,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.10077477495067035,
+      "median": 0.07502200483757387
+    },
+    "LIVINGAREA_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 154350,
+      "null_pct": 50.1933,
+      "distinct_count": 5199,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.1073990193325992,
+      "median": 0.0743915863015358
+    },
+    "NONLIVINGAPARTMENTS_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 213514,
+      "null_pct": 69.433,
+      "distinct_count": 386,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.008808672617209785,
+      "median": 0.0
+    },
+    "NONLIVINGAREA_AVG": {
+      "dtype": "DOUBLE",
+      "null_count": 169682,
+      "null_pct": 55.1792,
+      "distinct_count": 3290,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.028357757075796634,
+      "median": 0.0035480221372279413
+    },
+    "APARTMENTS_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 156061,
+      "null_pct": 50.7497,
+      "distinct_count": 760,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.11423100693299297,
+      "median": 0.084
+    },
+    "BASEMENTAREA_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 179943,
+      "null_pct": 58.516,
+      "distinct_count": 3841,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.08754321224758464,
+      "median": 0.07464711874248735
+    },
+    "YEARS_BEGINEXPLUATATION_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 150007,
+      "null_pct": 48.781,
+      "distinct_count": 221,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.9770653729428809,
+      "median": 0.9815435506915069
+    },
+    "YEARS_BUILD_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 204488,
+      "null_pct": 66.4978,
+      "distinct_count": 154,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.7596373227337766,
+      "median": 0.7630644573958102
+    },
+    "COMMONAREA_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 214865,
+      "null_pct": 69.8723,
+      "distinct_count": 3128,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.04255313775014595,
+      "median": 0.019105293426424617
+    },
+    "ELEVATORS_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 163891,
+      "null_pct": 53.296,
+      "distinct_count": 26,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.07448973610916877,
+      "median": 0.0
+    },
+    "ENTRANCES_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 154828,
+      "null_pct": 50.3488,
+      "distinct_count": 30,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.14519265864568948,
+      "median": 0.1379
+    },
+    "FLOORSMAX_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 153020,
+      "null_pct": 49.7608,
+      "distinct_count": 25,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.22231504747846548,
+      "median": 0.1667
+    },
+    "FLOORSMIN_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 208642,
+      "null_pct": 67.8486,
+      "distinct_count": 25,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.2280584925507557,
+      "median": 0.2083
+    },
+    "LANDAREA_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 182590,
+      "null_pct": 59.3767,
+      "distinct_count": 3563,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.06495768445657657,
+      "median": 0.04584666238727856
+    },
+    "LIVINGAPARTMENTS_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 210199,
+      "null_pct": 68.355,
+      "distinct_count": 736,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.10564485674943674,
+      "median": 0.07671536854735353
+    },
+    "LIVINGAREA_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 154350,
+      "null_pct": 50.1933,
+      "distinct_count": 5301,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.10597505043712238,
+      "median": 0.07313370343569389
+    },
+    "NONLIVINGAPARTMENTS_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 213514,
+      "null_pct": 69.433,
+      "distinct_count": 167,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.008076387544282531,
+      "median": 0.0
+    },
+    "NONLIVINGAREA_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 169682,
+      "null_pct": 55.1792,
+      "distinct_count": 3327,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.027022319685987707,
+      "median": 0.0010639205250357415
+    },
+    "APARTMENTS_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 156061,
+      "null_pct": 50.7497,
+      "distinct_count": 1148,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.11784992076592957,
+      "median": 0.08672072760865979
+    },
+    "BASEMENTAREA_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 179943,
+      "null_pct": 58.516,
+      "distinct_count": 3772,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.08795485466574725,
+      "median": 0.07574878498649822
+    },
+    "YEARS_BEGINEXPLUATATION_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 150007,
+      "null_pct": 48.781,
+      "distinct_count": 245,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.977752264069393,
+      "median": 0.9817662455375382
+    },
+    "YEARS_BUILD_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 204488,
+      "null_pct": 66.4978,
+      "distinct_count": 151,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.7557462721916172,
+      "median": 0.7594930706459558
+    },
+    "COMMONAREA_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 214865,
+      "null_pct": 69.8723,
+      "distinct_count": 3202,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.0445951017852907,
+      "median": 0.020863600450408516
+    },
+    "ELEVATORS_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 163891,
+      "null_pct": 53.296,
+      "distinct_count": 46,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.07807784431136258,
+      "median": 0.0
+    },
+    "ENTRANCES_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 154828,
+      "null_pct": 50.3488,
+      "distinct_count": 46,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.14921278072869293,
+      "median": 0.1379
+    },
+    "FLOORSMAX_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 153020,
+      "null_pct": 49.7608,
+      "distinct_count": 49,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.22589659009259874,
+      "median": 0.1667
+    },
+    "FLOORSMIN_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 208642,
+      "null_pct": 67.8486,
+      "distinct_count": 47,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.23162493804934514,
+      "median": 0.2083
+    },
+    "LANDAREA_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 182590,
+      "null_pct": 59.3767,
+      "distinct_count": 3560,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.06716874904939898,
+      "median": 0.048615636960223335
+    },
+    "LIVINGAPARTMENTS_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 210199,
+      "null_pct": 68.355,
+      "distinct_count": 1097,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.10195447324072589,
+      "median": 0.07598958911156381
+    },
+    "LIVINGAREA_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 154350,
+      "null_pct": 50.1933,
+      "distinct_count": 5281,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.10860673604899444,
+      "median": 0.0750222947213463
+    },
+    "NONLIVINGAPARTMENTS_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 213514,
+      "null_pct": 69.433,
+      "distinct_count": 214,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.00865101333021141,
+      "median": 0.0
+    },
+    "NONLIVINGAREA_MEDI": {
+      "dtype": "DOUBLE",
+      "null_count": 169682,
+      "null_pct": 55.1792,
+      "distinct_count": 3323,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.028235920597261915,
+      "median": 0.003051342376907737
+    },
+    "FONDKAPREMONT_MODE": {
+      "dtype": "VARCHAR",
+      "null_count": 210295,
+      "null_pct": 68.3862,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": null,
+          "count": 210295
+        },
+        {
+          "value": "reg oper account",
+          "count": 73830
+        },
+        {
+          "value": "reg oper spec account",
+          "count": 12080
+        },
+        {
+          "value": "not specified",
+          "count": 5687
+        },
+        {
+          "value": "org spec account",
+          "count": 5619
+        }
+      ]
+    },
+    "HOUSETYPE_MODE": {
+      "dtype": "VARCHAR",
+      "null_count": 154297,
+      "null_pct": 50.1761,
+      "distinct_count": 3,
+      "top_values": [
+        {
+          "value": null,
+          "count": 154297
+        },
+        {
+          "value": "block of flats",
+          "count": 150503
+        },
+        {
+          "value": "specific housing",
+          "count": 1499
+        },
+        {
+          "value": "terraced house",
+          "count": 1212
+        }
+      ]
+    },
+    "TOTALAREA_MODE": {
+      "dtype": "DOUBLE",
+      "null_count": 148431,
+      "null_pct": 48.2685,
+      "distinct_count": 5116,
+      "min": 0.0,
+      "max": 1.0,
+      "avg": 0.10254666268544103,
+      "median": 0.06876001578420173
+    },
+    "WALLSMATERIAL_MODE": {
+      "dtype": "VARCHAR",
+      "null_count": 156341,
+      "null_pct": 50.8408,
+      "distinct_count": 7,
+      "top_values": [
+        {
+          "value": null,
+          "count": 156341
+        },
+        {
+          "value": "Panel",
+          "count": 66040
+        },
+        {
+          "value": "Stone, brick",
+          "count": 64815
+        },
+        {
+          "value": "Block",
+          "count": 9253
+        },
+        {
+          "value": "Wooden",
+          "count": 5362
+        },
+        {
+          "value": "Mixed",
+          "count": 2296
+        },
+        {
+          "value": "Monolithic",
+          "count": 1779
+        },
+        {
+          "value": "Others",
+          "count": 1625
+        }
+      ]
+    },
+    "EMERGENCYSTATE_MODE": {
+      "dtype": "BOOLEAN",
+      "null_count": 145755,
+      "null_pct": 47.3983,
+      "distinct_count": 2,
+      "top_values": [
+        {
+          "value": false,
+          "count": 159428
+        },
+        {
+          "value": null,
+          "count": 145755
+        },
+        {
+          "value": true,
+          "count": 2328
+        }
+      ]
+    },
+    "OBS_30_CNT_SOCIAL_CIRCLE": {
+      "dtype": "DOUBLE",
+      "null_count": 1021,
+      "null_pct": 0.332,
+      "distinct_count": 33,
+      "min": 0.0,
+      "max": 348.0,
+      "avg": 1.4222454239942575,
+      "median": 0.0
+    },
+    "DEF_30_CNT_SOCIAL_CIRCLE": {
+      "dtype": "DOUBLE",
+      "null_count": 1021,
+      "null_pct": 0.332,
+      "distinct_count": 10,
+      "min": 0.0,
+      "max": 34.0,
+      "avg": 0.1434206662533851,
+      "median": 0.0
+    },
+    "OBS_60_CNT_SOCIAL_CIRCLE": {
+      "dtype": "DOUBLE",
+      "null_count": 1021,
+      "null_pct": 0.332,
+      "distinct_count": 33,
+      "min": 0.0,
+      "max": 344.0,
+      "avg": 1.4052921791901856,
+      "median": 0.0
+    },
+    "DEF_60_CNT_SOCIAL_CIRCLE": {
+      "dtype": "DOUBLE",
+      "null_count": 1021,
+      "null_pct": 0.332,
+      "distinct_count": 9,
+      "min": 0.0,
+      "max": 24.0,
+      "avg": 0.10004894123788705,
+      "median": 0.0
+    },
+    "DAYS_LAST_PHONE_CHANGE": {
+      "dtype": "DOUBLE",
+      "null_count": 1,
+      "null_pct": 0.0003,
+      "distinct_count": 3773,
+      "min": -4292.0,
+      "max": 0.0,
+      "avg": -962.8587883320868,
+      "median": -757.0101238169011
+    },
+    "FLAG_DOCUMENT_2": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 4.2274910491006824e-05,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_3": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.7100233812774177,
+      "median": 1
+    },
+    "FLAG_DOCUMENT_4": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 8.129790479039775e-05,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_5": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.015114906458630749,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_6": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0880553866365756,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_7": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.00019186305530533867,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_8": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.08137595077899652,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_9": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.00389579559755586,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_10": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 2.276341334131137e-05,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_11": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.003912055178513939,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_12": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 6.503832383231819e-06,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_13": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.003525077151711646,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_14": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0029364803210291664,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_15": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0012097128232811183,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_16": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.009928100133003373,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_17": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0002666571277125046,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_18": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.008129790479039774,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_19": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0005951006630657115,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_20": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0005072989258920819,
+      "median": 0
+    },
+    "FLAG_DOCUMENT_21": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2,
+      "min": 0,
+      "max": 1,
+      "avg": 0.0003349473677364387,
+      "median": 0
+    },
+    "AMT_REQ_CREDIT_BUREAU_HOUR": {
+      "dtype": "DOUBLE",
+      "null_count": 41519,
+      "null_pct": 13.5016,
+      "distinct_count": 5,
+      "min": 0.0,
+      "max": 4.0,
+      "avg": 0.006402448193930645,
+      "median": 0.0
+    },
+    "AMT_REQ_CREDIT_BUREAU_DAY": {
+      "dtype": "DOUBLE",
+      "null_count": 41519,
+      "null_pct": 13.5016,
+      "distinct_count": 9,
+      "min": 0.0,
+      "max": 9.0,
+      "avg": 0.0070002105326475985,
+      "median": 0.0
+    },
+    "AMT_REQ_CREDIT_BUREAU_WEEK": {
+      "dtype": "DOUBLE",
+      "null_count": 41519,
+      "null_pct": 13.5016,
+      "distinct_count": 9,
+      "min": 0.0,
+      "max": 8.0,
+      "avg": 0.0343619356973142,
+      "median": 0.0
+    },
+    "AMT_REQ_CREDIT_BUREAU_MON": {
+      "dtype": "DOUBLE",
+      "null_count": 41519,
+      "null_pct": 13.5016,
+      "distinct_count": 24,
+      "min": 0.0,
+      "max": 27.0,
+      "avg": 0.26739526000781977,
+      "median": 0.0
+    },
+    "AMT_REQ_CREDIT_BUREAU_QRT": {
+      "dtype": "DOUBLE",
+      "null_count": 41519,
+      "null_pct": 13.5016,
+      "distinct_count": 11,
+      "min": 0.0,
+      "max": 261.0,
+      "avg": 0.26547414959848414,
+      "median": 0.0
+    },
+    "AMT_REQ_CREDIT_BUREAU_YEAR": {
+      "dtype": "DOUBLE",
+      "null_count": 41519,
+      "null_pct": 13.5016,
+      "distinct_count": 25,
+      "min": 0.0,
+      "max": 25.0,
+      "avg": 1.899974435321363,
+      "median": 1.2089286359095341
+    }
+  },
+  "primary_key_check": {
+    "column": "SK_ID_CURR",
+    "duplicate_key_count": 0,
+    "is_unique": true
+  }
+}

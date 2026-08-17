@@ -1,0 +1,92 @@
+{
+  "table": "installments_payments.csv",
+  "row_count": 13605401,
+  "column_count": 8,
+  "columns": {
+    "SK_ID_PREV": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 997752,
+      "min": 1000001,
+      "max": 2843499,
+      "avg": 1903364.9695492988,
+      "median": 1896120
+    },
+    "SK_ID_CURR": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 339587,
+      "min": 100001,
+      "max": 456255,
+      "avg": 278444.88173821557,
+      "median": 278780
+    },
+    "NUM_INSTALMENT_VERSION": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 65,
+      "min": 0.0,
+      "max": 178.0,
+      "avg": 0.8566373016127933,
+      "median": 1.0
+    },
+    "NUM_INSTALMENT_NUMBER": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 277,
+      "min": 1,
+      "max": 277,
+      "avg": 18.87089583026623,
+      "median": 8
+    },
+    "DAYS_INSTALMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2922,
+      "min": -2922.0,
+      "max": -1.0,
+      "avg": -1042.2699916011295,
+      "median": -818.3850954445509
+    },
+    "DAYS_ENTRY_PAYMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 2905,
+      "null_pct": 0.0214,
+      "distinct_count": 3039,
+      "min": -4921.0,
+      "max": -1.0,
+      "avg": -1051.1136840621016,
+      "median": -827.4432259754285
+    },
+    "AMT_INSTALMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 902539,
+      "min": 0.0,
+      "max": 3771487.845,
+      "avg": 17050.906988970648,
+      "median": 8837.669469458466
+    },
+    "AMT_PAYMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 2905,
+      "null_pct": 0.0214,
+      "distinct_count": 944235,
+      "min": 0.0,
+      "max": 3771487.845,
+      "avg": 17238.223249587205,
+      "median": 8163.75820127132
+    }
+  },
+  "foreign_key_check": {
+    "column": "SK_ID_CURR",
+    "references": "SK_ID_CURR spine (application_train + application_test)",
+    "orphan_key_count": 0
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "table": "bureau_balance.csv",
+  "row_count": 27299925,
+  "column_count": 3,
+  "columns": {
+    "SK_ID_BUREAU": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 817395,
+      "min": 5001709,
+      "max": 6842888,
+      "avg": 6036297.332973552,
+      "median": 6072786
+    },
+    "MONTHS_BALANCE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 97,
+      "min": -96,
+      "max": 0,
+      "avg": -30.74168665298531,
+      "median": -25
+    },
+    "STATUS": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 8,
+      "top_values": [
+        {
+          "value": "C",
+          "count": 13646993
+        },
+        {
+          "value": "0",
+          "count": 7499507
+        },
+        {
+          "value": "X",
+          "count": 5810482
+        },
+        {
+          "value": "1",
+          "count": 242347
+        },
+        {
+          "value": "5",
+          "count": 62406
+        },
+        {
+          "value": "2",
+          "count": 23419
+        },
+        {
+          "value": "3",
+          "count": 8924
+        },
+        {
+          "value": "4",
+          "count": 5847
+        }
+      ]
+    }
+  }
+}

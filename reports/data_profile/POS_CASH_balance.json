@@ -1,0 +1,126 @@
+{
+  "table": "POS_CASH_balance.csv",
+  "row_count": 10001358,
+  "column_count": 8,
+  "columns": {
+    "SK_ID_PREV": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 936325,
+      "min": 1000001,
+      "max": 2843499,
+      "avg": 1903216.5989568618,
+      "median": 1895550
+    },
+    "SK_ID_CURR": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 337252,
+      "min": 100001,
+      "max": 456255,
+      "avg": 278403.8633055631,
+      "median": 278516
+    },
+    "MONTHS_BALANCE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 96,
+      "min": -96,
+      "max": -1,
+      "avg": -35.012587990550884,
+      "median": -28
+    },
+    "CNT_INSTALMENT": {
+      "dtype": "DOUBLE",
+      "null_count": 26071,
+      "null_pct": 0.2607,
+      "distinct_count": 73,
+      "min": 1.0,
+      "max": 92.0,
+      "avg": 17.089650453164907,
+      "median": 12.0
+    },
+    "CNT_INSTALMENT_FUTURE": {
+      "dtype": "DOUBLE",
+      "null_count": 26087,
+      "null_pct": 0.2608,
+      "distinct_count": 79,
+      "min": 0.0,
+      "max": 85.0,
+      "avg": 10.483840388897706,
+      "median": 7.0
+    },
+    "NAME_CONTRACT_STATUS": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 9,
+      "top_values": [
+        {
+          "value": "Active",
+          "count": 9151119
+        },
+        {
+          "value": "Completed",
+          "count": 744883
+        },
+        {
+          "value": "Signed",
+          "count": 87260
+        },
+        {
+          "value": "Demand",
+          "count": 7065
+        },
+        {
+          "value": "Returned to the store",
+          "count": 5461
+        },
+        {
+          "value": "Approved",
+          "count": 4917
+        },
+        {
+          "value": "Amortized debt",
+          "count": 636
+        },
+        {
+          "value": "Canceled",
+          "count": 15
+        },
+        {
+          "value": "XNA",
+          "count": 2
+        }
+      ]
+    },
+    "SK_DPD": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 3400,
+      "min": 0,
+      "max": 4231,
+      "avg": 11.606928279139693,
+      "median": 0
+    },
+    "SK_DPD_DEF": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2307,
+      "min": 0,
+      "max": 3595,
+      "avg": 0.654468423188131,
+      "median": 0
+    }
+  },
+  "foreign_key_check": {
+    "column": "SK_ID_CURR",
+    "references": "SK_ID_CURR spine (application_train + application_test)",
+    "orphan_key_count": 0
+  }
+}

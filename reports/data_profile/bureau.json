@@ -1,0 +1,253 @@
+{
+  "table": "bureau.csv",
+  "row_count": 1716428,
+  "column_count": 17,
+  "columns": {
+    "SK_ID_CURR": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 305811,
+      "min": 100001,
+      "max": 456255,
+      "avg": 278214.9336447553,
+      "median": 277999
+    },
+    "SK_ID_BUREAU": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1716428,
+      "min": 5000000,
+      "max": 6843457,
+      "avg": 5924434.489031873,
+      "median": 5925835
+    },
+    "CREDIT_ACTIVE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": "Closed",
+          "count": 1079273
+        },
+        {
+          "value": "Active",
+          "count": 630607
+        },
+        {
+          "value": "Sold",
+          "count": 6527
+        },
+        {
+          "value": "Bad debt",
+          "count": 21
+        }
+      ]
+    },
+    "CREDIT_CURRENCY": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 4,
+      "top_values": [
+        {
+          "value": "currency 1",
+          "count": 1715020
+        },
+        {
+          "value": "currency 2",
+          "count": 1224
+        },
+        {
+          "value": "currency 3",
+          "count": 174
+        },
+        {
+          "value": "currency 4",
+          "count": 10
+        }
+      ]
+    },
+    "DAYS_CREDIT": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2923,
+      "min": -2922,
+      "max": 0,
+      "avg": -1142.107684680045,
+      "median": -986
+    },
+    "CREDIT_DAY_OVERDUE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 942,
+      "min": 0,
+      "max": 2792,
+      "avg": 0.8181665645165425,
+      "median": 0
+    },
+    "DAYS_CREDIT_ENDDATE": {
+      "dtype": "DOUBLE",
+      "null_count": 105553,
+      "null_pct": 6.1496,
+      "distinct_count": 14096,
+      "min": -42060.0,
+      "max": 31199.0,
+      "avg": 510.51736230309615,
+      "median": -329.7628350653728
+    },
+    "DAYS_ENDDATE_FACT": {
+      "dtype": "DOUBLE",
+      "null_count": 633653,
+      "null_pct": 36.917,
+      "distinct_count": 2917,
+      "min": -42023.0,
+      "max": 0.0,
+      "avg": -1017.43714806862,
+      "median": -895.8705160889036
+    },
+    "AMT_CREDIT_MAX_OVERDUE": {
+      "dtype": "DOUBLE",
+      "null_count": 1124488,
+      "null_pct": 65.5133,
+      "distinct_count": 68251,
+      "min": 0.0,
+      "max": 115987185.0,
+      "avg": 3825.417661273103,
+      "median": 0.0
+    },
+    "CNT_CREDIT_PROLONG": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 10,
+      "min": 0,
+      "max": 9,
+      "avg": 0.00641040579622332,
+      "median": 0
+    },
+    "AMT_CREDIT_SUM": {
+      "dtype": "DOUBLE",
+      "null_count": 13,
+      "null_pct": 0.0008,
+      "distinct_count": 236708,
+      "min": 0.0,
+      "max": 585000000.0,
+      "avg": 354994.59191767126,
+      "median": 125100.1369062684
+    },
+    "AMT_CREDIT_SUM_DEBT": {
+      "dtype": "DOUBLE",
+      "null_count": 257669,
+      "null_pct": 15.0119,
+      "distinct_count": 226537,
+      "min": -4705600.32,
+      "max": 170100000.0,
+      "avg": 137085.11995216084,
+      "median": 0.0
+    },
+    "AMT_CREDIT_SUM_LIMIT": {
+      "dtype": "DOUBLE",
+      "null_count": 591780,
+      "null_pct": 34.4774,
+      "distinct_count": 51726,
+      "min": -586406.115,
+      "max": 4705600.32,
+      "avg": 6229.514980300507,
+      "median": 0.0
+    },
+    "AMT_CREDIT_SUM_OVERDUE": {
+      "dtype": "DOUBLE",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 1616,
+      "min": 0.0,
+      "max": 3756681.0,
+      "avg": 37.912757741658844,
+      "median": 0.0
+    },
+    "CREDIT_TYPE": {
+      "dtype": "VARCHAR",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 15,
+      "top_values": [
+        {
+          "value": "Consumer credit",
+          "count": 1251615
+        },
+        {
+          "value": "Credit card",
+          "count": 402195
+        },
+        {
+          "value": "Car loan",
+          "count": 27690
+        },
+        {
+          "value": "Mortgage",
+          "count": 18391
+        },
+        {
+          "value": "Microloan",
+          "count": 12413
+        },
+        {
+          "value": "Loan for business development",
+          "count": 1975
+        },
+        {
+          "value": "Another type of loan",
+          "count": 1017
+        },
+        {
+          "value": "Unknown type of loan",
+          "count": 555
+        },
+        {
+          "value": "Loan for working capital replenishment",
+          "count": 469
+        },
+        {
+          "value": "Cash loan (non-earmarked)",
+          "count": 56
+        }
+      ]
+    },
+    "DAYS_CREDIT_UPDATE": {
+      "dtype": "BIGINT",
+      "null_count": 0,
+      "null_pct": 0.0,
+      "distinct_count": 2982,
+      "min": -41947,
+      "max": 372,
+      "avg": -593.7483197663986,
+      "median": -394
+    },
+    "AMT_ANNUITY": {
+      "dtype": "DOUBLE",
+      "null_count": 1226791,
+      "null_pct": 71.4735,
+      "distinct_count": 40321,
+      "min": 0.0,
+      "max": 118453423.5,
+      "avg": 15712.757700077795,
+      "median": 0.34024020542958516
+    }
+  },
+  "primary_key_check": {
+    "column": "SK_ID_BUREAU",
+    "duplicate_key_count": 0,
+    "is_unique": true
+  },
+  "foreign_key_check": {
+    "column": "SK_ID_CURR",
+    "references": "SK_ID_CURR spine (application_train + application_test)",
+    "orphan_key_count": 0
+  }
+}
