@@ -5,6 +5,7 @@ description = "Machine learning project for the Home Credit Default Risk Kaggle 
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "duckdb>=1.5.5",
     "ipykernel>=7.3.0",
     "jupyterlab>=4.6.3",
     "kagglehub>=1.0.2",

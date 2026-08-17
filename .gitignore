@@ -73,3 +73,12 @@ models/*
 # Generated reports
 reports/*
 !reports/.gitkeep
+
+# Data profiling artifacts are committed on purpose (small, structured,
+# versioned source of truth for both humans and future LLM sessions).
+# The DuckDB landing cache is a large throwaway intermediate — not committed.
+!reports/data_profile/
+reports/data_profile/*.duckdb
+reports/data_profile/*.duckdb.wal
+!reports/data_profile/*.json
+!reports/data_dictionary.md
