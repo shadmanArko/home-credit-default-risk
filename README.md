@@ -70,6 +70,30 @@ a scalable engine, store as metadata, read the metadata everywhere else),
 and it scales unchanged from this dataset's ~1GB tables to files far
 larger than available RAM.
 
+### Visual EDA report (Sweetviz)
+
+`uv run python scripts/generate_eda_report.py` generates
+`reports/eda_train_vs_test_compare.html`, a Sweetviz side-by-side
+comparison of `application_train` vs. `application_test` — per-column
+distributions, missingness, and cardinality plotted for both sets at once.
+
+Two deliberate scoping decisions, not defaults:
+
+- **`ydata-profiling` was evaluated and rejected**: its pins (`pandas
+  <=1.1` / `==1.4.0`) conflict with this project's `pandas>=3.0.5` and
+  there's no way to satisfy both — documented here instead of silently
+  worked around.
+- Only `application_train`/`application_test` are profiled this way
+  (307k / 49k rows fit safely in pandas); the report intentionally
+  **excludes `TARGET`** and skips pairwise feature associations. Per this
+  project's EDA discipline (see `notebooks/01_data_understanding.ipynb`),
+  feature-vs-target analysis is deferred until after the stratified
+  train/valid split and computed on the training fold only — this report
+  is train-vs-test drift only, not target correlation.
+
+The generated HTML (~8MB, mostly embedded plots) is not committed to git;
+regenerate it locally when needed.
+
 ## Project Structure
 
 ```text
