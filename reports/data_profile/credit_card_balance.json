@@ -40,7 +40,7 @@
       "distinct_count": 1347904,
       "min": -420250.185,
       "max": 1505902.185,
-      "avg": 58300.15526185754,
+      "avg": 58300.15526185749,
       "median": 0.0
     },
     "AMT_CREDIT_LIMIT_ACTUAL": {
@@ -60,7 +60,7 @@
       "distinct_count": 2267,
       "min": -6827.31,
       "max": 2115000.0,
-      "avg": 5961.324822059306,
+      "avg": 5961.324822059308,
       "median": 0.0
     },
     "AMT_DRAWINGS_CURRENT": {
@@ -70,7 +70,7 @@
       "distinct_count": 187005,
       "min": -6211.62,
       "max": 2287098.315,
-      "avg": 7433.38817920264,
+      "avg": 7433.388179202639,
       "median": 0.0
     },
     "AMT_DRAWINGS_OTHER_CURRENT": {
@@ -90,7 +90,7 @@
       "distinct_count": 168748,
       "min": 0.0,
       "max": 2239274.16,
-      "avg": 2968.804847683019,
+      "avg": 2968.8048476830218,
       "median": 0.0
     },
     "AMT_INST_MIN_REGULARITY": {
@@ -100,7 +100,7 @@
       "distinct_count": 312266,
       "min": 0.0,
       "max": 202882.005,
-      "avg": 3540.204128515211,
+      "avg": 3540.2041285152072,
       "median": 0.0
     },
     "AMT_PAYMENT_CURRENT": {
@@ -110,7 +110,7 @@
       "distinct_count": 163209,
       "min": 0.0,
       "max": 4289207.445,
-      "avg": 10280.537702000322,
+      "avg": 10280.537702000312,
       "median": 2702.7
     },
     "AMT_PAYMENT_TOTAL_CURRENT": {
@@ -120,7 +120,7 @@
       "distinct_count": 182957,
       "min": 0.0,
       "max": 4278315.69,
-      "avg": 7588.856739464136,
+      "avg": 7588.856739464137,
       "median": 0.0
     },
     "AMT_RECEIVABLE_PRINCIPAL": {
@@ -130,7 +130,7 @@
       "distinct_count": 1195839,
       "min": -423305.82,
       "max": 1472316.795,
-      "avg": 55965.87690549751,
+      "avg": 55965.87690549755,
       "median": 0.0
     },
     "AMT_RECIVABLE": {
@@ -140,7 +140,7 @@
       "distinct_count": 1338878,
       "min": -420250.185,
       "max": 1493338.185,
-      "avg": 58088.81117667365,
+      "avg": 58088.81117667358,
       "median": 0.0
     },
     "AMT_TOTAL_RECEIVABLE": {
@@ -150,7 +150,7 @@
       "distinct_count": 1339008,
       "min": -420250.185,
       "max": 1493338.185,
-      "avg": 58098.28548873732,
+      "avg": 58098.28548873725,
       "median": 0.0
     },
     "CNT_DRAWINGS_ATM_CURRENT": {

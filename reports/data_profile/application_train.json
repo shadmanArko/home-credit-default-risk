@@ -320,7 +320,7 @@
       "distinct_count": 81,
       "min": 0.00029,
       "max": 0.072508,
-      "avg": 0.020868112057780497,
+      "avg": 0.020868112057781246,
       "median": 0.01885
     },
     "DAYS_BIRTH": {
@@ -350,7 +350,7 @@
       "distinct_count": 15688,
       "min": -24672.0,
       "max": 0.0,
-      "avg": -4986.120327538418,
+      "avg": -4986.120327538419,
       "median": -4504.0
     },
     "DAYS_ID_PUBLISH": {
@@ -672,7 +672,7 @@
       "distinct_count": 114584,
       "min": 0.014568132412445587,
       "max": 0.9626927705613059,
-      "avg": 0.5021298056566633,
+      "avg": 0.5021298056566631,
       "median": 0.5059979305057544
     },
     "EXT_SOURCE_2": {
@@ -682,7 +682,7 @@
       "distinct_count": 119831,
       "min": 8.173616518884397e-08,
       "max": 0.8549996664047012,
-      "avg": 0.5143926741308479,
+      "avg": 0.5143926741308475,
       "median": 0.5659614260608526
     },
     "EXT_SOURCE_3": {
@@ -692,7 +692,7 @@
       "distinct_count": 814,
       "min": 0.0005272652387098817,
       "max": 0.8960095494948396,
-      "avg": 0.5108529061799466,
+      "avg": 0.510852906179945,
       "median": 0.5352762504724826
     },
     "APARTMENTS_AVG": {
@@ -712,7 +712,7 @@
       "distinct_count": 3780,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.08844221905180015,
+      "avg": 0.08844221905180012,
       "median": 0.0763
     },
     "YEARS_BEGINEXPLUATATION_AVG": {
@@ -722,7 +722,7 @@
       "distinct_count": 285,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.9777348581622413,
+      "avg": 0.9777348581622414,
       "median": 0.9816
     },
     "YEARS_BUILD_AVG": {
@@ -732,7 +732,7 @@
       "distinct_count": 149,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.7524714325927329,
+      "avg": 0.7524714325927326,
       "median": 0.7552
     },
     "COMMONAREA_AVG": {
@@ -742,7 +742,7 @@
       "distinct_count": 3181,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.04462071541135081,
+      "avg": 0.044620715411350854,
       "median": 0.0211
     },
     "ELEVATORS_AVG": {
@@ -752,7 +752,7 @@
       "distinct_count": 257,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.07894151232417519,
+      "avg": 0.07894151232417486,
       "median": 0.0
     },
     "ENTRANCES_AVG": {
@@ -762,7 +762,7 @@
       "distinct_count": 285,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.1497246700680427,
+      "avg": 0.14972467006803944,
       "median": 0.1379
     },
     "FLOORSMAX_AVG": {
@@ -772,7 +772,7 @@
       "distinct_count": 403,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.22628190703663006,
+      "avg": 0.22628190703663015,
       "median": 0.1667
     },
     "FLOORSMIN_AVG": {
@@ -782,7 +782,7 @@
       "distinct_count": 305,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.23189350049055513,
+      "avg": 0.23189350049055482,
       "median": 0.2083
     },
     "LANDAREA_AVG": {
@@ -792,7 +792,7 @@
       "distinct_count": 3527,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.0663331841723973,
+      "avg": 0.06633318417239727,
       "median": 0.0481
     },
     "LIVINGAPARTMENTS_AVG": {
@@ -812,7 +812,7 @@
       "distinct_count": 5199,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.1073990193325992,
+      "avg": 0.10739901933259903,
       "median": 0.0745
     },
     "NONLIVINGAPARTMENTS_AVG": {
@@ -822,7 +822,7 @@
       "distinct_count": 386,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.008808672617209785,
+      "avg": 0.008808672617209768,
       "median": 0.0
     },
     "NONLIVINGAREA_AVG": {
@@ -832,7 +832,7 @@
       "distinct_count": 3290,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.028357757075796634,
+      "avg": 0.028357757075796644,
       "median": 0.0036
     },
     "APARTMENTS_MODE": {
@@ -842,7 +842,7 @@
       "distinct_count": 760,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.11423100693299297,
+      "avg": 0.11423100693299305,
       "median": 0.084
     },
     "BASEMENTAREA_MODE": {
@@ -852,7 +852,7 @@
       "distinct_count": 3841,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.08754321224758464,
+      "avg": 0.0875432122475847,
       "median": 0.0746
     },
     "YEARS_BEGINEXPLUATATION_MODE": {
@@ -862,7 +862,7 @@
       "distinct_count": 221,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.9770653729428809,
+      "avg": 0.9770653729428818,
       "median": 0.9816
     },
     "YEARS_BUILD_MODE": {
@@ -872,7 +872,7 @@
       "distinct_count": 154,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.7596373227337767,
+      "avg": 0.7596373227337776,
       "median": 0.7648
     },
     "COMMONAREA_MODE": {
@@ -892,7 +892,7 @@
       "distinct_count": 26,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.07448973610916879,
+      "avg": 0.07448973610916886,
       "median": 0.0
     },
     "ENTRANCES_MODE": {
@@ -902,7 +902,7 @@
       "distinct_count": 30,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.14519265864568948,
+      "avg": 0.14519265864568587,
       "median": 0.1379
     },
     "FLOORSMAX_MODE": {
@@ -922,7 +922,7 @@
       "distinct_count": 25,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.2280584925507557,
+      "avg": 0.22805849255075533,
       "median": 0.2083
     },
     "LANDAREA_MODE": {
@@ -932,7 +932,7 @@
       "distinct_count": 3563,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.06495768445657657,
+      "avg": 0.06495768445657664,
       "median": 0.0458
     },
     "LIVINGAPARTMENTS_MODE": {
@@ -942,7 +942,7 @@
       "distinct_count": 736,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.10564485674943674,
+      "avg": 0.10564485674943677,
       "median": 0.0771
     },
     "LIVINGAREA_MODE": {
@@ -962,7 +962,7 @@
       "distinct_count": 167,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.008076387544282531,
+      "avg": 0.008076387544282512,
       "median": 0.0
     },
     "NONLIVINGAREA_MODE": {
@@ -972,7 +972,7 @@
       "distinct_count": 3327,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.027022319685987707,
+      "avg": 0.027022319685987724,
       "median": 0.0011
     },
     "APARTMENTS_MEDI": {
@@ -982,7 +982,7 @@
       "distinct_count": 1148,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.11784992076592957,
+      "avg": 0.11784992076592973,
       "median": 0.0864
     },
     "BASEMENTAREA_MEDI": {
@@ -1012,7 +1012,7 @@
       "distinct_count": 151,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.7557462721916172,
+      "avg": 0.755746272191618,
       "median": 0.7585
     },
     "COMMONAREA_MEDI": {
@@ -1022,7 +1022,7 @@
       "distinct_count": 3202,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.0445951017852907,
+      "avg": 0.04459510178529072,
       "median": 0.0208
     },
     "ELEVATORS_MEDI": {
@@ -1032,7 +1032,7 @@
       "distinct_count": 46,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.07807784431136258,
+      "avg": 0.07807784431136224,
       "median": 0.0
     },
     "ENTRANCES_MEDI": {
@@ -1042,7 +1042,7 @@
       "distinct_count": 46,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.1492127807286929,
+      "avg": 0.14921278072868946,
       "median": 0.1379
     },
     "FLOORSMAX_MEDI": {
@@ -1062,7 +1062,7 @@
       "distinct_count": 47,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.23162493804934514,
+      "avg": 0.23162493804934492,
       "median": 0.2083
     },
     "LANDAREA_MEDI": {
@@ -1072,7 +1072,7 @@
       "distinct_count": 3560,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.06716874904939898,
+      "avg": 0.06716874904939911,
       "median": 0.0487
     },
     "LIVINGAPARTMENTS_MEDI": {
@@ -1082,7 +1082,7 @@
       "distinct_count": 1097,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.1019544732407259,
+      "avg": 0.10195447324072582,
       "median": 0.0761
     },
     "LIVINGAREA_MEDI": {
@@ -1092,7 +1092,7 @@
       "distinct_count": 5281,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.10860673604899444,
+      "avg": 0.10860673604899451,
       "median": 0.0749
     },
     "NONLIVINGAPARTMENTS_MEDI": {
@@ -1102,7 +1102,7 @@
       "distinct_count": 214,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.00865101333021141,
+      "avg": 0.008651013330211363,
       "median": 0.0
     },
     "NONLIVINGAREA_MEDI": {
@@ -1112,7 +1112,7 @@
       "distinct_count": 3323,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.02823592059726191,
+      "avg": 0.02823592059726193,
       "median": 0.0031
     },
     "FONDKAPREMONT_MODE": {
@@ -1174,7 +1174,7 @@
       "distinct_count": 5116,
       "min": 0.0,
       "max": 1.0,
-      "avg": 0.10254666268544103,
+      "avg": 0.10254666268544088,
       "median": 0.0688
     },
     "WALLSMATERIAL_MODE": {
