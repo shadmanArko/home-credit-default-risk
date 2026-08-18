@@ -18,8 +18,8 @@ Current stage:
 - [x] Automated testing with pytest
 - [x] Kaggle data pipeline
 - [x] Data profiling & dictionary
+- [x] Exploratory data analysis
 - [ ] Data validation
-- [ ] Exploratory data analysis
 - [ ] Feature engineering
 - [ ] Baseline model
 - [ ] Model evaluation
