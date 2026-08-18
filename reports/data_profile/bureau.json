@@ -11,7 +11,7 @@
       "min": 100001,
       "max": 456255,
       "avg": 278214.9336447553,
-      "median": 277999
+      "median": 278055.0
     },
     "SK_ID_BUREAU": {
       "dtype": "BIGINT",
@@ -21,7 +21,7 @@
       "min": 5000000,
       "max": 6843457,
       "avg": 5924434.489031873,
-      "median": 5925835
+      "median": 5926303.5
     },
     "CREDIT_ACTIVE": {
       "dtype": "VARCHAR",
@@ -79,7 +79,7 @@
       "min": -2922,
       "max": 0,
       "avg": -1142.107684680045,
-      "median": -986
+      "median": -987.0
     },
     "CREDIT_DAY_OVERDUE": {
       "dtype": "BIGINT",
@@ -89,7 +89,7 @@
       "min": 0,
       "max": 2792,
       "avg": 0.8181665645165425,
-      "median": 0
+      "median": 0.0
     },
     "DAYS_CREDIT_ENDDATE": {
       "dtype": "DOUBLE",
@@ -99,7 +99,7 @@
       "min": -42060.0,
       "max": 31199.0,
       "avg": 510.51736230309615,
-      "median": -329.7628350653728
+      "median": -330.0
     },
     "DAYS_ENDDATE_FACT": {
       "dtype": "DOUBLE",
@@ -109,7 +109,7 @@
       "min": -42023.0,
       "max": 0.0,
       "avg": -1017.43714806862,
-      "median": -895.8705160889036
+      "median": -897.0
     },
     "AMT_CREDIT_MAX_OVERDUE": {
       "dtype": "DOUBLE",
@@ -118,7 +118,7 @@
       "distinct_count": 68251,
       "min": 0.0,
       "max": 115987185.0,
-      "avg": 3825.417661273103,
+      "avg": 3825.4176612731035,
       "median": 0.0
     },
     "CNT_CREDIT_PROLONG": {
@@ -129,7 +129,7 @@
       "min": 0,
       "max": 9,
       "avg": 0.00641040579622332,
-      "median": 0
+      "median": 0.0
     },
     "AMT_CREDIT_SUM": {
       "dtype": "DOUBLE",
@@ -139,7 +139,7 @@
       "min": 0.0,
       "max": 585000000.0,
       "avg": 354994.59191767126,
-      "median": 125100.1369062684
+      "median": 125518.5
     },
     "AMT_CREDIT_SUM_DEBT": {
       "dtype": "DOUBLE",
@@ -148,7 +148,7 @@
       "distinct_count": 226537,
       "min": -4705600.32,
       "max": 170100000.0,
-      "avg": 137085.11995216084,
+      "avg": 137085.11995216087,
       "median": 0.0
     },
     "AMT_CREDIT_SUM_LIMIT": {
@@ -158,7 +158,7 @@
       "distinct_count": 51726,
       "min": -586406.115,
       "max": 4705600.32,
-      "avg": 6229.514980300507,
+      "avg": 6229.514980300508,
       "median": 0.0
     },
     "AMT_CREDIT_SUM_OVERDUE": {
@@ -168,7 +168,7 @@
       "distinct_count": 1616,
       "min": 0.0,
       "max": 3756681.0,
-      "avg": 37.912757741658844,
+      "avg": 37.91275774165884,
       "median": 0.0
     },
     "CREDIT_TYPE": {
@@ -227,7 +227,7 @@
       "min": -41947,
       "max": 372,
       "avg": -593.7483197663986,
-      "median": -394
+      "median": -395.0
     },
     "AMT_ANNUITY": {
       "dtype": "DOUBLE",
@@ -236,8 +236,8 @@
       "distinct_count": 40321,
       "min": 0.0,
       "max": 118453423.5,
-      "avg": 15712.757700077795,
-      "median": 0.34024020542958516
+      "avg": 15712.75770007779,
+      "median": 0.0
     }
   },
   "primary_key_check": {

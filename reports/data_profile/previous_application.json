@@ -11,7 +11,7 @@
       "min": 1000001,
       "max": 2845382,
       "avg": 1923089.1353305625,
-      "median": 1923109
+      "median": 1923110.5
     },
     "SK_ID_CURR": {
       "dtype": "BIGINT",
@@ -21,7 +21,7 @@
       "min": 100001,
       "max": 456255,
       "avg": 278357.1740986484,
-      "median": 278743
+      "median": 278714.5
     },
     "NAME_CONTRACT_TYPE": {
       "dtype": "VARCHAR",
@@ -54,8 +54,8 @@
       "distinct_count": 357959,
       "min": 0.0,
       "max": 418058.145,
-      "avg": 15955.120659452168,
-      "median": 11229.138422932225
+      "avg": 15955.120659452166,
+      "median": 11250.0
     },
     "AMT_APPLICATION": {
       "dtype": "DOUBLE",
@@ -64,8 +64,8 @@
       "distinct_count": 93885,
       "min": 0.0,
       "max": 6905160.0,
-      "avg": 175233.86036043006,
-      "median": 71285.23912568392
+      "avg": 175233.8603604301,
+      "median": 71046.0
     },
     "AMT_CREDIT": {
       "dtype": "DOUBLE",
@@ -74,8 +74,8 @@
       "distinct_count": 86803,
       "min": 0.0,
       "max": 6905160.0,
-      "avg": 196114.02121797958,
-      "median": 80195.3200643911
+      "avg": 196114.02121797955,
+      "median": 80541.0
     },
     "AMT_DOWN_PAYMENT": {
       "dtype": "DOUBLE",
@@ -84,8 +84,8 @@
       "distinct_count": 29278,
       "min": -0.9,
       "max": 3060045.0,
-      "avg": 6697.402138796693,
-      "median": 1371.1001631451502
+      "avg": 6697.402138796697,
+      "median": 1638.0
     },
     "AMT_GOODS_PRICE": {
       "dtype": "DOUBLE",
@@ -94,8 +94,8 @@
       "distinct_count": 93885,
       "min": 0.0,
       "max": 6905160.0,
-      "avg": 227847.27928334597,
-      "median": 110800.02851857095
+      "avg": 227847.27928334603,
+      "median": 112320.0
     },
     "WEEKDAY_APPR_PROCESS_START": {
       "dtype": "VARCHAR",
@@ -141,7 +141,7 @@
       "min": 0,
       "max": 23,
       "avg": 12.484181667738385,
-      "median": 12
+      "median": 12.0
     },
     "FLAG_LAST_APPL_PER_CONTRACT": {
       "dtype": "VARCHAR",
@@ -167,7 +167,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.9964675185335532,
-      "median": 1
+      "median": 1.0
     },
     "RATE_DOWN_PAYMENT": {
       "dtype": "DOUBLE",
@@ -176,8 +176,8 @@
       "distinct_count": 207033,
       "min": -1.4978763414307847e-05,
       "max": 1.0,
-      "avg": 0.07963681542840431,
-      "median": 0.048381984647428745
+      "avg": 0.07963681542840484,
+      "median": 0.051605084707529336
     },
     "RATE_INTEREST_PRIMARY": {
       "dtype": "DOUBLE",
@@ -186,8 +186,8 @@
       "distinct_count": 148,
       "min": 0.03478125354187918,
       "max": 1.0,
-      "avg": 0.18835688954982105,
-      "median": 0.18912422823228275
+      "avg": 0.18835688954982102,
+      "median": 0.1891221806641732
     },
     "RATE_INTEREST_PRIVILEGED": {
       "dtype": "DOUBLE",
@@ -279,7 +279,7 @@
       "min": -2922,
       "max": -1,
       "avg": -880.6796679946402,
-      "median": -582
+      "median": -581.0
     },
     "NAME_PAYMENT_TYPE": {
       "dtype": "VARCHAR",
@@ -557,7 +557,7 @@
       "min": -1,
       "max": 4000000,
       "avg": 313.95111524630977,
-      "median": 3
+      "median": 3.0
     },
     "NAME_SELLER_INDUSTRY": {
       "dtype": "VARCHAR",
@@ -711,7 +711,7 @@
       "min": -2892.0,
       "max": 365243.0,
       "avg": 13826.269336879443,
-      "median": -830.9233938325295
+      "median": -831.0
     },
     "DAYS_LAST_DUE_1ST_VERSION": {
       "dtype": "DOUBLE",
@@ -721,7 +721,7 @@
       "min": -2801.0,
       "max": 365243.0,
       "avg": 33767.77405382746,
-      "median": -360.95211952979076
+      "median": -361.0
     },
     "DAYS_LAST_DUE": {
       "dtype": "DOUBLE",
@@ -731,7 +731,7 @@
       "min": -2889.0,
       "max": 365243.0,
       "avg": 76582.40306413585,
-      "median": -538.2421468815629
+      "median": -537.0
     },
     "DAYS_TERMINATION": {
       "dtype": "DOUBLE",
@@ -741,7 +741,7 @@
       "min": -2874.0,
       "max": 365243.0,
       "avg": 81992.34383828295,
-      "median": -498.59384537725396
+      "median": -499.0
     },
     "NFLAG_INSURED_ON_APPROVAL": {
       "dtype": "DOUBLE",

@@ -11,7 +11,7 @@
       "min": 1000001,
       "max": 2843499,
       "avg": 1903364.9695492988,
-      "median": 1896120
+      "median": 1896520.0
     },
     "SK_ID_CURR": {
       "dtype": "BIGINT",
@@ -21,7 +21,7 @@
       "min": 100001,
       "max": 456255,
       "avg": 278444.88173821557,
-      "median": 278780
+      "median": 278685.0
     },
     "NUM_INSTALMENT_VERSION": {
       "dtype": "DOUBLE",
@@ -41,7 +41,7 @@
       "min": 1,
       "max": 277,
       "avg": 18.87089583026623,
-      "median": 8
+      "median": 8.0
     },
     "DAYS_INSTALMENT": {
       "dtype": "DOUBLE",
@@ -51,7 +51,7 @@
       "min": -2922.0,
       "max": -1.0,
       "avg": -1042.2699916011295,
-      "median": -818.3850954445509
+      "median": -818.0
     },
     "DAYS_ENTRY_PAYMENT": {
       "dtype": "DOUBLE",
@@ -61,7 +61,7 @@
       "min": -4921.0,
       "max": -1.0,
       "avg": -1051.1136840621016,
-      "median": -827.4432259754285
+      "median": -827.0
     },
     "AMT_INSTALMENT": {
       "dtype": "DOUBLE",
@@ -70,8 +70,8 @@
       "distinct_count": 902539,
       "min": 0.0,
       "max": 3771487.845,
-      "avg": 17050.906988970648,
-      "median": 8837.669469458466
+      "avg": 17050.90698897069,
+      "median": 8884.08
     },
     "AMT_PAYMENT": {
       "dtype": "DOUBLE",
@@ -80,8 +80,8 @@
       "distinct_count": 944235,
       "min": 0.0,
       "max": 3771487.845,
-      "avg": 17238.223249587205,
-      "median": 8163.75820127132
+      "avg": 17238.22324958725,
+      "median": 8125.515
     }
   },
   "foreign_key_check": {

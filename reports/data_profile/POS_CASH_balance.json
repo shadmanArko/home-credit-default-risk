@@ -11,7 +11,7 @@
       "min": 1000001,
       "max": 2843499,
       "avg": 1903216.5989568618,
-      "median": 1895550
+      "median": 1896565.0
     },
     "SK_ID_CURR": {
       "dtype": "BIGINT",
@@ -21,7 +21,7 @@
       "min": 100001,
       "max": 456255,
       "avg": 278403.8633055631,
-      "median": 278516
+      "median": 278654.0
     },
     "MONTHS_BALANCE": {
       "dtype": "BIGINT",
@@ -31,7 +31,7 @@
       "min": -96,
       "max": -1,
       "avg": -35.012587990550884,
-      "median": -28
+      "median": -28.0
     },
     "CNT_INSTALMENT": {
       "dtype": "DOUBLE",
@@ -105,7 +105,7 @@
       "min": 0,
       "max": 4231,
       "avg": 11.606928279139693,
-      "median": 0
+      "median": 0.0
     },
     "SK_DPD_DEF": {
       "dtype": "BIGINT",
@@ -115,7 +115,7 @@
       "min": 0,
       "max": 3595,
       "avg": 0.654468423188131,
-      "median": 0
+      "median": 0.0
     }
   },
   "foreign_key_check": {

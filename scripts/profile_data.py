@@ -61,6 +61,20 @@ NUMERIC_TYPES = {
 MAX_CATEGORICAL_CARDINALITY = 100
 TOP_N_VALUES = 10
 
+# DuckDB's read_csv_auto type-sniffing misdetects this column as BOOLEAN
+# because its values are the literal strings "Yes"/"No", which match its
+# boolean-literal heuristic. It's actually a categorical flag like every
+# other *_MODE column. Left unfixed, this doesn't just mislabel the profile
+# (top_values would show true/false instead of Yes/No) — a nullable
+# BOOLEAN column mixed with nullable string columns in one pandas
+# DataFrame trips a real pandas/scikit-learn interop bug downstream
+# (`TypeError: boolean value of NA is ambiguous` inside SimpleImputer),
+# discovered while building the HC-M1-07 modeling pipeline.
+COLUMN_TYPE_OVERRIDES = {
+    "application_train.csv": {"EMERGENCYSTATE_MODE": "VARCHAR"},
+    "application_test.csv": {"EMERGENCYSTATE_MODE": "VARCHAR"},
+}
+
 
 def quote(identifier: str) -> str:
     return '"' + identifier.replace('"', '""') + '"'
@@ -91,7 +105,7 @@ def profile_table(
             exprs.append(f"MIN({q}) AS {quote(col + '__min')}")
             exprs.append(f"MAX({q}) AS {quote(col + '__max')}")
             exprs.append(f"AVG({q}) AS {quote(col + '__avg')}")
-            exprs.append(f"approx_quantile({q}, 0.5) AS {quote(col + '__median')}")
+            exprs.append(f"median({q}) AS {quote(col + '__median')}")
 
     agg_sql = f"SELECT {', '.join(exprs)} FROM {source}"
     agg_row = con.sql(agg_sql).fetchone()
@@ -165,9 +179,11 @@ def land_table(con: duckdb.DuckDBPyConnection, table: str, csv_path: Path) -> No
     ).fetchone()
     if exists:
         return
+    overrides = COLUMN_TYPE_OVERRIDES.get(csv_path.name)
+    types_arg = f", types={overrides!r}" if overrides else ""
     con.sql(
         f"CREATE TABLE {table} AS "
-        f"SELECT * FROM read_csv_auto({str(csv_path)!r}, sample_size=-1)"
+        f"SELECT * FROM read_csv_auto({str(csv_path)!r}, sample_size=-1{types_arg})"
     )
 
 

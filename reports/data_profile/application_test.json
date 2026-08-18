@@ -11,7 +11,7 @@
       "min": 100001,
       "max": 456250,
       "avg": 277796.67634990974,
-      "median": 277605
+      "median": 277549.0
     },
     "NAME_CONTRACT_TYPE": {
       "dtype": "VARCHAR",
@@ -85,7 +85,7 @@
       "min": 0,
       "max": 20,
       "avg": 0.39705399638929917,
-      "median": 0
+      "median": 0.0
     },
     "AMT_INCOME_TOTAL": {
       "dtype": "DOUBLE",
@@ -105,7 +105,7 @@
       "min": 45000.0,
       "max": 2245500.0,
       "avg": 516740.43556129985,
-      "median": 449947.44941645645
+      "median": 450000.0
     },
     "AMT_ANNUITY": {
       "dtype": "DOUBLE",
@@ -115,7 +115,7 @@
       "min": 2295.0,
       "max": 180576.0,
       "avg": 29426.240209359607,
-      "median": 26205.219995564512
+      "median": 26199.0
     },
     "AMT_GOODS_PRICE": {
       "dtype": "DOUBLE",
@@ -125,7 +125,7 @@
       "min": 45000.0,
       "max": 2245500.0,
       "avg": 462618.84047267353,
-      "median": 395413.02904319036
+      "median": 396000.0
     },
     "NAME_TYPE_SUITE": {
       "dtype": "VARCHAR",
@@ -299,7 +299,7 @@
       "min": 0.00025299999999999997,
       "max": 0.072508,
       "avg": 0.02122564108402952,
-      "median": 0.01884655893308613
+      "median": 0.01885
     },
     "DAYS_BIRTH": {
       "dtype": "BIGINT",
@@ -309,7 +309,7 @@
       "min": -25195,
       "max": -7338,
       "avg": -16068.084605284754,
-      "median": -15785
+      "median": -15785.0
     },
     "DAYS_EMPLOYED": {
       "dtype": "BIGINT",
@@ -319,7 +319,7 @@
       "min": -17463,
       "max": 365243,
       "avg": 67485.36632200886,
-      "median": -1292
+      "median": -1293.0
     },
     "DAYS_REGISTRATION": {
       "dtype": "DOUBLE",
@@ -329,7 +329,7 @@
       "min": -23722.0,
       "max": 0.0,
       "avg": -4967.652716231742,
-      "median": -4484.360980877345
+      "median": -4490.0
     },
     "DAYS_ID_PUBLISH": {
       "dtype": "BIGINT",
@@ -339,7 +339,7 @@
       "min": -6348,
       "max": 0,
       "avg": -3051.712949286066,
-      "median": -3235
+      "median": -3234.0
     },
     "OWN_CAR_AGE": {
       "dtype": "DOUBLE",
@@ -359,7 +359,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.9999794846545216,
-      "median": 1
+      "median": 1.0
     },
     "FLAG_EMP_PHONE": {
       "dtype": "BIGINT",
@@ -369,7 +369,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.8097201706876744,
-      "median": 1
+      "median": 1.0
     },
     "FLAG_WORK_PHONE": {
       "dtype": "BIGINT",
@@ -379,7 +379,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.20470211718365336,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_CONT_MOBILE": {
       "dtype": "BIGINT",
@@ -389,7 +389,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.9983998030526834,
-      "median": 1
+      "median": 1.0
     },
     "FLAG_PHONE": {
       "dtype": "BIGINT",
@@ -399,7 +399,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.26312982110618743,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_EMAIL": {
       "dtype": "BIGINT",
@@ -409,7 +409,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.16264565895289676,
-      "median": 0
+      "median": 0.0
     },
     "OCCUPATION_TYPE": {
       "dtype": "VARCHAR",
@@ -477,7 +477,7 @@
       "min": 1,
       "max": 3,
       "avg": 2.038158542589857,
-      "median": 2
+      "median": 2.0
     },
     "REGION_RATING_CLIENT_W_CITY": {
       "dtype": "BIGINT",
@@ -487,7 +487,7 @@
       "min": -1,
       "max": 3,
       "avg": 2.0125964221237487,
-      "median": 2
+      "median": 2.0
     },
     "WEEKDAY_APPR_PROCESS_START": {
       "dtype": "VARCHAR",
@@ -533,7 +533,7 @@
       "min": 0,
       "max": 23,
       "avg": 12.007365009026753,
-      "median": 12
+      "median": 12.0
     },
     "REG_REGION_NOT_LIVE_REGION": {
       "dtype": "BIGINT",
@@ -543,7 +543,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.01883308714918759,
-      "median": 0
+      "median": 0.0
     },
     "REG_REGION_NOT_WORK_REGION": {
       "dtype": "BIGINT",
@@ -553,7 +553,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.05516576399146562,
-      "median": 0
+      "median": 0.0
     },
     "LIVE_REGION_NOT_WORK_REGION": {
       "dtype": "BIGINT",
@@ -563,7 +563,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.04203594288527819,
-      "median": 0
+      "median": 0.0
     },
     "REG_CITY_NOT_LIVE_CITY": {
       "dtype": "BIGINT",
@@ -573,7 +573,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.07746594452650582,
-      "median": 0
+      "median": 0.0
     },
     "REG_CITY_NOT_WORK_CITY": {
       "dtype": "BIGINT",
@@ -583,7 +583,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.22466354833415395,
-      "median": 0
+      "median": 0.0
     },
     "LIVE_CITY_NOT_WORK_CITY": {
       "dtype": "BIGINT",
@@ -593,7 +593,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.17421631380272443,
-      "median": 0
+      "median": 0.0
     },
     "ORGANIZATION_TYPE": {
       "dtype": "VARCHAR",
@@ -651,7 +651,7 @@
       "min": 0.013457910498691777,
       "max": 0.9391445326561508,
       "avg": 0.5011798106396288,
-      "median": 0.5066448204813551
+      "median": 0.5067712615026179
     },
     "EXT_SOURCE_2": {
       "dtype": "DOUBLE",
@@ -661,7 +661,7 @@
       "min": 8.09785587553435e-06,
       "max": 0.8549996664047012,
       "avg": 0.518021075670542,
-      "median": 0.558658951148798
+      "median": 0.5587579430597367
     },
     "EXT_SOURCE_3": {
       "dtype": "DOUBLE",
@@ -671,7 +671,7 @@
       "min": 0.0005272652387098817,
       "max": 0.8825303127941461,
       "avg": 0.5001056254095644,
-      "median": 0.5187147498927137
+      "median": 0.5190973382084597
     },
     "APARTMENTS_AVG": {
       "dtype": "DOUBLE",
@@ -681,7 +681,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.12238773786056177,
-      "median": 0.09179049475025178
+      "median": 0.0928
     },
     "BASEMENTAREA_AVG": {
       "dtype": "DOUBLE",
@@ -691,7 +691,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.09006548358053325,
-      "median": 0.07805871886120996
+      "median": 0.0781
     },
     "YEARS_BEGINEXPLUATATION_AVG": {
       "dtype": "DOUBLE",
@@ -701,7 +701,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.9788281597651234,
-      "median": 0.9815616262855682
+      "median": 0.9816
     },
     "YEARS_BUILD_AVG": {
       "dtype": "DOUBLE",
@@ -711,7 +711,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.7511370908661243,
-      "median": 0.7530520971901721
+      "median": 0.7552
     },
     "COMMONAREA_AVG": {
       "dtype": "DOUBLE",
@@ -721,7 +721,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.047623660567905825,
-      "median": 0.022714391812450788
+      "median": 0.0227
     },
     "ELEVATORS_AVG": {
       "dtype": "DOUBLE",
@@ -771,7 +771,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.06719209370424575,
-      "median": 0.04832097086801106
+      "median": 0.0483
     },
     "LIVINGAPARTMENTS_AVG": {
       "dtype": "DOUBLE",
@@ -781,7 +781,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.10588525432222384,
-      "median": 0.07623837320574159
+      "median": 0.0756
     },
     "LIVINGAREA_AVG": {
       "dtype": "DOUBLE",
@@ -791,7 +791,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.11228625754207705,
-      "median": 0.07706135375061124
+      "median": 0.077
     },
     "NONLIVINGAPARTMENTS_AVG": {
       "dtype": "DOUBLE",
@@ -811,7 +811,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.029387290379523288,
-      "median": 0.0037647648354868944
+      "median": 0.0038
     },
     "APARTMENTS_MODE": {
       "dtype": "DOUBLE",
@@ -821,7 +821,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.11907800619544046,
-      "median": 0.08564329943969563
+      "median": 0.0851
     },
     "BASEMENTAREA_MODE": {
       "dtype": "DOUBLE",
@@ -831,7 +831,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.088998071364261,
-      "median": 0.0769469802496569
+      "median": 0.077
     },
     "YEARS_BEGINEXPLUATATION_MODE": {
       "dtype": "DOUBLE",
@@ -841,7 +841,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.9782923478059214,
-      "median": 0.98128096903929
+      "median": 0.9816
     },
     "YEARS_BUILD_MODE": {
       "dtype": "DOUBLE",
@@ -851,7 +851,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.7583271475835794,
-      "median": 0.758230697292863
+      "median": 0.7583
     },
     "COMMONAREA_MODE": {
       "dtype": "DOUBLE",
@@ -861,7 +861,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.04522303757623448,
-      "median": 0.020246436417651576
+      "median": 0.0203
     },
     "ELEVATORS_MODE": {
       "dtype": "DOUBLE",
@@ -911,7 +911,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.06591410932162031,
-      "median": 0.046063074827751974
+      "median": 0.0462
     },
     "LIVINGAPARTMENTS_MODE": {
       "dtype": "DOUBLE",
@@ -921,7 +921,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.1108742295164108,
-      "median": 0.08157907766499269
+      "median": 0.0817
     },
     "LIVINGAREA_MODE": {
       "dtype": "DOUBLE",
@@ -931,7 +931,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.11068678151794206,
-      "median": 0.0752430379026904
+      "median": 0.0751
     },
     "NONLIVINGAPARTMENTS_MODE": {
       "dtype": "DOUBLE",
@@ -951,7 +951,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.028161478375992827,
-      "median": 0.0011928817874250499
+      "median": 0.0012
     },
     "APARTMENTS_MEDI": {
       "dtype": "DOUBLE",
@@ -961,7 +961,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.12280867763607359,
-      "median": 0.09208102075970068
+      "median": 0.0926
     },
     "BASEMENTAREA_MEDI": {
       "dtype": "DOUBLE",
@@ -971,7 +971,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.08952910012794342,
-      "median": 0.07772713071916829
+      "median": 0.0778
     },
     "YEARS_BEGINEXPLUATATION_MEDI": {
       "dtype": "DOUBLE",
@@ -981,7 +981,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.9788220372373116,
-      "median": 0.9815636314655173
+      "median": 0.9816
     },
     "YEARS_BUILD_MEDI": {
       "dtype": "DOUBLE",
@@ -991,7 +991,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.7543436192838624,
-      "median": 0.7561867924528303
+      "median": 0.7585
     },
     "COMMONAREA_MEDI": {
       "dtype": "DOUBLE",
@@ -1001,7 +1001,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.047420381664371555,
-      "median": 0.022421774851341936
+      "median": 0.0223
     },
     "ELEVATORS_MEDI": {
       "dtype": "DOUBLE",
@@ -1051,7 +1051,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.06806901903367488,
-      "median": 0.04888540857258238
+      "median": 0.0488
     },
     "LIVINGAPARTMENTS_MEDI": {
       "dtype": "DOUBLE",
@@ -1061,7 +1061,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.10706329240792524,
-      "median": 0.07718514035821729
+      "median": 0.077
     },
     "LIVINGAREA_MEDI": {
       "dtype": "DOUBLE",
@@ -1071,7 +1071,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.11336773181962508,
-      "median": 0.07763624992726498
+      "median": 0.0776
     },
     "NONLIVINGAPARTMENTS_MEDI": {
       "dtype": "DOUBLE",
@@ -1091,7 +1091,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.029296288614298446,
-      "median": 0.003129238608420466
+      "median": 0.0031
     },
     "FONDKAPREMONT_MODE": {
       "dtype": "VARCHAR",
@@ -1153,7 +1153,7 @@
       "min": 0.0,
       "max": 1.0,
       "avg": 0.10712853369065821,
-      "median": 0.07073563858753479
+      "median": 0.0707
     },
     "WALLSMATERIAL_MODE": {
       "dtype": "VARCHAR",
@@ -1196,13 +1196,13 @@
       ]
     },
     "EMERGENCYSTATE_MODE": {
-      "dtype": "BOOLEAN",
+      "dtype": "VARCHAR",
       "null_count": 22209,
       "null_pct": 45.5625,
       "distinct_count": 2,
       "top_values": [
         {
-          "value": false,
+          "value": "No",
           "count": 26179
         },
         {
@@ -1210,7 +1210,7 @@
           "count": 22209
         },
         {
-          "value": true,
+          "value": "Yes",
           "count": 356
         }
       ]
@@ -1263,7 +1263,7 @@
       "min": -4361.0,
       "max": 0.0,
       "avg": -1077.7662276382734,
-      "median": -860.7862555272598
+      "median": -863.0
     },
     "FLAG_DOCUMENT_2": {
       "dtype": "BIGINT",
@@ -1273,7 +1273,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_3": {
       "dtype": "BIGINT",
@@ -1283,7 +1283,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.7866198916789758,
-      "median": 1
+      "median": 1.0
     },
     "FLAG_DOCUMENT_4": {
       "dtype": "BIGINT",
@@ -1293,7 +1293,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.00010257672739208929,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_5": {
       "dtype": "BIGINT",
@@ -1303,7 +1303,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.014750533398982439,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_6": {
       "dtype": "BIGINT",
@@ -1313,7 +1313,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.08747743311997375,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_7": {
       "dtype": "BIGINT",
@@ -1323,7 +1323,7 @@
       "min": 0,
       "max": 1,
       "avg": 4.103069095683571e-05,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_8": {
       "dtype": "BIGINT",
@@ -1333,7 +1333,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.0884621697029378,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_9": {
       "dtype": "BIGINT",
@@ -1343,7 +1343,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.0044928606597735106,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_10": {
       "dtype": "BIGINT",
@@ -1353,7 +1353,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_11": {
       "dtype": "BIGINT",
@@ -1363,7 +1363,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.0011693746922698178,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_12": {
       "dtype": "BIGINT",
@@ -1373,7 +1373,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_13": {
       "dtype": "BIGINT",
@@ -1383,7 +1383,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_14": {
       "dtype": "BIGINT",
@@ -1393,7 +1393,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_15": {
       "dtype": "BIGINT",
@@ -1403,7 +1403,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_16": {
       "dtype": "BIGINT",
@@ -1413,7 +1413,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_17": {
       "dtype": "BIGINT",
@@ -1423,7 +1423,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_18": {
       "dtype": "BIGINT",
@@ -1433,7 +1433,7 @@
       "min": 0,
       "max": 1,
       "avg": 0.001559166256359757,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_19": {
       "dtype": "BIGINT",
@@ -1443,7 +1443,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_20": {
       "dtype": "BIGINT",
@@ -1453,7 +1453,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "FLAG_DOCUMENT_21": {
       "dtype": "BIGINT",
@@ -1463,7 +1463,7 @@
       "min": 0,
       "max": 0,
       "avg": 0.0,
-      "median": 0
+      "median": 0.0
     },
     "AMT_REQ_CREDIT_BUREAU_HOUR": {
       "dtype": "DOUBLE",

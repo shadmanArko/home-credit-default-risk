@@ -11,7 +11,7 @@
       "min": 5001709,
       "max": 6842888,
       "avg": 6036297.332973552,
-      "median": 6072786
+      "median": 6070821.0
     },
     "MONTHS_BALANCE": {
       "dtype": "BIGINT",
@@ -21,7 +21,7 @@
       "min": -96,
       "max": 0,
       "avg": -30.74168665298531,
-      "median": -25
+      "median": -25.0
     },
     "STATUS": {
       "dtype": "VARCHAR",
