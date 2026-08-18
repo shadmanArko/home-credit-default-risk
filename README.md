@@ -60,6 +60,14 @@ does this data look like." Instead:
    profiles with the official `HomeCredit_columns_description.csv` into a
    single `reports/data_dictionary.md` — a compact, versioned reference
    with real statistics and business descriptions side by side.
+3. `uv run python scripts/generate_data_quality_summary.py` consolidates
+   every table's full-row duplicate count and every declared foreign-key
+   relationship's orphan rate — not just single-column FK-to-spine checks,
+   but arbitrary table-to-table relationships (e.g. `bureau_balance ->
+   bureau`, `POS_CASH_balance.SK_ID_PREV -> previous_application`) — into
+   one scorecard, `reports/data_quality_summary.md`. This is the answer to
+   "how much duplicate/bad data is in all my tables": one file, one row
+   per table, no digging through notebook cells.
 
 Both the profile JSONs and the data dictionary are committed to git. They
 are the reference for understanding the dataset going forward — for

@@ -15,9 +15,10 @@ then run every profiling query against that table. One parse per file,
 many cheap columnar scans after.
 
 Output: one JSON file per table in reports/data_profile/, containing row
-count, per-column null rate / cardinality / numeric stats, a primary-key
-uniqueness check, and (for child tables) a foreign-key orphan check against
-the SK_ID_CURR spine. This JSON is the artifact downstream notebooks and
+count, per-column null rate / cardinality / numeric stats, a full-row
+duplicate check, a primary-key uniqueness check, and every declared
+foreign-key relationship's orphan count. This JSON is the artifact
+downstream notebooks, scripts/generate_data_quality_summary.py, and
 future sessions should read instead of re-scanning the raw CSVs.
 """
 
@@ -31,17 +32,70 @@ OUTPUT_DIR = Path("reports/data_profile")
 CACHE_DB = OUTPUT_DIR / ".landing_cache.duckdb"
 DESCRIPTION_FILE = "HomeCredit_columns_description.csv"
 
-# Candidate primary key per table, and the FK column (if any) that should
-# resolve into the SK_ID_CURR spine (application_train + application_test).
+# Candidate primary key per table, and every foreign-key relationship that
+# should resolve into another landed table (or the "spine" view, which is
+# SK_ID_CURR from application_train UNION application_test). Each fk_check
+# is verified independently, so a table can declare more than one — e.g.
+# POS_CASH_balance has both SK_ID_CURR (-> spine) and SK_ID_PREV
+# (-> previous_application).
 TABLE_KEYS = {
-    "application_train.csv": {"pk": "SK_ID_CURR", "fk": None},
-    "application_test.csv": {"pk": "SK_ID_CURR", "fk": None},
-    "bureau.csv": {"pk": "SK_ID_BUREAU", "fk": "SK_ID_CURR"},
-    "bureau_balance.csv": {"pk": None, "fk": None},
-    "previous_application.csv": {"pk": "SK_ID_PREV", "fk": "SK_ID_CURR"},
-    "POS_CASH_balance.csv": {"pk": None, "fk": "SK_ID_CURR"},
-    "credit_card_balance.csv": {"pk": None, "fk": "SK_ID_CURR"},
-    "installments_payments.csv": {"pk": None, "fk": "SK_ID_CURR"},
+    "application_train.csv": {"pk": "SK_ID_CURR", "fk_checks": []},
+    "application_test.csv": {"pk": "SK_ID_CURR", "fk_checks": []},
+    "bureau.csv": {
+        "pk": "SK_ID_BUREAU",
+        "fk_checks": [
+            {"column": "SK_ID_CURR", "ref_table": "spine", "ref_column": "SK_ID_CURR"},
+        ],
+    },
+    "bureau_balance.csv": {
+        "pk": None,
+        "fk_checks": [
+            {
+                "column": "SK_ID_BUREAU",
+                "ref_table": "bureau",
+                "ref_column": "SK_ID_BUREAU",
+            },
+        ],
+    },
+    "previous_application.csv": {
+        "pk": "SK_ID_PREV",
+        "fk_checks": [
+            {"column": "SK_ID_CURR", "ref_table": "spine", "ref_column": "SK_ID_CURR"},
+        ],
+    },
+    "POS_CASH_balance.csv": {
+        "pk": None,
+        "fk_checks": [
+            {"column": "SK_ID_CURR", "ref_table": "spine", "ref_column": "SK_ID_CURR"},
+            {
+                "column": "SK_ID_PREV",
+                "ref_table": "previous_application",
+                "ref_column": "SK_ID_PREV",
+            },
+        ],
+    },
+    "credit_card_balance.csv": {
+        "pk": None,
+        "fk_checks": [
+            {"column": "SK_ID_CURR", "ref_table": "spine", "ref_column": "SK_ID_CURR"},
+            {
+                "column": "SK_ID_PREV",
+                "ref_table": "previous_application",
+                "ref_column": "SK_ID_PREV",
+            },
+        ],
+    },
+    "installments_payments.csv": {
+        "pk": None,
+        "fk_checks": [
+            {"column": "SK_ID_CURR", "ref_table": "spine", "ref_column": "SK_ID_CURR"},
+            {
+                "column": "SK_ID_PREV",
+                "ref_table": "previous_application",
+                "ref_column": "SK_ID_PREV",
+            },
+        ],
+    },
 }
 
 NUMERIC_TYPES = {
@@ -85,12 +139,7 @@ def column_schema(con: duckdb.DuckDBPyConnection, table: str) -> list[tuple[str,
     return [(row[0], row[1]) for row in rows]
 
 
-def profile_table(
-    con: duckdb.DuckDBPyConnection,
-    csv_name: str,
-    table: str,
-    spine_relation: str | None,
-) -> dict:
+def profile_table(con: duckdb.DuckDBPyConnection, csv_name: str, table: str) -> dict:
     schema = column_schema(con, table)
     source = table
 
@@ -144,7 +193,12 @@ def profile_table(
         "columns": columns,
     }
 
-    keys = TABLE_KEYS.get(csv_name, {"pk": None, "fk": None})
+    distinct_rows = con.sql(
+        f"SELECT COUNT(*) FROM (SELECT DISTINCT * FROM {source})"
+    ).fetchone()[0]
+    profile["duplicate_row_check"] = {"duplicate_row_count": row_count - distinct_rows}
+
+    keys = TABLE_KEYS.get(csv_name, {"pk": None, "fk_checks": []})
     pk = keys["pk"]
     if pk:
         dup = con.sql(
@@ -157,18 +211,27 @@ def profile_table(
             "is_unique": dup == 0,
         }
 
-    fk = keys["fk"]
-    if fk and spine_relation:
+    fk_checks = []
+    for check in keys.get("fk_checks", []):
+        col, ref_table, ref_col = (
+            check["column"],
+            check["ref_table"],
+            check["ref_column"],
+        )
         orphan = con.sql(
-            f"SELECT COUNT(*) FROM (SELECT DISTINCT {quote(fk)} FROM {source}) t "
-            f"LEFT JOIN {spine_relation} s ON t.{quote(fk)} = s.SK_ID_CURR "
-            f"WHERE s.SK_ID_CURR IS NULL"
+            f"SELECT COUNT(*) FROM (SELECT DISTINCT {quote(col)} FROM {source}) t "
+            f"LEFT JOIN {ref_table} r ON t.{quote(col)} = r.{quote(ref_col)} "
+            f"WHERE r.{quote(ref_col)} IS NULL"
         ).fetchone()[0]
-        profile["foreign_key_check"] = {
-            "column": fk,
-            "references": "SK_ID_CURR spine (application_train + application_test)",
-            "orphan_key_count": orphan,
-        }
+        fk_checks.append(
+            {
+                "column": col,
+                "references": f"{ref_table}.{ref_col}",
+                "orphan_key_count": orphan,
+            }
+        )
+    if fk_checks:
+        profile["foreign_key_checks"] = fk_checks
 
     return profile
 
@@ -194,10 +257,13 @@ def main() -> None:
     # re-parsing, which matters once files are large.
     con = duckdb.connect(str(CACHE_DB))
 
-    train_path = DATA_DIR / "application_train.csv"
-    test_path = DATA_DIR / "application_test.csv"
-    land_table(con, "application_train", train_path)
-    land_table(con, "application_test", test_path)
+    # Pre-land every table another table's fk_checks can reference, so
+    # profiling order (alphabetical, below) never hits a "table doesn't
+    # exist yet" error regardless of which table is referenced by which.
+    land_table(con, "application_train", DATA_DIR / "application_train.csv")
+    land_table(con, "application_test", DATA_DIR / "application_test.csv")
+    land_table(con, "bureau", DATA_DIR / "bureau.csv")
+    land_table(con, "previous_application", DATA_DIR / "previous_application.csv")
     con.sql(
         "CREATE OR REPLACE VIEW spine AS "
         "SELECT SK_ID_CURR FROM application_train "
@@ -210,7 +276,7 @@ def main() -> None:
         print(f"Landing {path.name} -> table {table} ...")
         land_table(con, table, path)
         print(f"Profiling {table} ...")
-        profile = profile_table(con, path.name, table, spine_relation="spine")
+        profile = profile_table(con, path.name, table)
         out_path = OUTPUT_DIR / f"{path.stem}.json"
         out_path.write_text(json.dumps(profile, indent=2, default=str))
         print(f"  -> {out_path} (row_count={profile['row_count']})")

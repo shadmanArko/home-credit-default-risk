@@ -5,7 +5,6 @@ Generated from `reports/data_profile/*.json` (produced by `scripts/profile_data.
 ## `POS_CASH_balance.csv`
 
 - Rows: **10,001,358**, Columns: **8**
-- Foreign key `SK_ID_CURR` -> SK_ID_CURR spine (application_train + application_test): no orphans
 
 | Column | Description | Stats |
 |---|---|---|
@@ -281,7 +280,6 @@ Generated from `reports/data_profile/*.json` (produced by `scripts/profile_data.
 
 - Rows: **1,716,428**, Columns: **17**
 - Primary key `SK_ID_BUREAU`: unique
-- Foreign key `SK_ID_CURR` -> SK_ID_CURR spine (application_train + application_test): no orphans
 
 | Column | Description | Stats |
 |---|---|---|
@@ -316,7 +314,6 @@ Generated from `reports/data_profile/*.json` (produced by `scripts/profile_data.
 ## `credit_card_balance.csv`
 
 - Rows: **3,840,312**, Columns: **23**
-- Foreign key `SK_ID_CURR` -> SK_ID_CURR spine (application_train + application_test): no orphans
 
 | Column | Description | Stats |
 |---|---|---|
@@ -347,7 +344,6 @@ Generated from `reports/data_profile/*.json` (produced by `scripts/profile_data.
 ## `installments_payments.csv`
 
 - Rows: **13,605,401**, Columns: **8**
-- Foreign key `SK_ID_CURR` -> SK_ID_CURR spine (application_train + application_test): no orphans
 
 | Column | Description | Stats |
 |---|---|---|
@@ -364,7 +360,6 @@ Generated from `reports/data_profile/*.json` (produced by `scripts/profile_data.
 
 - Rows: **1,670,214**, Columns: **37**
 - Primary key `SK_ID_PREV`: unique
-- Foreign key `SK_ID_CURR` -> SK_ID_CURR spine (application_train + application_test): no orphans
 
 | Column | Description | Stats |
 |---|---|---|

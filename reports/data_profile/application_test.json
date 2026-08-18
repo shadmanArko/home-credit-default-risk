@@ -1526,6 +1526,9 @@
       "median": 2.0
     }
   },
+  "duplicate_row_check": {
+    "duplicate_row_count": 0
+  },
   "primary_key_check": {
     "column": "SK_ID_CURR",
     "duplicate_key_count": 0,

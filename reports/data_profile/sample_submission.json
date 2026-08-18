@@ -23,5 +23,8 @@
       "avg": 0.5,
       "median": 0.5
     }
+  },
+  "duplicate_row_check": {
+    "duplicate_row_count": 0
   }
 }

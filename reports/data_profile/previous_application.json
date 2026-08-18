@@ -54,7 +54,7 @@
       "distinct_count": 357959,
       "min": 0.0,
       "max": 418058.145,
-      "avg": 15955.120659452166,
+      "avg": 15955.120659452174,
       "median": 11250.0
     },
     "AMT_APPLICATION": {
@@ -64,7 +64,7 @@
       "distinct_count": 93885,
       "min": 0.0,
       "max": 6905160.0,
-      "avg": 175233.8603604301,
+      "avg": 175233.86036043015,
       "median": 71046.0
     },
     "AMT_CREDIT": {
@@ -84,7 +84,7 @@
       "distinct_count": 29278,
       "min": -0.9,
       "max": 3060045.0,
-      "avg": 6697.402138796697,
+      "avg": 6697.402138796695,
       "median": 1638.0
     },
     "AMT_GOODS_PRICE": {
@@ -94,7 +94,7 @@
       "distinct_count": 93885,
       "min": 0.0,
       "max": 6905160.0,
-      "avg": 227847.27928334603,
+      "avg": 227847.2792833461,
       "median": 112320.0
     },
     "WEEKDAY_APPR_PROCESS_START": {
@@ -176,7 +176,7 @@
       "distinct_count": 207033,
       "min": -1.4978763414307847e-05,
       "max": 1.0,
-      "avg": 0.07963681542840484,
+      "avg": 0.0796368154284047,
       "median": 0.051605084707529336
     },
     "RATE_INTEREST_PRIMARY": {
@@ -186,7 +186,7 @@
       "distinct_count": 148,
       "min": 0.03478125354187918,
       "max": 1.0,
-      "avg": 0.18835688954982102,
+      "avg": 0.18835688954982105,
       "median": 0.1891221806641732
     },
     "RATE_INTEREST_PRIVILEGED": {
@@ -754,14 +754,19 @@
       "median": 0.0
     }
   },
+  "duplicate_row_check": {
+    "duplicate_row_count": 0
+  },
   "primary_key_check": {
     "column": "SK_ID_PREV",
     "duplicate_key_count": 0,
     "is_unique": true
   },
-  "foreign_key_check": {
-    "column": "SK_ID_CURR",
-    "references": "SK_ID_CURR spine (application_train + application_test)",
-    "orphan_key_count": 0
-  }
+  "foreign_key_checks": [
+    {
+      "column": "SK_ID_CURR",
+      "references": "spine.SK_ID_CURR",
+      "orphan_key_count": 0
+    }
+  ]
 }

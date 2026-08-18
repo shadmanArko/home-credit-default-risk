@@ -40,7 +40,7 @@
       "distinct_count": 1347904,
       "min": -420250.185,
       "max": 1505902.185,
-      "avg": 58300.15526185755,
+      "avg": 58300.15526185754,
       "median": 0.0
     },
     "AMT_CREDIT_LIMIT_ACTUAL": {
@@ -90,7 +90,7 @@
       "distinct_count": 168748,
       "min": 0.0,
       "max": 2239274.16,
-      "avg": 2968.8048476830218,
+      "avg": 2968.804847683019,
       "median": 0.0
     },
     "AMT_INST_MIN_REGULARITY": {
@@ -100,7 +100,7 @@
       "distinct_count": 312266,
       "min": 0.0,
       "max": 202882.005,
-      "avg": 3540.2041285152054,
+      "avg": 3540.204128515211,
       "median": 0.0
     },
     "AMT_PAYMENT_CURRENT": {
@@ -110,7 +110,7 @@
       "distinct_count": 163209,
       "min": 0.0,
       "max": 4289207.445,
-      "avg": 10280.537702000312,
+      "avg": 10280.537702000322,
       "median": 2702.7
     },
     "AMT_PAYMENT_TOTAL_CURRENT": {
@@ -120,7 +120,7 @@
       "distinct_count": 182957,
       "min": 0.0,
       "max": 4278315.69,
-      "avg": 7588.856739464142,
+      "avg": 7588.856739464136,
       "median": 0.0
     },
     "AMT_RECEIVABLE_PRINCIPAL": {
@@ -130,7 +130,7 @@
       "distinct_count": 1195839,
       "min": -423305.82,
       "max": 1472316.795,
-      "avg": 55965.876905497506,
+      "avg": 55965.87690549751,
       "median": 0.0
     },
     "AMT_RECIVABLE": {
@@ -140,7 +140,7 @@
       "distinct_count": 1338878,
       "min": -420250.185,
       "max": 1493338.185,
-      "avg": 58088.81117667357,
+      "avg": 58088.81117667365,
       "median": 0.0
     },
     "AMT_TOTAL_RECEIVABLE": {
@@ -150,7 +150,7 @@
       "distinct_count": 1339008,
       "min": -420250.185,
       "max": 1493338.185,
-      "avg": 58098.28548873723,
+      "avg": 58098.28548873732,
       "median": 0.0
     },
     "CNT_DRAWINGS_ATM_CURRENT": {
@@ -260,9 +260,19 @@
       "median": 0.0
     }
   },
-  "foreign_key_check": {
-    "column": "SK_ID_CURR",
-    "references": "SK_ID_CURR spine (application_train + application_test)",
-    "orphan_key_count": 0
-  }
+  "duplicate_row_check": {
+    "duplicate_row_count": 0
+  },
+  "foreign_key_checks": [
+    {
+      "column": "SK_ID_CURR",
+      "references": "spine.SK_ID_CURR",
+      "orphan_key_count": 0
+    },
+    {
+      "column": "SK_ID_PREV",
+      "references": "previous_application.SK_ID_PREV",
+      "orphan_key_count": 11372
+    }
+  ]
 }

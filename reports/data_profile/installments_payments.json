@@ -70,7 +70,7 @@
       "distinct_count": 902539,
       "min": 0.0,
       "max": 3771487.845,
-      "avg": 17050.90698897069,
+      "avg": 17050.90698897068,
       "median": 8884.08
     },
     "AMT_PAYMENT": {
@@ -80,13 +80,23 @@
       "distinct_count": 944235,
       "min": 0.0,
       "max": 3771487.845,
-      "avg": 17238.22324958725,
+      "avg": 17238.22324958727,
       "median": 8125.515
     }
   },
-  "foreign_key_check": {
-    "column": "SK_ID_CURR",
-    "references": "SK_ID_CURR spine (application_train + application_test)",
-    "orphan_key_count": 0
-  }
+  "duplicate_row_check": {
+    "duplicate_row_count": 0
+  },
+  "foreign_key_checks": [
+    {
+      "column": "SK_ID_CURR",
+      "references": "spine.SK_ID_CURR",
+      "orphan_key_count": 0
+    },
+    {
+      "column": "SK_ID_PREV",
+      "references": "previous_application.SK_ID_PREV",
+      "orphan_key_count": 38847
+    }
+  ]
 }

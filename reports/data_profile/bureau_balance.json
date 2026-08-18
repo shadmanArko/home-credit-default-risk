@@ -63,5 +63,15 @@
         }
       ]
     }
-  }
+  },
+  "duplicate_row_check": {
+    "duplicate_row_count": 0
+  },
+  "foreign_key_checks": [
+    {
+      "column": "SK_ID_BUREAU",
+      "references": "bureau.SK_ID_BUREAU",
+      "orphan_key_count": 43041
+    }
+  ]
 }
