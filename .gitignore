@@ -84,3 +84,4 @@ reports/data_profile/*.duckdb.wal
 !reports/data_dictionary.md
 !reports/data_quality_summary.md
 !reports/reproducibility_check.md
+!reports/experiments.csv

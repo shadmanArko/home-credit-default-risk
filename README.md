@@ -19,11 +19,11 @@ Current stage:
 - [x] Kaggle data pipeline
 - [x] Data profiling & dictionary
 - [x] Exploratory data analysis
+- [x] Baseline model
+- [x] Model evaluation
+- [x] Model comparison
 - [ ] Data validation
 - [ ] Feature engineering
-- [ ] Baseline model
-- [ ] Model evaluation
-- [ ] Model comparison
 - [ ] Final Kaggle submission
 
 ## Tech Stack
@@ -101,6 +101,26 @@ Two deliberate scoping decisions, not defaults:
 
 The generated HTML (~8MB, mostly embedded plots) is not committed to git;
 regenerate it locally when needed.
+
+## Baseline Modeling & Experiment Tracking
+
+`notebooks/02_baseline_model.ipynb` builds a reproducible stratified
+train/validation split (`random_state=42`, saved to
+`data/interim/train_valid_split.csv`), then a dummy baseline and a
+`Pipeline`-wrapped logistic regression baseline on `application` features.
+Every result is appended to `reports/experiments.csv` — the durable,
+cross-notebook experiment log every future model has to beat:
+
+| id | model | features | roc_auc |
+|---|---|---|---|
+| B0 | DummyClassifier(strategy='prior') | none | 0.5000 |
+| B1 | LogisticRegression(class_weight='balanced') | application | 0.7489 |
+
+The write is an upsert by `id`, not an overwrite — a teammate's or a later
+milestone's experiment rows survive regardless of which notebook runs last.
+See `reports/reproducibility_check.md` for a from-scratch verification that
+these numbers reproduce exactly, plus a documented, immaterial exception
+(parallel floating-point `AVG()` in the data profiler).
 
 ## Project Structure
 

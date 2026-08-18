@@ -1,0 +1,3 @@
+id,model,features,validation,roc_auc,owner
+B0,DummyClassifier(strategy='prior'),application (none used),80/20 stratified,0.5,You
+B1,LogisticRegression(class_weight='balanced'),application,80/20 stratified,0.7489,You
