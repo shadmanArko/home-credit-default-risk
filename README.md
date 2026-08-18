@@ -6,7 +6,7 @@ The goal is to develop a reproducible machine learning workflow for predicting t
 
 ## Project Status
 
-🚧 Project setup in progress.
+✅ Milestone 1 (data understanding + baseline modeling) complete. 🚧 Feature engineering next.
 
 Current stage:
 
@@ -25,6 +25,19 @@ Current stage:
 - [ ] Data validation
 - [ ] Feature engineering
 - [ ] Final Kaggle submission
+
+## Milestone 1 Summary
+
+| | |
+|---|---|
+| **Problem** | Predict `TARGET` — whether a loan applicant will have payment difficulty on the loan — from application-time data. Full framing, cost asymmetry, and metric justification: [`docs/problem_definition.md`](docs/problem_definition.md). |
+| **Target** | Binary, ~11.4:1 imbalanced (~8.07% positive). Only present in `application_train`. |
+| **Metric** | ROC-AUC — chosen over accuracy for the imbalance, and over other classification metrics because this stage optimizes ranking, not a final approve/reject threshold (see `docs/problem_definition.md` §4–5). |
+| **Data understanding** | 9 tables profiled end-to-end with an out-of-core DuckDB pipeline (scales past what fits in memory) — [`notebooks/01_data_understanding.ipynb`](notebooks/01_data_understanding.ipynb), [`reports/data_dictionary.md`](reports/data_dictionary.md), [`reports/data_quality_summary.md`](reports/data_quality_summary.md). |
+| **Baseline modeling** | Reproducible stratified split + dummy baseline + `Pipeline`-wrapped logistic regression — [`notebooks/02_baseline_model.ipynb`](notebooks/02_baseline_model.ipynb), results in [`reports/experiments.csv`](reports/experiments.csv). |
+| **Headline result** | **ROC-AUC 0.7489** (logistic regression, `application` features only) vs. **0.5000** (dummy floor) — the number future feature engineering and model upgrades have to beat. |
+| **Reproducibility** | Verified from a full clean-room rebuild, not assumed — [`reports/reproducibility_check.md`](reports/reproducibility_check.md). |
+| **Known limitations** | No cross-validation or hyperparameter tuning yet (deliberately deferred until a feature set beyond a single linear baseline exists to tune — see the notebook's own reasoning); `DAYS_EMPLOYED` sentinel and `bureau_balance`/`SK_ID_PREV` orphan rates identified but not yet fixed (feature engineering scope). |
 
 ## Tech Stack
 
@@ -128,24 +141,37 @@ these numbers reproduce exactly, plus a documented, immaterial exception
 home-credit-default-risk/
 │
 ├── data/
-│   ├── raw/
-│   ├── interim/
+│   ├── raw/                          # gitignored — download_data.py fetches it
+│   ├── interim/                      # train_valid_split.csv (regenerable)
 │   └── processed/
 │
 ├── docs/
+│   └── problem_definition.md         # HC-M1-01
 │
 ├── notebooks/
+│   ├── 01_data_understanding.ipynb   # HC-M1-02/03/04
+│   └── 02_baseline_model.ipynb       # HC-M1-05..10
 │
 ├── src/
 │   └── home_credit_default_risk/
 │
 ├── scripts/
+│   ├── download_data.py
+│   ├── profile_data.py
+│   ├── build_data_dictionary.py
+│   ├── generate_data_quality_summary.py
+│   └── generate_eda_report.py
 │
 ├── tests/
 │
 ├── models/
 │
 ├── reports/
+│   ├── data_profile/*.json           # gitignored cache excluded, JSONs committed
+│   ├── data_dictionary.md
+│   ├── data_quality_summary.md
+│   ├── reproducibility_check.md
+│   └── experiments.csv
 │
 ├── .github/
 │   └── workflows/
@@ -153,3 +179,4 @@ home-credit-default-risk/
 ├── pyproject.toml
 ├── uv.lock
 └── README.md
+```
