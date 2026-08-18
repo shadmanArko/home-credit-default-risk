@@ -95,17 +95,15 @@ selection (see §5).
 ## 5. Threshold vs. ranking — why they're kept separate
 
 ROC-AUC and PR-AUC evaluate the model's ranking quality and are what we
-optimize for during model selection in this milestone. The actual
-approve/reject cutoff is a business decision that trades off the
-asymmetric costs in §1, and will be chosen later (in a subsequent
-milestone) by inspecting the precision-recall curve on validation
-predictions and picking the point that satisfies a recall floor on
-defaulters that the business is willing to commit to. That threshold
-work is out of scope for Milestone 1.
+optimize for during model selection. The actual approve/reject cutoff is
+a business decision that trades off the asymmetric costs in §1, chosen by
+inspecting the precision-recall curve on cross-validated predictions and
+picking the point that satisfies a recall floor on defaulters the
+business is willing to commit to. That threshold work is `HC-M3-25`
+(Milestone 3, Phase H) — deliberately not done here, and deliberately not
+done by tuning against the final holdout (see §7).
 
-## 6. Deliverable status
-
-This document is the Milestone 1 deliverable for `HC-M1-01`.
+## 6. Milestone 1 deliverable status
 
 - [x] Business problem documented
 - [x] TARGET documented
@@ -113,3 +111,51 @@ This document is the Milestone 1 deliverable for `HC-M1-01`.
 - [x] ROC-AUC justified
 - [x] Supporting metrics identified
 - [ ] Team agrees on definition — pending review
+
+## 7. Milestone 3 confirmation (`HC-M3-01`)
+
+Re-reviewed before Milestone 3 modeling work, per `HC-M3-01`'s acceptance
+criteria. Nothing above changes — restated here explicitly rather than
+assumed, since "confirm the objective before experimenting" is the point
+of this ticket:
+
+- **Target variable**: unchanged, §2.
+- **Positive class**: unchanged, `TARGET = 1` (payment difficulty).
+- **Prediction task**: unchanged, §3 — binary classification, probability
+  output.
+- **Business interpretation**: unchanged, §1 — asymmetric cost of a missed
+  default vs. a wrongly rejected good client.
+- **Primary metric**: **ROC-AUC**, unchanged. This is the *only* metric
+  any model selection or hyperparameter search in Milestone 3 optimizes
+  against. Every other metric below is diagnostic — reported alongside,
+  never the search objective. Optimizing several metrics simultaneously
+  produces a model that isn't clearly best at anything; picking one and
+  holding to it is the point.
+- **Supporting metrics** (computed at the final holdout evaluation,
+  `HC-M3-21`, and during threshold analysis, `HC-M3-25`; not used to pick
+  between candidate models during CV in Phase E–F):
+  - **PR-AUC** — more informative than ROC-AUC under this dataset's
+    ~11:1 imbalance; watched as a secondary ranking-quality signal.
+  - **Precision** — of applicants flagged high-risk at the chosen
+    threshold, how many actually default.
+  - **Recall** — of applicants who actually default, how many the
+    threshold catches. The metric the business cost asymmetry (§1) cares
+    about most, since a missed default (false negative) is the expensive
+    error.
+  - **F1** — harmonic mean of precision/recall, reported as a single
+    summary number at the chosen threshold; not optimized directly,
+    since it implicitly weights precision and recall equally, which §1
+    already established is not this business's actual cost structure.
+  - **Confusion matrix**, expressed in business terms (defaults caught /
+    missed, good clients wrongly rejected) — the artifact a
+    non-technical stakeholder actually reads, everything else is how we
+    got there.
+
+**`HC-M3-01` acceptance criteria:**
+
+- [x] Target variable confirmed
+- [x] Primary metric confirmed
+- [x] Supporting metrics defined
+- [x] Positive class defined
+- [x] Prediction task documented
+- [x] Business interpretation documented
