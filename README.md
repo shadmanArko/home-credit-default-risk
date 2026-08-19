@@ -1,196 +1,447 @@
 # Home Credit Default Risk
 
-Machine learning project for the [Home Credit Default Risk](https://www.kaggle.com/competitions/home-credit-default-risk) Kaggle competition.
+[![CI](https://github.com/shadmanArko/home-credit-default-risk/actions/workflows/ci.yml/badge.svg)](https://github.com/shadmanArko/home-credit-default-risk/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![Tests](https://img.shields.io/badge/tests-39%20passing-brightgreen)
+![Ruff](https://img.shields.io/badge/lint-ruff-informational)
 
-The goal is to develop a reproducible machine learning workflow for predicting the probability that a loan applicant will default.
+A leakage-audited, reproducible machine learning pipeline that predicts a loan
+applicant's probability of default, built end-to-end on the
+[Home Credit Default Risk](https://www.kaggle.com/competitions/home-credit-default-risk)
+Kaggle dataset (9 tables, ~2.9 GB, ~308K applicants).
 
-## Project Status
+This is not a single notebook that trains a model and stops. It is a
+milestone-by-milestone engineering exercise — data understanding, feature
+engineering, leakage auditing, model selection under cross-validation, a
+deliberate (and deliberately *not automatic*) hyperparameter-tuning decision,
+one single untouched holdout evaluation, and a full error-analysis pass —
+with every claim in this README backed by a number computed somewhere in this
+repository, not asserted from memory.
 
-✅ Milestone 1 (data understanding + baseline modeling) complete. 🚧 Feature engineering next.
+**Headline result:** an untuned LightGBM model scores **0.7791 ROC-AUC** on a
+holdout set it never influenced — **+0.2791 over the 0.5000 dummy floor** and
+**+0.0302 over a naive linear-model-on-raw-features baseline (0.7489)** —
+with a business-driven decision threshold (0.485, chosen against an explicit
+70% recall floor) rather than a default 0.5 cutoff.
 
-Current stage:
+---
 
-- [x] Python environment
-- [x] Dependency management with uv
-- [x] Project structure
-- [x] Package configuration
-- [x] Linting with Ruff
-- [x] Automated testing with pytest
-- [x] Kaggle data pipeline
-- [x] Data profiling & dictionary
-- [x] Exploratory data analysis
-- [x] Baseline model
-- [x] Model evaluation
-- [x] Model comparison
-- [ ] Data validation
-- [ ] Feature engineering
-- [ ] Final Kaggle submission
+## Table of contents
 
-## Milestone 1 Summary
+- [Results at a glance](#results-at-a-glance)
+- [How this was built — workflow & methodology](#how-this-was-built--workflow--methodology)
+- [Engineering principles applied throughout](#engineering-principles-applied-throughout)
+- [Project status](#project-status)
+- [Repository structure](#repository-structure)
+- [Getting started](#getting-started)
+- [Data pipeline](#data-pipeline)
+- [Modeling pipeline](#modeling-pipeline)
+- [Testing & CI](#testing--ci)
+- [Tech stack](#tech-stack)
+- [Known limitations & future work](#known-limitations--future-work)
+- [Milestone reports](#milestone-reports)
 
-| | |
+---
+
+## Results at a glance
+
+| Metric | Value | Compared to |
+|---|---|---|
+| **Holdout ROC-AUC** (final model, evaluated once) | **0.7791** | Dummy floor: 0.5000 · M1 linear baseline: 0.7489 |
+| **Development-pool CV ROC-AUC** | 0.7747 ± 0.0020 | Holdout matched/exceeded this (+0.0044) — no overfitting |
+| **Holdout PR-AUC** | 0.2758 | vs. ~0.081 base rate (positive class prevalence) |
+| **Chosen decision threshold** | 0.485 | Chosen to satisfy a 70% recall floor, not defaulted to 0.5 |
+| **Recall / Precision at chosen threshold** | 0.701 / 0.174 | Deliberately recall-favoring — see [why](#threshold-selection) |
+| **Unit tests** | 39 passing | `src/home_credit_default_risk/` package, not notebook-only logic |
+| **Feature engineering lift** | +0.0108 ROC-AUC | Engineered features vs. raw `application` columns, model held fixed (0.7550 vs. 0.7442, logistic regression) |
+
+**Model comparison (5-fold stratified CV, identical folds, engineered features):**
+
+| Model | CV ROC-AUC | Notes |
+|---|---|---|
+| `DummyClassifier` | 0.5000 | Floor |
+| Logistic Regression | 0.7550 | Linear baseline on the full engineered feature set |
+| XGBoost | 0.7579 | Given a fair, comparable setup — still lost to LightGBM |
+| **LightGBM (untuned)** | **0.7747** | **Selected as final model** |
+| LightGBM (tuned, `RandomizedSearchCV`) | 0.7778 | **Rejected** — more than double the overfitting gap for a +0.0032 gain |
+
+Full experiment ledger with every model/feature-set/tuning combination ever
+run: [`reports/experiments.csv`](reports/experiments.csv).
+
+---
+
+## How this was built — workflow & methodology
+
+This project was run as two structured milestones, each broken into small,
+independently reviewable tickets (`HC-M1-01` … `HC-M1-10`, `HC-M3-01` …
+`HC-M3-29`) — the same granularity a Jira-driven sprint would use, applied
+solo. Every ticket has a stated acceptance criteria and closes with a
+notebook section that satisfies it explicitly, so the notebooks double as a
+running audit trail of *why* each decision was made, not just *what* the
+final answer was.
+
+```mermaid
+flowchart TD
+    subgraph M1["Milestone 1 — Data Understanding & Baseline"]
+        A1["Problem definition<br/>& metric justification"] --> A2["Out-of-core data profiling<br/>(DuckDB, 9 tables)"]
+        A2 --> A3["EDA & data quality audit"]
+        A3 --> A4["Stratified holdout split<br/>(touched once, ever)"]
+        A4 --> A5["Dummy + logistic baseline<br/>(reproducibility-verified)"]
+    end
+
+    subgraph M3["Milestone 3 — Feature Engineering, Modeling & Error Analysis"]
+        B1["Feature engineering strategy<br/>+ leakage audit"] --> B2["Leakage-safe sklearn Pipeline<br/>+ unit tests"]
+        B2 --> B3["5-fold CV model comparison<br/>Dummy / Logistic / LightGBM / XGBoost"]
+        B3 --> B4["Hyperparameter search<br/>+ overfitting check on BOTH models"]
+        B4 --> B5["Final model selection<br/>(6 explicit criteria, not just AUC)"]
+        B5 --> B6["Single holdout evaluation<br/>(HC-M3-21 — never touched again)"]
+        B6 --> B7["Error analysis<br/>FP/FN · threshold · feature importance · fairness · limitations"]
+        B7 --> B8["Technical review<br/>(Definition of Done checklist)"]
+    end
+
+    A5 --> B1
+```
+
+**The discipline that made this more than a script that trains a model:**
+
+1. **Confirm before you build.** `HC-M3-01` re-confirmed the target, metric,
+   and business framing before any modeling started — cheap insurance
+   against optimizing the wrong thing for two milestones.
+2. **One holdout, touched exactly once.** The train/holdout split was drawn
+   in Milestone 1 and never redrawn. Every candidate model, every
+   hyperparameter search, and every threshold decision in Milestone 3 was
+   evaluated on cross-validated *development-pool* predictions — the holdout
+   was reserved for a single, final evaluation (`HC-M3-21`), verified for
+   this README by re-exporting the notebook and grepping every reference to
+   confirm it, not assumed from the surrounding prose.
+3. **Investigate, don't assume.** Every quantitative claim in this
+   repository — a leakage risk, a correlation, a threshold's precision/recall
+   trade-off, a fairness gap — is backed by a specific computation in a
+   specific notebook cell or script, not a plausible-sounding guess.
+4. **Report the result you get, not the one you expect.** The hyperparameter
+   search found a configuration that scored *higher* on cross-validated
+   ROC-AUC — and it was rejected anyway, because it overfit substantially
+   more for a gain smaller than this dataset's fold-to-fold noise
+   (`HC-M3-18`). A tuned model that reports worse generalization risk for a
+   marginal metric gain is not automatically the better model.
+5. **Business cost drives the threshold, not the metric's default.** ROC-AUC
+   is a ranking metric and says nothing about where to draw the approve/reject
+   line. `HC-M3-25` derived that line from the dataset's actual cost
+   asymmetry (a missed default costs more than a wrongly rejected good
+   client) against leakage-safe out-of-fold predictions — never against the
+   holdout, and never defaulting to 0.5 without checking.
+6. **A number without a caveat is a number nobody should trust.** The final
+   write-up documents run-to-run non-determinism discovered in this
+   project's own re-runs (LightGBM/XGBoost's multi-threaded training,
+   `RandomizedSearchCV`'s search-order sensitivity), a measured recall gap
+   by gender that is reported without over-claiming its cause, and an
+   explicit "what this model has *not* been shown to do" statement
+   (`HC-M3-27`) — see [Known limitations](#known-limitations--future-work).
+
+## Engineering principles applied throughout
+
+- **Reproducibility over convenience.** `config.RANDOM_STATE = 42` threads
+  through every split, model, and search. Milestone 1's baseline numbers
+  were verified from a full clean-room rebuild
+  ([`reports/reproducibility_check.md`](reports/reproducibility_check.md)),
+  not just re-run once and trusted.
+- **Leakage-safety by construction, not by discipline alone.** Preprocessing
+  (`ColumnTransformer`) is only ever fit inside a `Pipeline.fit()` call on a
+  training fold; feature engineering functions are pure, stateless, and
+  never accept the target column — enforced by unit tests, not convention.
+- **A real Python package, not notebook-only logic.** Feature engineering,
+  historical aggregations, the preprocessing pipeline, and the CV harness
+  all live in `src/home_credit_default_risk/`, covered by **39 unit tests**
+  (`tests/`) that run independently of the real 2.9 GB dataset via synthetic
+  fixtures with hand-computed expected values.
+- **Data platform patterns applied to a Kaggle dataset.** Rather than
+  re-parsing multi-gigabyte CSVs in every notebook, raw data is landed once
+  into DuckDB and profiled with a scalable, out-of-core engine — the same
+  "compute once, store as metadata, read everywhere" pattern real data
+  platforms use for data catalogs.
+- **CI enforced, not just claimed.** Every push and pull request runs the
+  same `ruff check` and `pytest` this README claims pass —
+  [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+
+## Project status
+
+✅ **Milestone 1** (data understanding + baseline modeling) — complete.
+✅ **Milestone 3** (feature engineering, modeling, error analysis) — complete.
+⬜ Kaggle competition submission — not yet attempted (this project's scope so
+far is a rigorously validated local pipeline, not a leaderboard score).
+
+| Stage | Status |
 |---|---|
-| **Problem** | Predict `TARGET` — whether a loan applicant will have payment difficulty on the loan — from application-time data. Full framing, cost asymmetry, and metric justification: [`docs/problem_definition.md`](docs/problem_definition.md). |
-| **Target** | Binary, ~11.4:1 imbalanced (~8.07% positive). Only present in `application_train`. |
-| **Metric** | ROC-AUC — chosen over accuracy for the imbalance, and over other classification metrics because this stage optimizes ranking, not a final approve/reject threshold (see `docs/problem_definition.md` §4–5). |
-| **Data understanding** | 9 tables profiled end-to-end with an out-of-core DuckDB pipeline (scales past what fits in memory) — [`notebooks/01_data_understanding.ipynb`](notebooks/01_data_understanding.ipynb), [`reports/data_dictionary.md`](reports/data_dictionary.md), [`reports/data_quality_summary.md`](reports/data_quality_summary.md). |
-| **Baseline modeling** | Reproducible stratified split + dummy baseline + `Pipeline`-wrapped logistic regression — [`notebooks/02_baseline_model.ipynb`](notebooks/02_baseline_model.ipynb), results in [`reports/experiments.csv`](reports/experiments.csv). |
-| **Headline result** | **ROC-AUC 0.7489** (logistic regression, `application` features only) vs. **0.5000** (dummy floor) — the number future feature engineering and model upgrades have to beat. |
-| **Reproducibility** | Verified from a full clean-room rebuild, not assumed — [`reports/reproducibility_check.md`](reports/reproducibility_check.md). |
-| **Known limitations** | No cross-validation or hyperparameter tuning yet (deliberately deferred until a feature set beyond a single linear baseline exists to tune — see the notebook's own reasoning); `DAYS_EMPLOYED` sentinel and `bureau_balance`/`SK_ID_PREV` orphan rates identified but not yet fixed (feature engineering scope). |
+| Environment, tooling, CI (uv, Ruff, pytest, GitHub Actions) | ✅ |
+| Data pipeline (download, DuckDB profiling, data dictionary, quality audit) | ✅ |
+| Exploratory data analysis | ✅ |
+| Holdout strategy (drawn once, reused everywhere) | ✅ |
+| Baseline modeling (dummy + logistic regression) | ✅ |
+| Feature engineering (ratios, age/employment, 3 historical aggregation groups) | ✅ |
+| Feature leakage audit | ✅ |
+| Leakage-safe preprocessing pipeline + tests | ✅ |
+| Model selection under 5-fold CV (Dummy / Logistic / LightGBM / XGBoost) | ✅ |
+| Hyperparameter tuning (evaluated and deliberately rejected) | ✅ |
+| Final holdout evaluation (touched exactly once) | ✅ |
+| Error analysis (false positives/negatives, threshold, feature importance, fairness, limitations) | ✅ |
+| Final experiment summary & technical review | ✅ |
+| Final model artifact persisted (`models/`, `scripts/train_final_model.py`) | ✅ |
+| Kaggle test-set submission | ⬜ |
 
-## Milestone 3 Progress (in progress — feature engineering + model selection)
-
-| | |
-|---|---|
-| **Feature engineering** | Ratio/age features + historical aggregations from `bureau`, `previous_application`, and payment-behavior tables — [`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb), strategy in [`docs/feature_engineering_strategy.md`](docs/feature_engineering_strategy.md), leakage audit in [`docs/feature_leakage_audit.md`](docs/feature_leakage_audit.md). |
-| **Reusable pipeline code** | Feature engineering, preprocessing, and CV moved into a real importable package — `src/home_credit_default_risk/{features,aggregations,pipeline,cv}.py` — with 39 unit tests, not left as notebook-only logic. |
-| **Feature-set decision** | Engineered features beat application-only baseline by **+0.0106 ROC-AUC** under 5-fold CV, holding the model fixed (logistic regression) — [`notebooks/04_modeling.ipynb`](notebooks/04_modeling.ipynb). |
-| **Best candidate** | **LightGBM, ROC-AUC 0.7747 ± 0.0020** (5-fold CV) on engineered features — beats XGBoost (0.7579, same features/CV/setup), logistic regression on the same features (0.7550), and the Milestone 1 baseline (0.7489). |
-| **Hyperparameter tuning result** | `RandomizedSearchCV` (30 candidates × 5-fold CV) found a configuration scoring **+0.0032 CV ROC-AUC** over the untuned defaults — but with **more than double the train-vs-CV overfitting gap** (~0.0995 vs. ~0.0418). **Tuning was rejected**: the untuned LightGBM defaults are the final model. A genuine "don't tune just to say you tuned" result, not a foregone conclusion — see `notebooks/04_modeling.ipynb`, `HC-M3-18`. |
-| **Final holdout result** | **ROC-AUC 0.7791** on the holdout set (61,503 rows, evaluated exactly once) — **+0.0044 above** the dev-pool CV estimate, the favorable direction, confirming no overfitting. PR-AUC 0.2758. See `notebooks/04_modeling.ipynb`, `HC-M3-19`–`21`. |
-| **Error analysis** | False positive/negative characteristics (`HC-M3-23`/`24`), a leakage-safe threshold analysis on out-of-fold predictions choosing **0.485** against a 70% recall floor (`HC-M3-25`), gain-based feature importance (`EXT_SOURCE_*` ≈ 48% of total gain, `HC-M3-26`), and documented limitations including a measured recall gap by `CODE_GENDER` (`HC-M3-27`) — see `notebooks/04_modeling.ipynb`. |
-| **Experiment summary** | 8 experiments recorded end-to-end (2 Milestone 1 baselines + 6 Milestone 3 candidates, including the rejected tuned configuration) — [`reports/experiments.csv`](reports/experiments.csv), `HC-M3-28`. |
-| **What's next** | `HC-M3-29` — Milestone 3 technical review (Definition of Done checklist), closing Milestone 3. |
-
-## Tech Stack
-
-- Python 3.12
-- uv
-- pandas
-- NumPy
-- SciPy
-- scikit-learn
-- Matplotlib
-- Seaborn
-- JupyterLab
-- KaggleHub
-- DuckDB
-- Ruff
-- pytest
-
-## Data Profiling
-
-The raw dataset is ~2.9GB across 8 tables and will only grow in future
-projects, so it is never loaded into pandas wholesale just to answer "what
-does this data look like." Instead:
-
-1. `uv run python scripts/profile_data.py` lands each raw CSV once into a
-   local DuckDB table (a single text parse) and computes full-table
-   aggregates — row/column counts, per-column null rate, cardinality,
-   numeric stats, top categorical values, primary-key uniqueness, and
-   foreign-key orphan rates against the `SK_ID_CURR` spine — using
-   DuckDB's out-of-core vectorized engine, which never requires the full
-   file to fit in memory. Output: one JSON per table in
-   `reports/data_profile/`.
-2. `uv run python scripts/build_data_dictionary.py` merges those JSON
-   profiles with the official `HomeCredit_columns_description.csv` into a
-   single `reports/data_dictionary.md` — a compact, versioned reference
-   with real statistics and business descriptions side by side.
-3. `uv run python scripts/generate_data_quality_summary.py` consolidates
-   every table's full-row duplicate count and every declared foreign-key
-   relationship's orphan rate — not just single-column FK-to-spine checks,
-   but arbitrary table-to-table relationships (e.g. `bureau_balance ->
-   bureau`, `POS_CASH_balance.SK_ID_PREV -> previous_application`) — into
-   one scorecard, `reports/data_quality_summary.md`. This is the answer to
-   "how much duplicate/bad data is in all my tables": one file, one row
-   per table, no digging through notebook cells.
-
-Both the profile JSONs and the data dictionary are committed to git. They
-are the reference for understanding the dataset going forward — for
-developers and for AI assistants working on this repo — rather than
-re-reading or re-summarizing the raw CSVs each time. This is the same
-pattern real data platforms use for data catalogs (compute stats once with
-a scalable engine, store as metadata, read the metadata everywhere else),
-and it scales unchanged from this dataset's ~1GB tables to files far
-larger than available RAM.
-
-### Visual EDA report (Sweetviz)
-
-`uv run python scripts/generate_eda_report.py` generates
-`reports/eda_train_vs_test_compare.html`, a Sweetviz side-by-side
-comparison of `application_train` vs. `application_test` — per-column
-distributions, missingness, and cardinality plotted for both sets at once.
-
-Two deliberate scoping decisions, not defaults:
-
-- **`ydata-profiling` was evaluated and rejected**: its pins (`pandas
-  <=1.1` / `==1.4.0`) conflict with this project's `pandas>=3.0.5` and
-  there's no way to satisfy both — documented here instead of silently
-  worked around.
-- Only `application_train`/`application_test` are profiled this way
-  (307k / 49k rows fit safely in pandas); the report intentionally
-  **excludes `TARGET`** and skips pairwise feature associations. Per this
-  project's EDA discipline (see `notebooks/01_data_understanding.ipynb`),
-  feature-vs-target analysis is deferred until after the stratified
-  train/valid split and computed on the training fold only — this report
-  is train-vs-test drift only, not target correlation.
-
-The generated HTML (~8MB, mostly embedded plots) is not committed to git;
-regenerate it locally when needed.
-
-## Baseline Modeling & Experiment Tracking
-
-`notebooks/02_baseline_model.ipynb` builds a reproducible stratified
-train/validation split (`random_state=42`, saved to
-`data/interim/train_valid_split.csv`), then a dummy baseline and a
-`Pipeline`-wrapped logistic regression baseline on `application` features.
-Every result is appended to `reports/experiments.csv` — the durable,
-cross-notebook experiment log every future model has to beat:
-
-| id | model | features | roc_auc |
-|---|---|---|---|
-| B0 | DummyClassifier(strategy='prior') | none | 0.5000 |
-| B1 | LogisticRegression(class_weight='balanced') | application | 0.7489 |
-
-The write is an upsert by `id`, not an overwrite — a teammate's or a later
-milestone's experiment rows survive regardless of which notebook runs last.
-See `reports/reproducibility_check.md` for a from-scratch verification that
-these numbers reproduce exactly, plus a documented, immaterial exception
-(parallel floating-point `AVG()` in the data profiler).
-
-## Project Structure
+## Repository structure
 
 ```text
 home-credit-default-risk/
 │
+├── .github/
+│   └── workflows/
+│       └── ci.yml                     # Lint (Ruff) + test (pytest) on every push/PR
+│
 ├── data/
-│   ├── raw/                          # gitignored — download_data.py fetches it
-│   ├── interim/                      # train_valid_split.csv (regenerable)
+│   ├── raw/                           # gitignored — scripts/download_data.py fetches it
+│   ├── interim/                       # train_valid_split.csv (regenerable, HC-M1-05)
 │   └── processed/
 │
 ├── docs/
-│   └── problem_definition.md         # HC-M1-01
+│   ├── problem_definition.md          # HC-M1-01 / HC-M3-01 — target, metric, cost asymmetry
+│   ├── feature_engineering_strategy.md  # HC-M3-04 — every candidate feature, rationale, leakage risk
+│   └── feature_leakage_audit.md       # HC-M3-07 — six-category leakage audit, real findings
 │
 ├── notebooks/
-│   ├── 01_data_understanding.ipynb   # HC-M1-02/03/04
-│   └── 02_baseline_model.ipynb       # HC-M1-05..10
+│   ├── 01_data_understanding.ipynb    # HC-M1-02..04 — profiling, EDA, data quality
+│   ├── 02_baseline_model.ipynb        # HC-M1-05..10 — split, baselines, reproducibility
+│   ├── 03_feature_engineering.ipynb   # HC-M3-02..07 — features, leakage audit
+│   └── 04_modeling.ipynb              # HC-M3-08..29 — CV, tuning, holdout, error analysis
 │
-├── src/
-│   └── home_credit_default_risk/
+├── src/home_credit_default_risk/      # Importable package — not notebook-only logic
+│   ├── config.py                      # Single source of truth: seed, split, CV, metric
+│   ├── features.py                    # Ratio/age/employment feature engineering
+│   ├── aggregations.py                # bureau / previous_application / payment-history aggregations
+│   ├── pipeline.py                    # build_feature_matrix() + leakage-safe build_preprocessor()
+│   ├── cv.py                          # Stratified K-fold CV harness
+│   └── utils.py                       # safe_divide() and other shared helpers
 │
 ├── scripts/
-│   ├── download_data.py
-│   ├── profile_data.py
-│   ├── build_data_dictionary.py
-│   ├── generate_data_quality_summary.py
-│   └── generate_eda_report.py
+│   ├── download_data.py               # Kaggle → data/raw/
+│   ├── profile_data.py                # Out-of-core DuckDB profiling → reports/data_profile/
+│   ├── build_data_dictionary.py       # Profiles + official docs → reports/data_dictionary.md
+│   ├── generate_data_quality_summary.py  # Duplicate/orphan-rate scorecard across all tables
+│   ├── generate_eda_report.py         # Sweetviz train-vs-test drift report
+│   └── train_final_model.py           # Reproduces HC-M3-20's fit, saves models/*.joblib
 │
-├── tests/
+├── tests/                             # 39 tests — config, features, aggregations, pipeline, CV, utils
 │
-├── models/
+├── models/                            # Trained artifacts (gitignored — regenerate via the script above)
 │
 ├── reports/
-│   ├── data_profile/*.json           # gitignored cache excluded, JSONs committed
-│   ├── data_dictionary.md
-│   ├── data_quality_summary.md
-│   ├── reproducibility_check.md
-│   └── experiments.csv
-│
-├── .github/
-│   └── workflows/
+│   ├── data_profile/*.json            # Per-table profiles (committed; cache DB is gitignored)
+│   ├── data_dictionary.md             # Column-level reference, stats + business description
+│   ├── data_quality_summary.md        # Duplicate/orphan-rate scorecard, all 9 tables
+│   ├── reproducibility_check.md       # Clean-room rebuild verification
+│   ├── experiments.csv                # Every experiment, model, feature set, tuning, CV/holdout AUC
+│   └── holdout_prediction_analysis.csv  # Regenerable — HC-M3-22's per-row prediction dataset
 │
 ├── pyproject.toml
 ├── uv.lock
 └── README.md
 ```
+
+## Getting started
+
+```bash
+# 1. Install dependencies (Python 3.12, managed by uv)
+uv sync
+
+# 2. Fetch the raw Kaggle dataset (requires Kaggle API credentials)
+uv run python scripts/download_data.py
+
+# 3. Profile the data and build the reference artifacts
+uv run python scripts/profile_data.py
+uv run python scripts/build_data_dictionary.py
+uv run python scripts/generate_data_quality_summary.py
+
+# 4. Open the notebooks in order, or run the test suite directly
+uv run jupyter lab
+uv run pytest -q
+
+# 5. Regenerate the final model artifact without re-running the full notebook
+uv run python scripts/train_final_model.py
+```
+
+## Data pipeline
+
+The raw dataset is ~2.9 GB across 9 tables and will only grow in future
+projects, so it is never loaded into pandas wholesale just to answer "what
+does this data look like." Instead:
+
+1. **`scripts/profile_data.py`** lands each raw CSV once into a local DuckDB
+   table (a single text parse) and computes full-table aggregates — row/column
+   counts, per-column null rate, cardinality, numeric stats, top categorical
+   values, primary-key uniqueness, and foreign-key orphan rates against the
+   `SK_ID_CURR` spine — using DuckDB's out-of-core vectorized engine, which
+   never requires the full file to fit in memory. Output: one JSON per table
+   in `reports/data_profile/`.
+2. **`scripts/build_data_dictionary.py`** merges those JSON profiles with the
+   official `HomeCredit_columns_description.csv` into a single
+   `reports/data_dictionary.md` — a compact, versioned reference with real
+   statistics and business descriptions side by side.
+3. **`scripts/generate_data_quality_summary.py`** consolidates every table's
+   full-row duplicate count and every declared foreign-key relationship's
+   orphan rate — not just single-column FK-to-spine checks, but arbitrary
+   table-to-table relationships (e.g. `bureau_balance -> bureau`,
+   `POS_CASH_balance.SK_ID_PREV -> previous_application`) — into one
+   scorecard, `reports/data_quality_summary.md`.
+
+Both the profile JSONs and the data dictionary are committed to git — the
+reference for understanding the dataset going forward, rather than
+re-reading or re-summarizing the raw CSVs each time. This mirrors how real
+data platforms build data catalogs (compute stats once with a scalable
+engine, store as metadata, read the metadata everywhere else), and scales
+unchanged from this dataset's ~1 GB tables to files far larger than
+available RAM.
+
+**Visual EDA (Sweetviz):** `scripts/generate_eda_report.py` generates a
+train-vs-test drift report (`reports/eda_train_vs_test_compare.html`, not
+committed — regenerate locally). `ydata-profiling` was evaluated and
+rejected: its pandas version pins conflict with this project's `pandas>=3.0.5`
+with no way to satisfy both, documented rather than silently worked around.
+The report deliberately excludes `TARGET` and pairwise feature associations —
+per this project's EDA discipline, feature-vs-target analysis is deferred
+until after the holdout split and computed on the training fold only.
+
+## Modeling pipeline
+
+**Feature engineering** (`HC-M3-05`/`06`, [`docs/feature_engineering_strategy.md`](docs/feature_engineering_strategy.md)):
+ratio features (credit-to-income, annuity-to-income, credit-to-annuity),
+age/employment features (with the `DAYS_EMPLOYED` 365,243-day sentinel
+correctly recoded to `NaN`), and historical aggregations from `bureau`,
+`previous_application`, and payment-behavior tables — 149 columns total, up
+from the 122 raw `application` columns. Every candidate feature was checked
+against a six-category leakage audit
+([`docs/feature_leakage_audit.md`](docs/feature_leakage_audit.md)) before
+use; real findings were investigated and explicitly accepted or deferred,
+never silently ignored.
+
+**Leakage-safe pipeline** (`HC-M3-09`, `src/home_credit_default_risk/pipeline.py`):
+feature engineering is pure and stateless (safe to apply once, since it fits
+nothing); preprocessing (median/most-frequent imputation, `RobustScaler`,
+one-hot encoding) is an *unfitted* `ColumnTransformer`, fit only inside a
+`Pipeline.fit()` call on a training fold — never on validation or holdout
+rows.
+
+**Model selection** (`HC-M3-11`–`19`): five candidates compared on identical
+5-fold stratified CV folds — a dummy floor, logistic regression (both on raw
+and engineered features, isolating the feature-engineering effect), LightGBM,
+and XGBoost. LightGBM won by a margin well beyond fold-to-fold noise. A
+30-candidate `RandomizedSearchCV` then found a configuration scoring higher
+on CV — but with more than double the train-vs-CV overfitting gap, so it was
+rejected in favor of the untuned defaults, selected against six explicit
+criteria (performance, stability, complexity, interpretability, runtime,
+business suitability), not ROC-AUC alone.
+
+**Final holdout evaluation** (`HC-M3-20`/`21`): the frozen configuration is
+fit once on the full 246,008-row development pool and evaluated exactly once
+on the 61,503-row holdout, which had never influenced any prior decision —
+**0.7791 ROC-AUC**, +0.0044 above the CV estimate (the favorable direction:
+no overfitting).
+
+### Threshold selection
+
+ROC-AUC measures ranking quality and is fixed once the model is trained —
+choosing a classification threshold only trades precision against recall,
+never changes the ranking metric. `HC-M3-25` derived the threshold from
+**leakage-safe out-of-fold predictions on the development pool**
+(`cross_val_predict`, never the holdout — reusing an already-evaluated
+holdout to pick a threshold would be exactly the repeated-peeking leakage
+this project's holdout discipline exists to prevent).
+
+Because a missed default costs Home Credit more than a wrongly rejected good
+client (see [`docs/problem_definition.md`](docs/problem_definition.md) §1),
+the threshold was chosen to satisfy an explicit **70% recall floor** on
+defaulters, then maximize precision subject to that floor — landing at
+**0.485** (precision 0.174, recall 0.701, F1 0.279, 32.5% of applicants
+flagged), a deliberately recall-favoring choice rather than the F1-maximizing
+threshold (~0.65–0.70) or the untested default of 0.5.
+
+### Error analysis & interpretation
+
+- **False positive/negative analysis** (`HC-M3-23`/`24`): false positives
+  (27.4% of actual negatives) and false negatives (30.5% of actual positives)
+  were compared against correctly classified applicants across income,
+  credit, age, employment, and the three `EXT_SOURCE_*` bureau scores, with
+  visualizations and documented business implications for each.
+- **Feature importance** (`HC-M3-26`): gain-based LightGBM importance (not
+  the library's split-count default, which was explicitly rejected as less
+  business-relevant) shows the three `EXT_SOURCE_*` scores account for
+  **~48% of total model gain**, with this project's own engineered features
+  (`credit_to_annuity`, `late_payment_rate`, `cc_mean_utilization`, and
+  others) earning real, meaningful weight in the top 12 — concrete evidence
+  the feature engineering work mattered, not just a CV number. Interpreted
+  with an explicit disclaimer: feature importance shows what the model
+  *uses*, never what *causes* default.
+- **Model limitations & fairness** (`HC-M3-27`): a real subgroup check found
+  recall differs by `CODE_GENDER` (79.3% for men vs. 65.0% for women) at the
+  chosen threshold, while ROC-AUC is close between groups (0.781 vs. 0.771)
+  — reported honestly, without over-claiming the cause, alongside data,
+  model, feature, and validation limitations and concrete future
+  improvements. See [Known limitations](#known-limitations--future-work).
+
+## Testing & CI
+
+```bash
+uv run pytest -q      # 39 tests — config, features, aggregations, pipeline, CV, package
+uv run ruff check .   # Linting
+```
+
+Both run automatically on every push and pull request via
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml). Tests use synthetic
+fixtures with hand-computed expected values rather than the real dataset, so
+the suite runs in about a second and never depends on the ~2.9 GB raw data
+being present.
+
+## Tech stack
+
+| Category | Tools |
+|---|---|
+| Language & environment | Python 3.12, [uv](https://docs.astral.sh/uv/) |
+| Data engine | [DuckDB](https://duckdb.org/) (out-of-core profiling & aggregation) |
+| ML / data | pandas, NumPy, SciPy, scikit-learn, LightGBM, XGBoost |
+| Visualization | Matplotlib, Seaborn, Sweetviz |
+| Notebooks | JupyterLab |
+| Quality | Ruff (lint + format), pytest, GitHub Actions CI |
+| Data source | KaggleHub |
+
+## Known limitations & future work
+
+Documented in full, with real numbers, in `notebooks/04_modeling.ipynb`
+(`HC-M3-27`). Summarized here so it's visible without opening a notebook:
+
+- **No fairness audit beyond one subgroup check.** The measured recall gap
+  by gender (above) has not been root-caused via a formal equalized-odds or
+  disparate-impact analysis — flagged as the top priority before any real
+  deployment.
+- **No probability calibration check.** The chosen threshold assumes
+  `predict_proba`'s ranking is meaningful (confirmed by ROC-AUC) but its
+  outputs were never checked for calibration (e.g. a reliability diagram).
+- **No out-of-time validation.** The holdout is a random split of the same
+  population as training, not a chronologically later slice — this project
+  cannot speak to performance drift over time.
+- **Hyperparameter search instability, discovered in this project's own
+  re-runs**: `RandomizedSearchCV` with a fixed seed produced different "best"
+  configurations across independent executions, because LightGBM's
+  multi-threaded training is itself non-deterministic enough to change which
+  sampled candidate ranks first. The qualitative conclusion (tuning isn't
+  worth the overfitting risk) held across runs; the specific numbers did not.
+- **Not scored against Kaggle's real test set.** Everything here is
+  validated on an internal holdout; no leaderboard submission has been made.
+
+Concrete next steps: a formal subgroup fairness audit, a calibration check,
+an out-of-time validation split, SHAP-based per-applicant explanations, and
+a Kaggle test-set submission for an external benchmark.
+
+## Milestone reports
+
+| Milestone | Focus | Key artifacts |
+|---|---|---|
+| **Milestone 1** | Data understanding, problem definition, baseline modeling | [`docs/problem_definition.md`](docs/problem_definition.md), [`notebooks/01_data_understanding.ipynb`](notebooks/01_data_understanding.ipynb), [`notebooks/02_baseline_model.ipynb`](notebooks/02_baseline_model.ipynb), [`reports/reproducibility_check.md`](reports/reproducibility_check.md) |
+| **Milestone 3** | Feature engineering, model selection, error analysis | [`docs/feature_engineering_strategy.md`](docs/feature_engineering_strategy.md), [`docs/feature_leakage_audit.md`](docs/feature_leakage_audit.md), [`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb), [`notebooks/04_modeling.ipynb`](notebooks/04_modeling.ipynb), [`reports/experiments.csv`](reports/experiments.csv) |
