@@ -6,8 +6,9 @@ application-level feature dataframe — never `TARGET` — so target leakage
 is impossible by construction, not just by convention.
 """
 
-import numpy as np
 import pandas as pd
+
+from home_credit_default_risk.utils import safe_divide
 
 # DuckDB's read_csv_auto (scripts/profile_data.py) doesn't override this
 # column, so it arrives as the raw sentinel Home Credit uses for "not
@@ -16,21 +17,13 @@ import pandas as pd
 DAYS_EMPLOYED_SENTINEL = 365243
 
 
-def _safe_divide(numerator: pd.Series, denominator: pd.Series) -> pd.Series:
-    """`numerator / denominator`, with zero/missing denominators and any
-    resulting +/-inf mapped to `NaN`. Downstream imputers handle `NaN`
-    uniformly; none of them handle infinities."""
-    result = numerator / denominator.replace(0, np.nan)
-    return result.replace([np.inf, -np.inf], np.nan)
-
-
 def add_ratio_features(df: pd.DataFrame) -> pd.DataFrame:
     """Group A — credit/income ratios. Returns a copy; does not mutate `df`."""
     df = df.copy()
-    df["credit_to_income"] = _safe_divide(df["AMT_CREDIT"], df["AMT_INCOME_TOTAL"])
-    df["annuity_to_income"] = _safe_divide(df["AMT_ANNUITY"], df["AMT_INCOME_TOTAL"])
-    df["credit_to_annuity"] = _safe_divide(df["AMT_CREDIT"], df["AMT_ANNUITY"])
-    df["goods_price_to_credit"] = _safe_divide(df["AMT_GOODS_PRICE"], df["AMT_CREDIT"])
+    df["credit_to_income"] = safe_divide(df["AMT_CREDIT"], df["AMT_INCOME_TOTAL"])
+    df["annuity_to_income"] = safe_divide(df["AMT_ANNUITY"], df["AMT_INCOME_TOTAL"])
+    df["credit_to_annuity"] = safe_divide(df["AMT_CREDIT"], df["AMT_ANNUITY"])
+    df["goods_price_to_credit"] = safe_divide(df["AMT_GOODS_PRICE"], df["AMT_CREDIT"])
     return df
 
 
@@ -51,9 +44,7 @@ def add_age_employment_features(df: pd.DataFrame) -> pd.DataFrame:
     df["age_years"] = -df["DAYS_BIRTH"] / 365.25
     df["employment_years"] = -days_employed / 365.25
     df["is_employment_unknown"] = is_employment_unknown.astype(int)
-    df["employment_to_age_ratio"] = _safe_divide(
-        df["employment_years"], df["age_years"]
-    )
+    df["employment_to_age_ratio"] = safe_divide(df["employment_years"], df["age_years"])
     return df
 
 
