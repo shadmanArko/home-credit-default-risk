@@ -1,8 +1,9 @@
-id,model,features,validation,roc_auc,owner
-B0,DummyClassifier(strategy='prior'),application (none used),80/20 stratified,0.5,You
-B1,LogisticRegression(class_weight='balanced'),application,80/20 stratified,0.7489,You
-E00,DummyClassifier(strategy='prior'),engineered,5-fold CV,0.5,You
-E01,LogisticRegression(class_weight='balanced'),application (baseline),5-fold CV,0.7442,You
-E02,LogisticRegression(class_weight='balanced'),engineered,5-fold CV,0.755,You
-E03,LGBMClassifier(class_weight='balanced'),engineered,5-fold CV,0.7747,You
-E04,XGBClassifier(scale_pos_weight=...),engineered,5-fold CV,0.7579,You
+id,model,features,tuning,validation,roc_auc,holdout_roc_auc,status
+B0,DummyClassifier(strategy='prior'),application (none used),No,80/20 stratified,0.5,,Floor baseline (M1)
+B1,LogisticRegression(class_weight='balanced'),application,No,80/20 stratified,0.7489,,M1 baseline
+E00,DummyClassifier(strategy='prior'),engineered,No,5-fold CV,0.5,,Floor baseline (M3)
+E01,LogisticRegression(class_weight='balanced'),application (baseline),No,5-fold CV,0.7442,,Feature-set ablation (HC-M3-08)
+E02,LogisticRegression(class_weight='balanced'),engineered,No,5-fold CV,0.755,,Feature-set ablation (HC-M3-08)
+E03,LGBMClassifier(class_weight='balanced'),engineered,No,5-fold CV,0.7747,0.7791,FINAL MODEL (HC-M3-19-21)
+E04,XGBClassifier(scale_pos_weight=...),engineered,No,5-fold CV,0.7579,,Runner-up tree model
+E05,"LGBMClassifier(class_weight='balanced', **best_params)",engineered,"Yes (RandomizedSearchCV, n_iter=30)",5-fold CV,0.7778,,Rejected -- overfits more for +0.0032 CV gain (HC-M3-18)

@@ -49,7 +49,9 @@ Current stage:
 | **Best candidate** | **LightGBM, ROC-AUC 0.7747 ± 0.0020** (5-fold CV) on engineered features — beats XGBoost (0.7579, same features/CV/setup), logistic regression on the same features (0.7550), and the Milestone 1 baseline (0.7489). |
 | **Hyperparameter tuning result** | `RandomizedSearchCV` (30 candidates × 5-fold CV) found a configuration scoring **+0.0032 CV ROC-AUC** over the untuned defaults — but with **more than double the train-vs-CV overfitting gap** (~0.0995 vs. ~0.0418). **Tuning was rejected**: the untuned LightGBM defaults are the final model. A genuine "don't tune just to say you tuned" result, not a foregone conclusion — see `notebooks/04_modeling.ipynb`, `HC-M3-18`. |
 | **Final holdout result** | **ROC-AUC 0.7791** on the holdout set (61,503 rows, evaluated exactly once) — **+0.0044 above** the dev-pool CV estimate, the favorable direction, confirming no overfitting. PR-AUC 0.2758. See `notebooks/04_modeling.ipynb`, `HC-M3-19`–`21`. |
-| **What's next** | Error analysis (`HC-M3-22`–`29`): confusion matrix breakdown, feature importance, threshold selection against the cost asymmetry in `docs/problem_definition.md`. |
+| **Error analysis** | False positive/negative characteristics (`HC-M3-23`/`24`), a leakage-safe threshold analysis on out-of-fold predictions choosing **0.485** against a 70% recall floor (`HC-M3-25`), gain-based feature importance (`EXT_SOURCE_*` ≈ 48% of total gain, `HC-M3-26`), and documented limitations including a measured recall gap by `CODE_GENDER` (`HC-M3-27`) — see `notebooks/04_modeling.ipynb`. |
+| **Experiment summary** | 8 experiments recorded end-to-end (2 Milestone 1 baselines + 6 Milestone 3 candidates, including the rejected tuned configuration) — [`reports/experiments.csv`](reports/experiments.csv), `HC-M3-28`. |
+| **What's next** | `HC-M3-29` — Milestone 3 technical review (Definition of Done checklist), closing Milestone 3. |
 
 ## Tech Stack
 
