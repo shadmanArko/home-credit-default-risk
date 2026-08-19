@@ -39,6 +39,17 @@ Current stage:
 | **Reproducibility** | Verified from a full clean-room rebuild, not assumed — [`reports/reproducibility_check.md`](reports/reproducibility_check.md). |
 | **Known limitations** | No cross-validation or hyperparameter tuning yet (deliberately deferred until a feature set beyond a single linear baseline exists to tune — see the notebook's own reasoning); `DAYS_EMPLOYED` sentinel and `bureau_balance`/`SK_ID_PREV` orphan rates identified but not yet fixed (feature engineering scope). |
 
+## Milestone 3 Progress (in progress — feature engineering + model selection)
+
+| | |
+|---|---|
+| **Feature engineering** | Ratio/age features + historical aggregations from `bureau`, `previous_application`, and payment-behavior tables — [`notebooks/03_feature_engineering.ipynb`](notebooks/03_feature_engineering.ipynb), strategy in [`docs/feature_engineering_strategy.md`](docs/feature_engineering_strategy.md), leakage audit in [`docs/feature_leakage_audit.md`](docs/feature_leakage_audit.md). |
+| **Reusable pipeline code** | Feature engineering, preprocessing, and CV moved into a real importable package — `src/home_credit_default_risk/{features,aggregations,pipeline,cv}.py` — with 39 unit tests, not left as notebook-only logic. |
+| **Feature-set decision** | Engineered features beat application-only baseline by **+0.0106 ROC-AUC** under 5-fold CV, holding the model fixed (logistic regression) — [`notebooks/04_modeling.ipynb`](notebooks/04_modeling.ipynb). |
+| **Best candidate** | **LightGBM, ROC-AUC 0.7743 ± 0.0012** (5-fold CV) on engineered features — beats XGBoost (0.7579, same features/CV/setup), logistic regression on the same features (0.7552), and the Milestone 1 baseline (0.7489). |
+| **Hyperparameter tuning result** | `RandomizedSearchCV` (30 candidates × 5-fold CV) found a configuration scoring **+0.0036 CV ROC-AUC** over the untuned defaults — but with **more than double the train-vs-CV overfitting gap** (0.0993 vs. 0.0418). **Tuning was rejected**: the untuned LightGBM defaults are the final model. A genuine "don't tune just to say you tuned" result, not a foregone conclusion — see `notebooks/04_modeling.ipynb`, `HC-M3-18`. |
+| **What's next** | Final holdout evaluation (`HC-M3-19`–`21`, touched exactly once), then error analysis (`HC-M3-22`–`29`). |
+
 ## Tech Stack
 
 - Python 3.12
