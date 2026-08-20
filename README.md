@@ -674,9 +674,52 @@ application — plus a live one-page form to demo it.
 
 ### Chunk 6 (cloud deployment)
 
-Planned, not yet built. Full breakdown (including *why* AWS Lambda over
-SageMaker/ECS for the eventual free-tier deployment) is tracked outside
-this README for now and will be folded in here once it lands.
+- **AWS Lambda (container image) + API Gateway, via SAM** — chosen over
+  SageMaker/ECS Fargate/EC2 specifically because Lambda's always-free
+  tier (1M requests + 400,000 GB-seconds/month) fits intermittent demo
+  traffic at $0, where the others bill continuously. The
+  [AWS Lambda Web Adapter](https://github.com/aws/aws-lambda-web-adapter)
+  lets [`Dockerfile.lambda`](Dockerfile.lambda) run the *exact same*
+  FastAPI/Uvicorn app as the local Docker image (Chunk 3) completely
+  unchanged — no Mangum-style ASGI shim, no second entrypoint.
+- **The deployed model is real, not synthetic** — a new
+  `lambda-fixture` Docker Compose service
+  ([`docker-compose.yml`](docker-compose.yml)) trains on the actual
+  Kaggle dataset and writes to a gitignored `lambda_build/` directory,
+  which `Dockerfile.lambda` bakes into the image at build time (Lambda
+  containers have no bind mounts, unlike Compose). CI's synthetic
+  `ci-fixture` model is never what gets deployed.
+- **Verified locally before touching AWS, the same discipline as every
+  other chunk**: `sam build` produces the real container image, then
+  `sam local start-api` emulates Lambda + API Gateway on the actual
+  built image and was hit with real requests — `GET /health`,
+  `POST /score` for a real known applicant (`SK_ID_CURR=100002`, scored
+  `0.83`, high risk), and `POST /apply` for a new applicant (scored
+  `0.13`, low risk). This caught two real container-sizing bugs before
+  they'd have cost money or failed silently in production:
+  - **OOM at the default 1024 MB** — `LocalFeatureStore` loads all
+    356,255 applicants into memory at startup; fixed by raising
+    `MemorySize` to 3008 MB in [`template.yaml`](template.yaml).
+  - **Cold start exceeding a 30s timeout** — loading the feature store
+    + opening the MLflow SQLite registry takes close to 30s on a cold
+    container; fixed by raising `Timeout` to 60s.
+- **CD (`HC-M4-17`)**: a `deploy` job in
+  [`ci.yml`](.github/workflows/ci.yml), gated behind repo secrets that
+  don't exist yet (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
+  `AWS_REGION`, `LAMBDA_ARTIFACTS_BUCKET`), redeploys *code* changes on
+  every merge to `main`. It never retrains — the real model artifacts
+  live in a small S3 bucket (synced there manually alongside each real
+  `lambda-fixture` run) since `lambda_build/` itself is gitignored and
+  unreachable from a GitHub Actions checkout.
+- Full step-by-step account setup (billing alarm, IAM user, `aws
+  configure`, S3 bucket, repo secrets) and the actual `sam deploy` /
+  teardown commands are in
+  [`docs/aws_deployment.md`](docs/aws_deployment.md) — account creation,
+  billing, and credential handling are all steps only the project owner
+  can perform; nothing there was done on their behalf.
+- **Not yet done**: the actual `sam deploy` to a live AWS account (the
+  account itself doesn't exist yet) — once it happens, the real API
+  Gateway URL and a Cost Explorer screenshot will replace this line.
 
 ## Testing & CI
 
@@ -702,7 +745,7 @@ being present.
 | Notebooks | JupyterLab |
 | Quality | Ruff (lint + format), pytest, GitHub Actions CI |
 | Data source | KaggleHub |
-| MLOps (Milestone 4) | MLflow (mlflow-skinny — tracking + model registry), SQLAlchemy (registry backend), FastAPI + Uvicorn (serving), Pydantic (request/response validation), Docker + Docker Compose, Evidently (drift monitoring) |
+| MLOps (Milestone 4) | MLflow (mlflow-skinny — tracking + model registry), SQLAlchemy (registry backend), FastAPI + Uvicorn (serving), Pydantic (request/response validation), Docker + Docker Compose, Evidently (drift monitoring), AWS Lambda + API Gateway via AWS SAM (cloud deployment), AWS Lambda Web Adapter |
 
 ## Known limitations & future work
 

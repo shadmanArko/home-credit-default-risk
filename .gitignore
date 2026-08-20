@@ -103,3 +103,17 @@ reports/monitoring/*.html
 mlflow.db
 mlruns/
 mlartifacts/
+
+# ============================================================
+# Lambda deployment build output (Milestone 4 — HC-M4-16)
+# ============================================================
+
+# Real, locally-trained model + feature store baked into the deployable
+# Lambda image (Dockerfile.lambda) via `docker compose run --rm
+# lambda-fixture` — regenerable, never committed.
+lambda_build/
+
+# SAM CLI's local build cache (`sam build` output) and its generated
+# per-machine deploy config — regenerable, machine-specific.
+.aws-sam/
+samconfig.toml

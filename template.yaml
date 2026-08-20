@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  HC-M4-16 — Home Credit Default Risk serving API on AWS Lambda.
+
+  Deploys the same FastAPI app used locally (Chunk 3) as a container-image
+  Lambda function, fronted by an HTTP API Gateway. Uses the AWS Lambda Web
+  Adapter (Dockerfile.lambda) so the app itself is completely unaware it's
+  running on Lambda. Deliberately minimal: no VPC, no other AWS services
+  called by the function, so the default AWSLambdaBasicExecutionRole
+  (CloudWatch Logs only) is least-privilege as-is.
+
+  The image must already contain the real, locally-trained model and
+  feature store — see Dockerfile.lambda's header comment and
+  `docker compose run --rm lambda-fixture` for how those are produced.
+  This template never trains or fetches data; it only packages and serves
+  whatever is already baked into the image referenced by ImageUri.
+
+Globals:
+  Function:
+    # Cold start (loading the 356k-row feature store into memory +
+    # opening the MLflow SQLite registry) takes close to 30s on its own,
+    # verified empirically -- a 30s timeout let the *first* request on a
+    # cold container time out before the app even finished starting.
+    Timeout: 60
+    # 1024 MB OOM-killed the container: the feature store (356k
+    # applicants) is loaded entirely into an in-memory dict-of-dicts at
+    # startup (LocalFeatureStore, HC-M4-04). Verified empirically with
+    # `sam local start-api` before picking this value, not guessed.
+    MemorySize: 3008
+
+Resources:
+  ScoringFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      DockerTag: latest
+      DockerContext: .
+      Dockerfile: Dockerfile.lambda
+    Properties:
+      PackageType: Image
+      Architectures:
+        - arm64
+      Events:
+        ProxyRoot:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+        ProxyAny:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  ApiUrl:
+    Description: Live HTTPS endpoint for the scoring API
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"

@@ -80,3 +80,46 @@ jobs:
       - name: Tear down
         if: always()
         run: docker compose down -v
+
+  # HC-M4-17 — CD: on a real merge to `main`, redeploy the *code* to the
+  # already-existing Lambda stack (see docs/aws_deployment.md). This
+  # never retrains: the real model + feature store are baked into the
+  # image via `docker compose run --rm lambda-fixture` (a manual step,
+  # run by the project owner on their own machine, since CI has no
+  # access to the real ~2.9 GB Kaggle dataset) and then synced to a
+  # small S3 bucket (`aws s3 sync lambda_build/ s3://.../lambda_build/`)
+  # as part of that same manual step. This job downloads that same
+  # `lambda_build/` from S3 before building, so `Dockerfile.lambda`'s
+  # `COPY lambda_build/...` has something to copy — it is NOT reachable
+  # from the git checkout, since lambda_build/ is deliberately gitignored
+  # (same convention as mlflow.db/mlruns/, HC-M4-16). Requires repo
+  # secrets this workflow cannot create on its own: AWS_ACCESS_KEY_ID,
+  # AWS_SECRET_ACCESS_KEY, AWS_REGION, LAMBDA_ARTIFACTS_BUCKET — add them
+  # under Settings → Secrets and variables → Actions before enabling
+  # this job (it no-ops harmlessly without them, since `aws`/`sam` calls
+  # simply fail rather than doing anything destructive).
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [lint-and-test, docker-smoke-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Set up SAM CLI
+        uses: aws-actions/setup-sam@v2
+
+      - name: Fetch the real model + feature store from S3
+        run: aws s3 sync "s3://${{ secrets.LAMBDA_ARTIFACTS_BUCKET }}/lambda_build" lambda_build
+
+      - name: Build
+        run: sam build
+
+      - name: Deploy (code-only update to the existing stack)
+        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset

@@ -27,6 +27,33 @@ services:
         "python /app/scripts/materialize_features.py && python /app/scripts/train_with_mlflow.py",
       ]
 
+  # HC-M4-16 — builds the real model + feature store for the AWS Lambda
+  # deployment (Dockerfile.lambda), from the real dataset. Identical to
+  # `train` above in every way except *where* the output lands: `train`
+  # writes into the `mlflow_data` volume the local `api` service reads
+  # from, while this writes into `./lambda_build/` on the host, which
+  # `Dockerfile.lambda` later `COPY`s into the deployable image. Kept as
+  # a separate service (rather than parameterizing `train`) so the local
+  # dev artifact and the "what gets deployed" artifact can never be
+  # silently conflated. Run with `docker compose run --rm lambda-fixture`
+  # whenever the deployed model needs to be refreshed.
+  lambda-fixture:
+    build: .
+    working_dir: /app/mlflow_data
+    volumes:
+      - ./reports/data_profile:/app/reports/data_profile
+      - ./data/interim:/app/data/interim
+      - ./lambda_build/data/processed:/app/data/processed
+      - ./lambda_build/mlflow_data:/app/mlflow_data
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:////app/mlflow_data/mlflow.db
+    entrypoint:
+      [
+        "sh",
+        "-c",
+        "python /app/scripts/materialize_features.py && python /app/scripts/train_with_mlflow.py",
+      ]
+
   # HC-M4-14 — CI only. Builds a tiny, fully synthetic model + feature
   # store (same synthetic-table pattern as tests/test_pipeline.py) so CI
   # can start the real `api` container and hit real endpoints, without
