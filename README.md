@@ -247,7 +247,9 @@ home-credit-default-risk/
 │   ├── train_with_mlflow.py           # Same fit, registered + promoted via MLflow instead
 │   ├── materialize_features.py        # Builds the offline feature store (Parquet)
 │   ├── benchmark_feature_lookup.py    # Real before/after feature-lookup timing
-│   └── score_batch.py                 # Batch-scoring CLI composition root
+│   ├── score_batch.py                 # Batch-scoring CLI composition root
+│   ├── generate_drift_report.py       # Evidently data + prediction drift report
+│   └── build_smoke_test_fixture.py    # CI only — tiny synthetic model + feature store
 │
 ├── tests/                             # 67 tests — package code + FastAPI route logic
 │
@@ -643,12 +645,38 @@ application — plus a live one-page form to demo it.
   stakes, promotion requires a human comparing the new model's metrics
   against the currently deployed version first.
 
-### Chunks 5–6 (CI/CD, cloud deployment)
+### Chunk 5 — CI/CD extension (`HC-M4-14`) ✅
 
-Planned, not yet built — each is its own reviewed chunk before the next
-starts. Full breakdown (including *why* AWS Lambda over SageMaker/ECS for
-the eventual free-tier deployment) is tracked outside this README for now
-and will be folded in here as each chunk lands.
+- **Why**: the existing CI job (`lint-and-test`) only ever exercised
+  library code — it never proved the Docker image actually builds, or
+  that the serving container actually starts and answers a request.
+- **The real constraint**: a genuine smoke test needs a trained model
+  and a materialized feature store, and both come from the ~2.9 GB real
+  Kaggle dataset — gitignored, and unavailable to GitHub Actions without
+  Kaggle credentials most forks/PRs wouldn't have.
+- **The fix**: `scripts/build_smoke_test_fixture.py` reuses the exact
+  synthetic six-table pattern already used in `tests/test_pipeline.py`
+  to train a tiny, fully synthetic model and write a tiny synthetic
+  feature store — real artifacts, just small ones — via a new
+  `ci-fixture` Docker Compose service. CI then starts the real `api`
+  container against that fixture (`docker compose up -d --no-deps api`,
+  deliberately skipping the real `train` service's dependency on the
+  actual dataset) and hits real endpoints for real responses:
+  `GET /health`, `POST /score` (a known synthetic `SK_ID_CURR`), and
+  `POST /apply` (a new applicant) all asserted for a genuine `200` with
+  a `probability` field in the body — not just "the build didn't fail."
+- **Verified locally before trusting it in CI**: ran the exact same
+  `ci-fixture` → `docker compose up -d --no-deps api` → curl sequence by
+  hand first, confirmed real 200s (including a correct `404` for an
+  unknown `SK_ID_CURR`), then wired it into
+  [`.github/workflows/ci.yml`](.github/workflows/ci.yml) as a second job
+  (`docker-smoke-test`) alongside the existing lint/test job.
+
+### Chunk 6 (cloud deployment)
+
+Planned, not yet built. Full breakdown (including *why* AWS Lambda over
+SageMaker/ECS for the eventual free-tier deployment) is tracked outside
+this README for now and will be folded in here once it lands.
 
 ## Testing & CI
 

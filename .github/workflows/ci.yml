@@ -27,3 +27,56 @@ jobs:
 
       - name: Run tests
         run: uv run pytest -q
+
+  # HC-M4-14 — real CI for the serving artifact, not just the library
+  # code above. Builds the actual Docker image and starts it for real,
+  # rather than just checking the build succeeds. The real dataset
+  # (~2.9 GB, gitignored, Kaggle credentials required) isn't available
+  # here, so `ci-fixture` (docker-compose.yml) trains a tiny, fully
+  # synthetic model + feature store first -- the same synthetic-table
+  # pattern already used in tests/test_pipeline.py -- specifically so
+  # this job can hit real endpoints and assert real 200 responses
+  # instead of skipping the check.
+  docker-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build images
+        run: docker compose build ci-fixture api
+
+      - name: Build synthetic model + feature store
+        run: docker compose run --rm ci-fixture
+
+      - name: Start API (skip the real `train` service — no dataset here)
+        run: docker compose up -d --no-deps api
+
+      - name: Wait for health check
+        run: |
+          for i in $(seq 1 20); do
+            if curl -sf http://localhost:8000/health; then exit 0; fi
+            sleep 2
+          done
+          echo "API never became healthy" >&2
+          exit 1
+
+      - name: Smoke test POST /score (known synthetic applicant)
+        run: |
+          curl -sf -X POST http://localhost:8000/score \
+            -H "Content-Type: application/json" \
+            -d '{"sk_id_curr": 100}' | tee /dev/stderr | grep -q '"probability"'
+
+      - name: Smoke test POST /apply (new applicant)
+        run: |
+          curl -sf -X POST http://localhost:8000/apply \
+            -H "Content-Type: application/json" \
+            -d '{"amt_income_total": 100000, "amt_credit": 400000, "amt_annuity": 20000, "amt_goods_price": 380000, "age_years": 35, "is_employed": true, "years_employed": 5, "cnt_children": 0, "code_gender": "F", "name_education_type": "Higher education", "name_family_status": "Married", "name_housing_type": "House / apartment", "flag_own_car": "N", "flag_own_realty": "Y", "credit_standing": "good"}' \
+            | tee /dev/stderr | grep -q '"probability"'
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

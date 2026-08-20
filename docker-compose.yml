@@ -27,6 +27,21 @@ services:
         "python /app/scripts/materialize_features.py && python /app/scripts/train_with_mlflow.py",
       ]
 
+  # HC-M4-14 — CI only. Builds a tiny, fully synthetic model + feature
+  # store (same synthetic-table pattern as tests/test_pipeline.py) so CI
+  # can start the real `api` container and hit real endpoints, without
+  # needing the ~2.9 GB Kaggle dataset or any credentials. Never use this
+  # for anything except a smoke test -- `train` above is the real thing.
+  ci-fixture:
+    build: .
+    working_dir: /app/mlflow_data
+    volumes:
+      - ./data/processed:/app/data/processed
+      - mlflow_data:/app/mlflow_data
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:////app/mlflow_data/mlflow.db
+    entrypoint: ["python", "/app/scripts/build_smoke_test_fixture.py"]
+
   api:
     build: .
     working_dir: /app/mlflow_data
