@@ -36,6 +36,7 @@ with a business-driven decision threshold (0.485, chosen against an explicit
 - [Getting started](#getting-started)
 - [Data pipeline](#data-pipeline)
 - [Modeling pipeline](#modeling-pipeline)
+- [MLOps & deployment (Milestone 4)](#mlops--deployment-milestone-4)
 - [Testing & CI](#testing--ci)
 - [Tech stack](#tech-stack)
 - [Known limitations & future work](#known-limitations--future-work)
@@ -167,6 +168,9 @@ flowchart TD
 
 ✅ **Milestone 1** (data understanding + baseline modeling) — complete.
 ✅ **Milestone 3** (feature engineering, modeling, error analysis) — complete.
+🚧 **Milestone 4** (MLOps & deployment — model registry, feature store,
+serving, monitoring, cloud deployment) — in progress, built one reviewed
+chunk at a time. See [MLOps & deployment](#mlops--deployment-milestone-4).
 ⬜ Kaggle competition submission — not yet attempted (this project's scope so
 far is a rigorously validated local pipeline, not a leaderboard score).
 
@@ -386,6 +390,59 @@ threshold (~0.65–0.70) or the untested default of 0.5.
   model, feature, and validation limitations and concrete future
   improvements. See [Known limitations](#known-limitations--future-work).
 
+## MLOps & deployment (Milestone 4)
+
+Everything above produces a *validated* model; nothing in Milestones 1–3
+can actually serve a prediction. Milestone 4 closes that gap with a real
+MLOps stack — a model registry, a feature store, a served API, monitoring,
+and (last) a cloud deployment — built as six independently-reviewed
+chunks (`HC-M4-*`), one at a time, rather than all at once.
+
+**Architecture discipline applied throughout**: Clean Architecture's
+Dependency Rule. Business logic (`domain/`, `application/`) never imports
+an infrastructure library directly — it depends on small, explicit
+interfaces (`domain/ports.py`), and concrete tools (MLflow, and later
+Feast/FastAPI) live behind adapters that implement them. This means, for
+example, that swapping the feature store implementation later requires
+touching zero lines in the code that actually decides how to score an
+applicant.
+
+### Chunk 1 — Experiment tracking & model registry (`HC-M4-01`–`03`) ✅
+
+- **Why**: before this chunk, the "final model" was a single loose
+  `models/lightgbm_final_pipeline.joblib` file with no version history and
+  no record of what parameters/metrics produced it beyond this README.
+- **What**: a `ModelRegistry` port (`src/home_credit_default_risk/domain/ports.py`)
+  and an MLflow-backed adapter
+  (`src/home_credit_default_risk/adapters/mlflow_registry.py`) that logs
+  every training run's parameters and metrics, versions the fitted
+  pipeline, and promotes a version to a `production` alias.
+  `scripts/train_with_mlflow.py` runs the exact same training recipe as
+  `scripts/train_final_model.py` (shared, not duplicated) through this
+  registry instead of a loose file.
+- **A real dependency conflict, resolved and documented rather than
+  silently worked around** (this project's established pattern — see
+  `ydata-profiling` in [Data pipeline](#data-pipeline)): the full `mlflow`
+  package requires `pandas<3`, incompatible with this project's
+  `pandas>=3.0.5`. Solved with `mlflow-skinny` (no such pin) plus a small
+  `mlflow.pyfunc` wrapper in place of the unavailable `mlflow.sklearn`
+  flavor — same registry functionality, no dependency conflict.
+- **Verified for real**, not just unit-tested: ran
+  `scripts/train_with_mlflow.py` against the actual 246,008-row
+  development pool, confirmed the registered model is retrievable via
+  `mlflow.client.MlflowClient.get_model_version_by_alias` and returns
+  real, valid probabilities (`[0, 1]`) for real applicants — plus 4 new
+  unit tests (`tests/test_mlflow_registry.py`) against a temporary SQLite
+  store, none of which touch the real dataset.
+
+### Chunks 2–6 (feature store, serving, monitoring, CI/CD, cloud deployment)
+
+Planned, not yet built — each is its own reviewed chunk before the next
+starts. Full breakdown (including *why* AWS Lambda over SageMaker/ECS for
+the eventual free-tier deployment, and the Feast-vs-hand-rolled fallback
+decision for the feature store) is tracked outside this README for now
+and will be folded in here as each chunk lands.
+
 ## Testing & CI
 
 ```bash
@@ -410,6 +467,7 @@ being present.
 | Notebooks | JupyterLab |
 | Quality | Ruff (lint + format), pytest, GitHub Actions CI |
 | Data source | KaggleHub |
+| MLOps (Milestone 4) | MLflow (mlflow-skinny — tracking + model registry), SQLAlchemy (registry backend) |
 
 ## Known limitations & future work
 

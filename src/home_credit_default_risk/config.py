@@ -34,3 +34,10 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 CACHE_DB = REPORTS_DIR / "data_profile" / ".landing_cache.duckdb"
 SPLIT_PATH = DATA_INTERIM_DIR / "train_valid_split.csv"
 EXPERIMENTS_PATH = REPORTS_DIR / "experiments.csv"
+
+# Milestone 4 (`HC-M4-*`) — model registry. SQLite backend (not the
+# default local file store) because the MLflow Model Registry's alias
+# API requires a database-backed tracking store, not just run logging.
+MLFLOW_TRACKING_URI = f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}"
+MLFLOW_MODEL_NAME = "home_credit_lightgbm"
+MLFLOW_PRODUCTION_ALIAS = "production"

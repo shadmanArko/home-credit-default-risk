@@ -85,3 +85,14 @@ reports/data_profile/*.duckdb.wal
 !reports/data_quality_summary.md
 !reports/reproducibility_check.md
 !reports/experiments.csv
+
+# ============================================================
+# MLflow (Milestone 4 — HC-M4-01..03)
+# ============================================================
+
+# Local SQLite tracking store + artifact store — regenerate via
+# scripts/train_with_mlflow.py, never committed (same reasoning as the
+# DuckDB landing cache above: large, regenerable, not source of truth).
+mlflow.db
+mlruns/
+mlartifacts/

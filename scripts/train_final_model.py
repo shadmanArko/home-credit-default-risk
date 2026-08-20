@@ -5,6 +5,11 @@ same feature matrix, same untuned `LGBMClassifier` defaults, same
 `random_state` -- as a standalone, importable step so the final model can
 be regenerated without re-running the whole notebook (including its
 one-time hyperparameter search).
+
+`load_development_data()` and `build_final_pipeline()` are also imported
+directly by `scripts/train_with_mlflow.py` (`HC-M4-03`) -- one training
+recipe, two ways to persist the result (a loose joblib file here, the
+MLflow Model Registry there), per this project's DRY discipline.
 """
 
 import time
@@ -26,7 +31,8 @@ FINAL_MODEL_PARAMS = {
 MODEL_PATH = config.PROJECT_ROOT / "models" / "lightgbm_final_pipeline.joblib"
 
 
-def main() -> None:
+def load_development_data() -> tuple[pd.DataFrame, pd.Series]:
+    """Load and feature-engineer the development pool (`HC-M3-09`/`20`)."""
     con = duckdb.connect(str(config.CACHE_DB), read_only=True)
     application_train = con.sql("SELECT * FROM application_train").df()
     con.close()
@@ -43,13 +49,22 @@ def main() -> None:
 
     y = development["TARGET"]
     X = feature_matrix.drop(columns=["SK_ID_CURR"])
+    return X, y
 
-    pipeline = Pipeline(
+
+def build_final_pipeline(X: pd.DataFrame) -> Pipeline:
+    """The frozen `HC-M3-19` configuration, unfitted."""
+    return Pipeline(
         steps=[
             ("preprocess", build_preprocessor(X)),
             ("classify", LGBMClassifier(**FINAL_MODEL_PARAMS)),
         ]
     )
+
+
+def main() -> None:
+    X, y = load_development_data()
+    pipeline = build_final_pipeline(X)
 
     start = time.time()
     pipeline.fit(X, y)
