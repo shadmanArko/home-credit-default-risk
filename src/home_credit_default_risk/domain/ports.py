@@ -66,3 +66,15 @@ class FeatureStore(ABC):
         id outside the dataset this store was built from) — a scoring use
         case must decide how to handle that, not this port.
         """
+
+    @abstractmethod
+    def get_default_features(self) -> dict[str, Any]:
+        """`HC-M4-19` — a template feature row for an applicant this
+        store has never seen: every known column present, each set to
+        its correct "no data" value (`0` for count-style columns,
+        `NaN`/`None` for everything else) -- the same representation a
+        real applicant with no bureau/previous-loan history already gets
+        from `build_historical_features()`. A brand-new-applicant use
+        case overlays real answers onto this template rather than
+        needing a second, parallel notion of "empty."
+        """

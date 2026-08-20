@@ -218,12 +218,24 @@ home-credit-default-risk/
 │   └── 04_modeling.ipynb              # HC-M3-08..29 — CV, tuning, holdout, error analysis
 │
 ├── src/home_credit_default_risk/      # Importable package — not notebook-only logic
-│   ├── config.py                      # Single source of truth: seed, split, CV, metric
+│   ├── config.py                      # Single source of truth: seed, split, CV, metric, MLOps config
 │   ├── features.py                    # Ratio/age/employment feature engineering
 │   ├── aggregations.py                # bureau / previous_application / payment-history aggregations
 │   ├── pipeline.py                    # build_feature_matrix() + leakage-safe build_preprocessor()
 │   ├── cv.py                          # Stratified K-fold CV harness
-│   └── utils.py                       # safe_divide() and other shared helpers
+│   ├── utils.py                       # safe_divide() and other shared helpers
+│   ├── domain/                        # HC-M4 — pure business logic, zero third-party imports
+│   │   ├── ports.py                   #   FeatureStore, ModelRegistry (abstract interfaces)
+│   │   └── scoring.py                 #   decide() — the HC-M3-25 threshold, applied
+│   ├── application/                   # HC-M4 — use cases orchestrating the ports
+│   │   ├── score.py                   #   ScoreApplicantUseCase — known SK_ID_CURR
+│   │   └── score_new_applicant.py     #   ScoreNewApplicantUseCase — brand-new applicant
+│   └── adapters/                      # HC-M4 — concrete implementations of the ports
+│       ├── mlflow_registry.py         #   MlflowModelRegistry (cached, versioned model loads)
+│       ├── local_store.py             #   LocalFeatureStore (Feast evaluated + rejected, see below)
+│       └── api/
+│           ├── main.py                #   FastAPI composition root — /score, /apply, /health
+│           └── static/index.html      #   One-page demo form, served at "/"
 │
 ├── scripts/
 │   ├── download_data.py               # Kaggle → data/raw/
@@ -231,11 +243,18 @@ home-credit-default-risk/
 │   ├── build_data_dictionary.py       # Profiles + official docs → reports/data_dictionary.md
 │   ├── generate_data_quality_summary.py  # Duplicate/orphan-rate scorecard across all tables
 │   ├── generate_eda_report.py         # Sweetviz train-vs-test drift report
-│   └── train_final_model.py           # Reproduces HC-M3-20's fit, saves models/*.joblib
+│   ├── train_final_model.py           # Reproduces HC-M3-20's fit, saves models/*.joblib
+│   ├── train_with_mlflow.py           # Same fit, registered + promoted via MLflow instead
+│   ├── materialize_features.py        # Builds the offline feature store (Parquet)
+│   ├── benchmark_feature_lookup.py    # Real before/after feature-lookup timing
+│   └── score_batch.py                 # Batch-scoring CLI composition root
 │
-├── tests/                             # 39 tests — config, features, aggregations, pipeline, CV, utils
+├── tests/                             # 67 tests — package code + FastAPI route logic
 │
 ├── models/                            # Trained artifacts (gitignored — regenerate via the script above)
+│
+├── Dockerfile                         # Serving image (FastAPI + Uvicorn)
+├── docker-compose.yml                 # `train` (materialize + register) + `api` (serve) services
 │
 ├── reports/
 │   ├── data_profile/*.json            # Per-table profiles (committed; cache DB is gitignored)
@@ -270,6 +289,15 @@ uv run pytest -q
 
 # 5. Regenerate the final model artifact without re-running the full notebook
 uv run python scripts/train_final_model.py
+
+# 6. Or run the full served API in Docker (materializes features, trains
+#    + registers the model, then serves it on http://localhost:8000)
+docker compose up -d api
+curl -X POST localhost:8000/score -H "Content-Type: application/json" \
+  -d '{"sk_id_curr": 100001}'
+
+# 7. Or open http://localhost:8000/ in a browser for a one-page demo
+#    form that scores a brand-new applicant (POST /apply under the hood)
 ```
 
 ## Data pipeline
@@ -474,7 +502,115 @@ applicant.
   path, out of scope for a local, single-node demo) before being
   scoreable. Documented here, not discovered later.
 
-### Chunks 3–6 (serving, monitoring, CI/CD, cloud deployment)
+### Chunk 3 — Serving: FastAPI + Docker (`HC-M4-08`–`11`) ✅
+
+- **`domain/scoring.py`**: a pure `decide(probability, threshold)` function
+  and a frozen `Decision` dataclass — the `HC-M3-25` threshold (0.485) now
+  lives here as an explicit business rule, not a magic number scattered
+  across entrypoints.
+- **`application/score.py`**: `ScoreApplicantUseCase`, constructed with a
+  `FeatureStore` and a `ModelRegistry` (both ports, injected — never a
+  concrete Feast/MLflow import). It fetches an applicant's materialized
+  features, applies `HC-M3-05`'s `add_basic_features()` (the ratio/age
+  features were never part of the feature store, since they were never
+  the bottleneck `HC-M4-04` identified), scores via the registered model,
+  and applies the decision threshold. **This is the only place in the
+  codebase that knows any of that** — every entrypoint below just calls
+  `use_case.score(sk_id_curr)`.
+- **Two composition roots sharing that one use case**: a FastAPI app
+  (`adapters/api/main.py`, `POST /score` + `GET /health`, using FastAPI's
+  native dependency injection so tests can substitute a fake use case via
+  `app.dependency_overrides` without touching real infrastructure) and a
+  batch CLI (`scripts/score_batch.py`) — neither imports the other, and
+  neither contains scoring logic of its own.
+- **A real, measured inefficiency found and fixed while wiring this up**:
+  the use case originally called `ModelRegistry.get_production_model()`
+  on every single scoring request, which reloaded the model artifact from
+  MLflow on every call. Fixed at the adapter layer (`MlflowModelRegistry`
+  now caches the loaded model, keyed by registered version, and only
+  reloads when a newer version has actually been promoted) — a
+  performance fix that required zero changes to the use case or any
+  entrypoint, exactly the point of keeping infrastructure concerns behind
+  the port.
+- **Dockerized** (`Dockerfile` + `docker-compose.yml`): a `train` service
+  materializes the feature store and registers the model *inside the
+  container's own filesystem*, and an `api` service serves it. Two real,
+  non-obvious problems surfaced and fixed while getting this actually
+  running (not just written):
+  1. **`python:3.12-slim` is missing `libgomp1`** (LightGBM/XGBoost's
+     OpenMP runtime dependency) — the same class of gap this project hit
+     locally on macOS with `libomp`. Fixed with one `apt-get install`
+     layer.
+  2. **MLflow's local SQLite backend bakes in absolute host paths** for
+     every artifact at write time — training on the host and mounting
+     the result into a container would give the container an unresolvable
+     path. Fixed by running training *inside* the container context
+     (`working_dir` set to the persisted volume, so MLflow's CWD-relative
+     default artifact root lands inside it) rather than on the host.
+  3. **Loading a registered model isn't actually read-only**: MLflow's
+     artifact-repo implementation writes a small metadata sidecar file
+     into the model's own directory on every load, not just on
+     write — discovered as a real `OSError` under a `:ro` volume mount,
+     not assumed in advance.
+- **Verified for real**: built both images, ran `docker compose run --rm
+  train` (materializes 356,255 applicants' features, trains, registers,
+  promotes — all inside the container), then `docker compose up -d api`
+  and hit it with real `curl` requests — `POST /score` for two real
+  applicants returned real probabilities (0.325 and 0.798, correctly
+  classified against the 0.485 threshold), an unknown `SK_ID_CURR`
+  correctly returned `404`, and a malformed payload correctly returned
+  `422`.
+
+### Chunk 3B — New-applicant scoring + a one-page demo (`HC-M4-19`–`24`) ✅
+
+`ScoreApplicantUseCase` only scores applicants already in the Kaggle
+dataset, looked up by `SK_ID_CURR`. This chunk adds the other real case:
+a genuinely new person, never seen before, filling out a loan
+application — plus a live one-page form to demo it.
+
+- **The design insight**: a brand-new applicant has no bureau/previous-
+  loan history — but `aggregations.py` already represents "no history"
+  correctly for real applicants (count columns `0`, ratio columns
+  `NaN`). `FeatureStore.get_default_features()` (a new port method)
+  exposes that same "no data" template; `ScoreNewApplicantUseCase`
+  overlays the demo form's ~14 fields on top of it and runs the *same*
+  `add_basic_features()` and `domain/scoring.decide()` Chunk 3 already
+  built. No fake bureau call, no new domain logic.
+- **A real finding that changed the design**: tested the use case
+  against the real model with a "strong" applicant profile (high
+  income, homeowner, 15 years employed) and a deliberately extreme
+  "worst case" (very low income, huge requested credit, unemployed, 5
+  children) — neither crossed the decision threshold. Root cause:
+  `EXT_SOURCE_1/2/3` (bureau credit scores) drive ~48% of the model's
+  decision (`HC-M3-26`) and are unavailable for a truly new applicant, so
+  every demo submission had them imputed to the same default, compressing
+  every outcome into a narrow low-to-medium-risk band regardless of the
+  other inputs. Fixed by adding one extra field — "estimated credit
+  bureau standing" (Poor/Fair/Good/Excellent, mapped to representative
+  `EXT_SOURCE` values spanning the real observed range) — after which
+  the same base profile produces a real, dramatic, monotonic range:
+  **0.85 (poor) → 0.76 (fair) → 0.31 (good) → 0.12 (excellent)**,
+  correctly crossing the threshold. Labeled honestly in the UI as an
+  estimate, not a real bureau lookup.
+- **`Literal`-typed request validation**: every dropdown field in the
+  `POST /apply` Pydantic model uses `Literal[...]` with this dataset's
+  *actual* category strings (verified directly against the raw data, not
+  guessed) — an invalid category is rejected with `422`, not silently
+  routed into the model's "unknown category" bucket.
+- **The frontend**: a single static `index.html` (no build step, no
+  framework), served by FastAPI's own `StaticFiles` mount at `/` —
+  zero CORS configuration, zero new infrastructure. Verified with a real
+  browser: submitted the form, confirmed the result renders correctly
+  (a genuine bug was caught and fixed here — a leftover inline
+  `display: none` from the "hide previous result" step was silently
+  overriding the CSS class that should have shown it).
+- **Verified for real, in Docker**: rebuilt the image, brought up
+  `docker compose up -d api`, and confirmed all three endpoints
+  work together — `GET /` (the form), `POST /apply` (new applicant,
+  real probability), and `POST /score` (existing applicant, unaffected
+  by this chunk's changes) — before tearing everything down.
+
+### Chunks 4–6 (monitoring, CI/CD, cloud deployment)
 
 Planned, not yet built — each is its own reviewed chunk before the next
 starts. Full breakdown (including *why* AWS Lambda over SageMaker/ECS for
@@ -505,7 +641,7 @@ being present.
 | Notebooks | JupyterLab |
 | Quality | Ruff (lint + format), pytest, GitHub Actions CI |
 | Data source | KaggleHub |
-| MLOps (Milestone 4) | MLflow (mlflow-skinny — tracking + model registry), SQLAlchemy (registry backend) |
+| MLOps (Milestone 4) | MLflow (mlflow-skinny — tracking + model registry), SQLAlchemy (registry backend), FastAPI + Uvicorn (serving), Pydantic (request/response validation), Docker + Docker Compose |
 
 ## Known limitations & future work
 

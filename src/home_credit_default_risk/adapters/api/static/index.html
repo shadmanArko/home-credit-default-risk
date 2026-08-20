@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Home Credit Default Risk — Loan Application Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    max-width: 640px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    line-height: 1.4;
+  }
+  h1 { font-size: 1.4rem; }
+  p.subtitle { color: #666; margin-top: -0.5rem; }
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1rem;
+    margin-top: 1.5rem;
+  }
+  .field { display: flex; flex-direction: column; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; }
+  input, select {
+    padding: 0.4rem;
+    font-size: 1rem;
+    border: 1px solid #999;
+    border-radius: 4px;
+  }
+  button {
+    grid-column: 1 / -1;
+    padding: 0.7rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background: #2563eb;
+    color: white;
+  }
+  button:disabled { background: #999; cursor: default; }
+  #result {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 6px;
+    display: none;
+  }
+  #result.low-risk { display: block; background: #dcfce7; border: 1px solid #16a34a; }
+  #result.high-risk { display: block; background: #fee2e2; border: 1px solid #dc2626; }
+  #result h2 { margin: 0 0 0.5rem 0; font-size: 1.1rem; }
+  #result .prob { font-size: 1.8rem; font-weight: 700; }
+  #error { color: #dc2626; margin-top: 1rem; display: none; }
+  .note {
+    font-size: 0.8rem;
+    color: #666;
+    grid-column: 1 / -1;
+    margin: -0.25rem 0 0.25rem 0;
+  }
+</style>
+</head>
+<body>
+  <h1>Loan Application — Default Risk Demo</h1>
+  <p class="subtitle">
+    A demonstration of the model from
+    <a href="https://github.com/shadmanArko/home-credit-default-risk" target="_blank" rel="noopener">
+      this project</a> scoring a brand-new applicant (not looked up from the training data).
+  </p>
+
+  <form id="apply-form">
+    <div class="field">
+      <label for="amt_income_total">Annual income</label>
+      <input type="number" id="amt_income_total" min="0" step="1000" value="150000" required />
+    </div>
+    <div class="field">
+      <label for="amt_credit">Requested credit amount</label>
+      <input type="number" id="amt_credit" min="0" step="1000" value="500000" required />
+    </div>
+    <div class="field">
+      <label for="amt_annuity">Loan annuity (payment)</label>
+      <input type="number" id="amt_annuity" min="0" step="500" value="25000" required />
+    </div>
+    <div class="field">
+      <label for="amt_goods_price">Price of goods being purchased</label>
+      <input type="number" id="amt_goods_price" min="0" step="1000" value="450000" required />
+    </div>
+
+    <div class="field">
+      <label for="age_years">Age (years)</label>
+      <input type="number" id="age_years" min="18" max="100" value="35" required />
+    </div>
+    <div class="field">
+      <label for="cnt_children">Number of children</label>
+      <select id="cnt_children">
+        <option value="0" selected>0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6+</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="is_employed">Employment status</label>
+      <select id="is_employed">
+        <option value="true" selected>Currently employed</option>
+        <option value="false">Not currently employed</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="years_employed">Years at current job</label>
+      <input type="number" id="years_employed" min="0" max="60" value="5" />
+    </div>
+
+    <div class="field">
+      <label for="code_gender">Gender</label>
+      <select id="code_gender">
+        <option value="F">Female</option>
+        <option value="M">Male</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="name_family_status">Family status</label>
+      <select id="name_family_status">
+        <option value="Married" selected>Married</option>
+        <option value="Single / not married">Single / not married</option>
+        <option value="Civil marriage">Civil marriage</option>
+        <option value="Separated">Separated</option>
+        <option value="Widow">Widow</option>
+      </select>
+    </div>
+
+    <div class="field full">
+      <label for="name_education_type">Education</label>
+      <select id="name_education_type">
+        <option value="Secondary / secondary special" selected>Secondary / secondary special</option>
+        <option value="Higher education">Higher education</option>
+        <option value="Incomplete higher">Incomplete higher</option>
+        <option value="Lower secondary">Lower secondary</option>
+        <option value="Academic degree">Academic degree</option>
+      </select>
+    </div>
+
+    <div class="field full">
+      <label for="name_housing_type">Housing</label>
+      <select id="name_housing_type">
+        <option value="House / apartment" selected>House / apartment</option>
+        <option value="With parents">With parents</option>
+        <option value="Municipal apartment">Municipal apartment</option>
+        <option value="Rented apartment">Rented apartment</option>
+        <option value="Office apartment">Office apartment</option>
+        <option value="Co-op apartment">Co-op apartment</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="flag_own_car">Owns a car?</label>
+      <select id="flag_own_car">
+        <option value="N" selected>No</option>
+        <option value="Y">Yes</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="flag_own_realty">Owns property?</label>
+      <select id="flag_own_realty">
+        <option value="N" selected>No</option>
+        <option value="Y">Yes</option>
+      </select>
+    </div>
+
+    <div class="field full">
+      <label for="credit_standing">Estimated credit bureau standing (if known)</label>
+      <select id="credit_standing">
+        <option value="poor">Poor</option>
+        <option value="fair">Fair</option>
+        <option value="good" selected>Good</option>
+        <option value="excellent">Excellent</option>
+      </select>
+    </div>
+    <p class="note">
+      A brand-new applicant has no credit bureau history on file yet — this
+      field lets the demo approximate one. It's the single strongest input
+      to the model (see the project's feature-importance analysis), so
+      changing it will move the result the most.
+    </p>
+
+    <button type="submit" id="submit-btn">Check application</button>
+  </form>
+
+  <div id="result"></div>
+  <div id="error"></div>
+
+  <script>
+    const form = document.getElementById("apply-form");
+    const resultEl = document.getElementById("result");
+    const errorEl = document.getElementById("error");
+    const submitBtn = document.getElementById("submit-btn");
+    const isEmployedSelect = document.getElementById("is_employed");
+    const yearsEmployedInput = document.getElementById("years_employed");
+
+    function syncYearsEmployedEnabled() {
+      const employed = isEmployedSelect.value === "true";
+      yearsEmployedInput.disabled = !employed;
+      if (!employed) yearsEmployedInput.value = "";
+    }
+    isEmployedSelect.addEventListener("change", syncYearsEmployedEnabled);
+    syncYearsEmployedEnabled();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      resultEl.style.display = "none";
+      errorEl.style.display = "none";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Scoring...";
+
+      const isEmployed = isEmployedSelect.value === "true";
+      const payload = {
+        amt_income_total: Number(document.getElementById("amt_income_total").value),
+        amt_credit: Number(document.getElementById("amt_credit").value),
+        amt_annuity: Number(document.getElementById("amt_annuity").value),
+        amt_goods_price: Number(document.getElementById("amt_goods_price").value),
+        age_years: Number(document.getElementById("age_years").value),
+        is_employed: isEmployed,
+        years_employed: isEmployed ? Number(yearsEmployedInput.value) : null,
+        cnt_children: Number(document.getElementById("cnt_children").value),
+        code_gender: document.getElementById("code_gender").value,
+        name_education_type: document.getElementById("name_education_type").value,
+        name_family_status: document.getElementById("name_family_status").value,
+        name_housing_type: document.getElementById("name_housing_type").value,
+        flag_own_car: document.getElementById("flag_own_car").value,
+        flag_own_realty: document.getElementById("flag_own_realty").value,
+        credit_standing: document.getElementById("credit_standing").value,
+      };
+
+      try {
+        const response = await fetch("/apply", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const body = await response.json().catch(() => ({}));
+          throw new Error(body.detail ? JSON.stringify(body.detail) : `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const pct = (data.probability * 100).toFixed(1);
+        resultEl.style.display = "block";
+        resultEl.className = data.is_high_risk ? "high-risk" : "low-risk";
+        resultEl.innerHTML = `
+          <h2>${data.is_high_risk ? "Flagged as higher risk" : "Not flagged as high risk"}</h2>
+          <div class="prob">${pct}% estimated default probability</div>
+          <div>Decision threshold: ${(data.threshold * 100).toFixed(1)}%</div>
+        `;
+      } catch (err) {
+        errorEl.textContent = "Error: " + err.message;
+        errorEl.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Check application";
+      }
+    });
+  </script>
+</body>
+</html>

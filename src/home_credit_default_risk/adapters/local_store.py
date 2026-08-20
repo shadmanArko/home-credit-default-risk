@@ -18,6 +18,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from home_credit_default_risk.aggregations import COUNT_COLUMNS
 from home_credit_default_risk.domain.ports import FeatureStore
 
 
@@ -27,6 +28,11 @@ class LocalFeatureStore(FeatureStore):
         self._features_by_id = features.set_index("SK_ID_CURR").to_dict(
             orient="index"
         )
+        self._default_features = {
+            col: 0 if col in COUNT_COLUMNS else float("nan")
+            for col in features.columns
+            if col != "SK_ID_CURR"
+        }
 
     def get_online_features(self, sk_id_curr: int) -> dict:
         try:
@@ -37,3 +43,6 @@ class LocalFeatureStore(FeatureStore):
                 "Re-run scripts/materialize_features.py if this applicant "
                 "should be covered."
             ) from None
+
+    def get_default_features(self) -> dict:
+        return dict(self._default_features)

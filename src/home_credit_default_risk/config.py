@@ -13,6 +13,7 @@ drawing a new one, so there is exactly one holdout definition across the
 whole project.
 """
 
+import os
 from pathlib import Path
 
 # Holdout split (matches the Milestone 1 split, reused as-is for M3)
@@ -39,7 +40,11 @@ EXPERIMENTS_PATH = REPORTS_DIR / "experiments.csv"
 # Milestone 4 (`HC-M4-*`) — model registry. SQLite backend (not the
 # default local file store) because the MLflow Model Registry's alias
 # API requires a database-backed tracking store, not just run logging.
-MLFLOW_TRACKING_URI = f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}"
+# Overridable via the `MLFLOW_TRACKING_URI` env var (`HC-M4-11`'s Docker
+# setup needs a container-local path, not this host's absolute path).
+MLFLOW_TRACKING_URI = os.environ.get(
+    "MLFLOW_TRACKING_URI", f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}"
+)
 MLFLOW_MODEL_NAME = "home_credit_lightgbm"
 MLFLOW_PRODUCTION_ALIAS = "production"
 

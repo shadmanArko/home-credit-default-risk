@@ -41,18 +41,40 @@ class _SklearnPipelineModel(mlflow.pyfunc.PythonModel):
 
 
 class MlflowModelRegistry(ModelRegistry):
-    """`ModelRegistry` backed by an MLflow tracking server + model registry."""
+    """`ModelRegistry` backed by an MLflow tracking server + model registry.
+
+    `get_production_model()` caches the loaded model, keyed by registered
+    version -- discovered as a real cost while wiring up `HC-M4-08`'s
+    scoring use case: without caching, every single scoring call would
+    reload the model artifact from the tracking store, which is fine for
+    a one-off script but wasteful in a serving loop (`HC-M4-09`/`10`)
+    calling `get_production_model()` on every request. Each call still
+    checks the *currently aliased version number* (a cheap metadata call,
+    not an artifact download) so a newly promoted model is picked up on
+    the next call rather than staying stale until process restart.
+    """
 
     def __init__(self, tracking_uri: str, model_name: str, alias: str) -> None:
         self._tracking_uri = tracking_uri
         self._model_name = model_name
         self._alias = alias
+        self._client = MlflowClient(tracking_uri=tracking_uri)
+        self._cached_model: mlflow.pyfunc.PyFuncModel | None = None
+        self._cached_version: str | None = None
         mlflow.set_tracking_uri(tracking_uri)
 
     def get_production_model(self) -> mlflow.pyfunc.PyFuncModel:
         mlflow.set_tracking_uri(self._tracking_uri)
-        model_uri = f"models:/{self._model_name}@{self._alias}"
-        return mlflow.pyfunc.load_model(model_uri)
+        current_version = self._client.get_model_version_by_alias(
+            self._model_name, self._alias
+        ).version
+
+        if current_version != self._cached_version:
+            model_uri = f"models:/{self._model_name}@{self._alias}"
+            self._cached_model = mlflow.pyfunc.load_model(model_uri)
+            self._cached_version = current_version
+
+        return self._cached_model
 
     def register_and_promote(
         self,
@@ -78,8 +100,7 @@ class MlflowModelRegistry(ModelRegistry):
 
         model_version = mlflow.register_model(f"runs:/{run_id}/model", self._model_name)
 
-        client = MlflowClient(tracking_uri=self._tracking_uri)
-        client.set_registered_model_alias(
+        self._client.set_registered_model_alias(
             self._model_name, self._alias, model_version.version
         )
         return str(model_version.version)

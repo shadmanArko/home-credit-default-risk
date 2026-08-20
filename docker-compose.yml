@@ -1,0 +1,50 @@
+services:
+  # One-off job: materializes the feature store and trains/registers the
+  # model *inside this container's own filesystem context*. This matters
+  # because MLflow's local SQLite backend records each artifact's
+  # location as an absolute path at write time -- running training on
+  # the host would bake in host paths the `api` container can't resolve.
+  # Re-run with `docker compose run --rm train` whenever the model or
+  # feature store needs to be regenerated.
+  train:
+    build: .
+    # MLflow's default artifact root is computed relative to the
+    # process's CWD, not the tracking DB's location -- so CWD must be
+    # inside the persistent volume, or artifacts land in the container's
+    # throwaway filesystem and vanish when it exits.
+    working_dir: /app/mlflow_data
+    volumes:
+      - ./reports/data_profile:/app/reports/data_profile
+      - ./data/interim:/app/data/interim
+      - ./data/processed:/app/data/processed
+      - mlflow_data:/app/mlflow_data
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:////app/mlflow_data/mlflow.db
+    entrypoint:
+      [
+        "sh",
+        "-c",
+        "python /app/scripts/materialize_features.py && python /app/scripts/train_with_mlflow.py",
+      ]
+
+  api:
+    build: .
+    working_dir: /app/mlflow_data
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./data/processed:/app/data/processed:ro
+      # Not read-only, despite `api` only ever *loading* a model: MLflow's
+      # local artifact-repo implementation writes a small metadata sidecar
+      # file into the model's own directory on every load, not just on
+      # write -- discovered by hitting the real `OSError` this caused
+      # under a `:ro` mount, not assumed.
+      - mlflow_data:/app/mlflow_data
+    environment:
+      - MLFLOW_TRACKING_URI=sqlite:////app/mlflow_data/mlflow.db
+    depends_on:
+      train:
+        condition: service_completed_successfully
+
+volumes:
+  mlflow_data:

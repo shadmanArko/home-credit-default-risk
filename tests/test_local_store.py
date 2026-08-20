@@ -40,3 +40,36 @@ def test_get_online_features_raises_key_error_for_an_unknown_applicant(tmp_path)
 
     with pytest.raises(KeyError):
         store.get_online_features(999999)
+
+
+def test_get_default_features_zeros_count_style_columns(tmp_path):
+    store = make_store(tmp_path)
+
+    defaults = store.get_default_features()
+
+    assert defaults["bureau_credit_count"] == 0
+
+
+def test_get_default_features_leaves_non_count_columns_as_nan(tmp_path):
+    store = make_store(tmp_path)
+
+    defaults = store.get_default_features()
+
+    assert pd.isna(defaults["prev_refused_rate"])
+
+
+def test_get_default_features_excludes_the_id_column(tmp_path):
+    store = make_store(tmp_path)
+
+    defaults = store.get_default_features()
+
+    assert "SK_ID_CURR" not in defaults
+
+
+def test_get_default_features_returns_a_fresh_copy_each_call(tmp_path):
+    store = make_store(tmp_path)
+
+    defaults = store.get_default_features()
+    defaults["bureau_credit_count"] = 999
+
+    assert store.get_default_features()["bureau_credit_count"] == 0
