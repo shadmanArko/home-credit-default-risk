@@ -30,6 +30,7 @@ PRIMARY_METRIC = "roc_auc"
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DATA_RAW_DIR = PROJECT_ROOT / "data" / "raw"
 DATA_INTERIM_DIR = PROJECT_ROOT / "data" / "interim"
+DATA_PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 CACHE_DB = REPORTS_DIR / "data_profile" / ".landing_cache.duckdb"
 SPLIT_PATH = DATA_INTERIM_DIR / "train_valid_split.csv"
@@ -41,3 +42,11 @@ EXPERIMENTS_PATH = REPORTS_DIR / "experiments.csv"
 MLFLOW_TRACKING_URI = f"sqlite:///{PROJECT_ROOT / 'mlflow.db'}"
 MLFLOW_MODEL_NAME = "home_credit_lightgbm"
 MLFLOW_PRODUCTION_ALIAS = "production"
+
+# Milestone 4 (`HC-M4-04`..`07`) — feature store. A materialized Parquet
+# file (offline store) that `LocalFeatureStore` loads for fast online
+# lookups -- Feast was evaluated and rejected (every released version
+# requires `pandas<3`, the same class of conflict as `ydata-profiling`
+# and the full `mlflow` package; unlike MLflow, Feast has no "skinny"
+# escape hatch since pandas is load-bearing in its core, not optional).
+FEATURE_STORE_PATH = DATA_PROCESSED_DIR / "historical_features.parquet"

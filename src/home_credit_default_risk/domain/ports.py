@@ -41,3 +41,28 @@ class ModelRegistry(ABC):
 
         Returns the new version identifier.
         """
+
+
+class FeatureStore(ABC):
+    """Fast, per-applicant lookup of precomputed historical features.
+
+    `HC-M4-04`'s reason to exist: `build_historical_features()`
+    (`aggregations.py`) recomputes a full-table aggregation over
+    `bureau`/`previous_application`/payment-history every time it runs,
+    even for a single applicant, because none of those SQL queries are
+    scoped by id up front. That's fine for a one-time batch (`HC-M3-09`)
+    and wrong for scoring one applicant on demand. A `FeatureStore`
+    separates "compute the aggregates" (still `aggregations.py`, run
+    once by a materialization job) from "look one applicant's result up
+    fast" (this port).
+    """
+
+    @abstractmethod
+    def get_online_features(self, sk_id_curr: int) -> dict[str, Any]:
+        """Return the named historical features already materialized for
+        this applicant.
+
+        Raises `KeyError` if `sk_id_curr` was never materialized (e.g. an
+        id outside the dataset this store was built from) — a scoring use
+        case must decide how to handle that, not this port.
+        """

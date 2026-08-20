@@ -435,12 +435,50 @@ applicant.
   unit tests (`tests/test_mlflow_registry.py`) against a temporary SQLite
   store, none of which touch the real dataset.
 
-### Chunks 2–6 (feature store, serving, monitoring, CI/CD, cloud deployment)
+### Chunk 2 — Feature store (`HC-M4-04`–`07`) ✅
+
+- **Why**: `build_historical_features()` (`aggregations.py`, `HC-M3-06`)
+  recomputes a full-table aggregation over `bureau`/`previous_application`/
+  payment-history *every time it runs* — fine for a one-time batch, wrong
+  for scoring one applicant on demand. There was no fast path to one
+  applicant's feature vector before this chunk.
+- **Feast was evaluated and rejected**: every released version (`0.20`
+  through `0.65`, the full available range) requires `pandas<3`,
+  incompatible with this project's `pandas>=3.0.5` — the same class of
+  conflict as `ydata-profiling` and the full `mlflow` package, except
+  Feast has no "skinny" escape hatch since pandas is load-bearing in its
+  core, not an optional extra. Documented rather than silently worked
+  around, per this project's standing practice.
+- **What was built instead, behind the same `FeatureStore` port**
+  (`domain/ports.py`) so nothing above this seam would need to change
+  regardless of which adapter satisfies it (Liskov Substitution): a
+  materialization script (`scripts/materialize_features.py`) that runs
+  `build_historical_features()` **once**, now over *every* applicant in
+  `application_train` **and** `application_test` (356,255 rows, not just
+  the 246,008-row development pool) and writes the result to
+  `data/processed/historical_features.parquet` — this project's offline
+  feature store. `LocalFeatureStore`
+  (`src/home_credit_default_risk/adapters/local_store.py`) loads that
+  file once and serves O(1) in-memory lookups by `SK_ID_CURR` — the
+  online store.
+- **Real, measured result** (`scripts/benchmark_feature_lookup.py`):
+  recomputing one applicant's features from the raw tables takes
+  **~650–930ms**; looking that same applicant up in `LocalFeatureStore`
+  takes **~0.013ms** — a **~50,000–70,000× speedup**, run twice to check
+  it wasn't a fluke. This is the concrete fix for the exact bottleneck
+  identified in this chunk's own "why."
+- **Honest scope limit, stated rather than hidden**: this store only
+  covers applicants already present in the raw Kaggle tables (train +
+  test) — a genuinely new applicant with no landed history row would
+  need `materialize_features.py` re-run (or a true incremental-update
+  path, out of scope for a local, single-node demo) before being
+  scoreable. Documented here, not discovered later.
+
+### Chunks 3–6 (serving, monitoring, CI/CD, cloud deployment)
 
 Planned, not yet built — each is its own reviewed chunk before the next
 starts. Full breakdown (including *why* AWS Lambda over SageMaker/ECS for
-the eventual free-tier deployment, and the Feast-vs-hand-rolled fallback
-decision for the feature store) is tracked outside this README for now
+the eventual free-tier deployment) is tracked outside this README for now
 and will be folded in here as each chunk lands.
 
 ## Testing & CI
