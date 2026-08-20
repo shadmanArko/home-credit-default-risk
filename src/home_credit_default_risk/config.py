@@ -55,3 +55,8 @@ MLFLOW_PRODUCTION_ALIAS = "production"
 # and the full `mlflow` package; unlike MLflow, Feast has no "skinny"
 # escape hatch since pandas is load-bearing in its core, not optional).
 FEATURE_STORE_PATH = DATA_PROCESSED_DIR / "historical_features.parquet"
+
+# Milestone 4 (`HC-M4-12`/`13`) — monitoring. Generated drift reports live
+# here, same "generated reports live in reports/" convention as the rest
+# of this project's artifacts.
+MONITORING_DIR = REPORTS_DIR / "monitoring"

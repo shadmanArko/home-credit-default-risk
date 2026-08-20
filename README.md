@@ -610,7 +610,40 @@ application — plus a live one-page form to demo it.
   real probability), and `POST /score` (existing applicant, unaffected
   by this chunk's changes) — before tearing everything down.
 
-### Chunks 4–6 (monitoring, CI/CD, cloud deployment)
+### Chunk 4 — Monitoring & drift detection (`HC-M4-12`/`13`) ✅
+
+- **What was compared**: the development pool (246,008 rows, everything
+  the model was trained/CV'd on) against `application_test` (48,744
+  rows) — the one batch in this entire dataset that has never been used
+  for training, tuning, or the `HC-M3-21` holdout evaluation, making it
+  the honest choice for a drift baseline. Both feature drift (149
+  engineered columns) and prediction drift (the registered model's
+  output probability, added as one more column) are checked together
+  via Evidently's `DataDriftPreset` — one report, not two.
+- **Real result**: **dataset drift not detected** (15 of 150 columns
+  drifted, 10% — well under the 50% dataset-level threshold), with the
+  drifted columns concentrated in loan-amount fields and credit ratios
+  (`credit_to_annuity`, `AMT_CREDIT`, `AMT_ANNUITY`, and several
+  `AMT_REQ_CREDIT_BUREAU_*` columns). More importantly, **prediction
+  drift is not detected either, and by a wide margin** — the predicted-
+  probability Wasserstein distance is 0.031 against Evidently's own 0.1
+  alert threshold (mean probability 0.392 → 0.386). Despite real,
+  measured feature-level drift, the model's actual risk output for the
+  population barely moved. Full write-up:
+  [`reports/monitoring/drift_report_notes.md`](reports/monitoring/drift_report_notes.md).
+- **`HC-M4-13` — what would trigger retraining in a real deployment**:
+  prediction drift (not feature drift) as the primary signal, alerting
+  at the same 0.1 Wasserstein threshold Evidently defaults to, checked
+  weekly against a rolling window of scored applicants; dataset drift
+  share as a secondary, earlier warning signal. When it fires, a new
+  training run goes through the `HC-M4-01`–`03` MLflow registry
+  infrastructure already built — logged, versioned, evaluated on the
+  same CV/holdout discipline as every model in this project — but
+  **not auto-promoted**: given a lending model's regulatory/financial
+  stakes, promotion requires a human comparing the new model's metrics
+  against the currently deployed version first.
+
+### Chunks 5–6 (CI/CD, cloud deployment)
 
 Planned, not yet built — each is its own reviewed chunk before the next
 starts. Full breakdown (including *why* AWS Lambda over SageMaker/ECS for
@@ -620,7 +653,7 @@ and will be folded in here as each chunk lands.
 ## Testing & CI
 
 ```bash
-uv run pytest -q      # 39 tests — config, features, aggregations, pipeline, CV, package
+uv run pytest -q      # 67 tests — package code, use cases, FastAPI routes
 uv run ruff check .   # Linting
 ```
 
@@ -641,7 +674,7 @@ being present.
 | Notebooks | JupyterLab |
 | Quality | Ruff (lint + format), pytest, GitHub Actions CI |
 | Data source | KaggleHub |
-| MLOps (Milestone 4) | MLflow (mlflow-skinny — tracking + model registry), SQLAlchemy (registry backend), FastAPI + Uvicorn (serving), Pydantic (request/response validation), Docker + Docker Compose |
+| MLOps (Milestone 4) | MLflow (mlflow-skinny — tracking + model registry), SQLAlchemy (registry backend), FastAPI + Uvicorn (serving), Pydantic (request/response validation), Docker + Docker Compose, Evidently (drift monitoring) |
 
 ## Known limitations & future work
 

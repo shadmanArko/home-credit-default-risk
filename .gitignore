@@ -86,6 +86,13 @@ reports/data_profile/*.duckdb.wal
 !reports/reproducibility_check.md
 !reports/experiments.csv
 
+# Drift monitoring (HC-M4-12/13) — the generated HTML report itself is a
+# large, regenerable Evidently bundle, same reasoning as the Sweetviz
+# report above; the write-up interpreting it is the versioned artifact.
+!reports/monitoring/
+reports/monitoring/*.html
+!reports/monitoring/drift_report_notes.md
+
 # ============================================================
 # MLflow (Milestone 4 — HC-M4-01..03)
 # ============================================================
