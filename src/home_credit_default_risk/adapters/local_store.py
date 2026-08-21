@@ -25,9 +25,12 @@ from home_credit_default_risk.domain.ports import FeatureStore
 class LocalFeatureStore(FeatureStore):
     def __init__(self, parquet_path: Path) -> None:
         features = pd.read_parquet(parquet_path)
-        self._features_by_id = features.set_index("SK_ID_CURR").to_dict(
-            orient="index"
-        )
+        # Indexing is cheap; eagerly converting all rows to a dict-of-dicts
+        # is not -- `to_dict(orient="index")` on the real ~356k-row store
+        # measured at ~10.5s, most of a Lambda cold start's time budget for
+        # a store that only ever needs one row per request. Row lookup is
+        # deferred to `get_online_features` instead.
+        self._features = features.set_index("SK_ID_CURR")
         self._default_features = {
             col: 0 if col in COUNT_COLUMNS else float("nan")
             for col in features.columns
@@ -36,7 +39,7 @@ class LocalFeatureStore(FeatureStore):
 
     def get_online_features(self, sk_id_curr: int) -> dict:
         try:
-            return self._features_by_id[sk_id_curr]
+            return self._features.loc[sk_id_curr].to_dict()
         except KeyError:
             raise KeyError(
                 f"No materialized features for SK_ID_CURR={sk_id_curr}. "
