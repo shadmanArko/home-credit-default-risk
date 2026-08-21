@@ -101,15 +101,36 @@ yourself, in your own terminal / AWS console.
   `/apply` (a new applicant, scored `0.13`, low risk) — all real 200s
   with real probabilities from the real model. This is the strongest
   pre-AWS confidence check available: the exact image that will ship.
-- Along the way, found and fixed two real container-sizing bugs the
-  local emulation caught before they'd have cost money or failed
-  silently in production:
-  - **OOM at the default 1024 MB** — `LocalFeatureStore` loads all
-    356,255 applicants into an in-memory dict at startup; fixed by
-    raising `MemorySize` to 3008 MB in `template.yaml`.
-  - **Cold start exceeding a 30s timeout** — loading the feature store
-    + opening the MLflow SQLite registry takes close to 30s on a cold
-    container; fixed by raising `Timeout` to 60s.
+- Along the way, found and fixed four real bugs — two the local
+  emulation caught, two only a real AWS deploy caught (`sam local`
+  doesn't enforce Lambda's read-only filesystem or API Gateway's timeout
+  behavior, so these were invisible until the actual thing was tested):
+  - **OOM at the default 1024 MB** (local) — `LocalFeatureStore` loads
+    all 356,255 applicants into memory at startup; fixed by raising
+    `MemorySize` to 3008 MB in `template.yaml`.
+  - **Cold start too close to a 30s timeout** (local) — loading the
+    feature store into an eager dict-of-dicts took ~10.5s on its own;
+    fixed in `local_store.py` by keeping the data as an indexed
+    DataFrame and looking up one row per request instead (~5ms) rather
+    than eagerly converting all 356k rows upfront.
+  - **API Gateway's HTTP API integration timeout is hard-capped at 29s
+    and *does* count cold-start Init time** (only found on real AWS) —
+    raising the Lambda's own `Timeout` to 60s doesn't help, since API
+    Gateway gives up first. This is why cold-start time had to actually
+    come down, not just get a longer budget.
+  - **`OSError: Read-only file system`** (only found on real AWS) —
+    Lambda's filesystem is read-only everywhere except `/tmp`, but
+    `mlflow.pyfunc.load_model()` writes a small metadata sidecar file
+    into the model's own artifact directory on every load, not just on
+    write (the same class of issue already hit and fixed for Docker
+    Compose's `:ro` mount, HC-M4-11). Fixed by copying `mlflow_data`
+    into `/tmp` at container startup (`Dockerfile.lambda`'s `CMD`) and
+    pointing `MLFLOW_TRACKING_URI` there — which in turn required
+    retraining with `working_dir: /tmp/mlflow_data` in the
+    `lambda-fixture` service, since MLflow bakes each artifact's
+    location as an absolute path computed from the CWD at training
+    time (the same "absolute path baked in" issue this project has now
+    hit three times, at three different target paths).
 
 ## The actual deploy (once you've done the account/IAM/`aws configure` steps)
 

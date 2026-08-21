@@ -42,10 +42,21 @@ RUN uv sync --frozen --no-dev
 # The real, locally-trained model + feature store -- see the file
 # header above for how these are produced.
 COPY lambda_build/data/processed ./data/processed
-COPY lambda_build/mlflow_data ./mlflow_data
+COPY lambda_build/mlflow_data ./mlflow_data_readonly
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PYTHONUNBUFFERED=1
-ENV MLFLOW_TRACKING_URI=sqlite:////app/mlflow_data/mlflow.db
+# Lambda's filesystem is read-only everywhere except /tmp -- but
+# `mlflow.pyfunc.load_model()` writes a small metadata sidecar file into
+# the model's own artifact directory on every load, not just on write
+# (the same behavior already hit and fixed for Docker Compose's `:ro`
+# mount -- see docker-compose.yml's `api` service comment). Discovered
+# as a real `OSError: Read-only file system` on the real deployed
+# Lambda, not caught by `sam local start-api` (which does not enforce
+# this constraint, unlike real Lambda). Fixed by copying the small
+# (~1 MB) mlflow_data directory into /tmp -- the one writable path on
+# Lambda -- before the app starts, and pointing MLFLOW_TRACKING_URI
+# there instead of at the read-only image layer.
+ENV MLFLOW_TRACKING_URI=sqlite:////tmp/mlflow_data/mlflow.db
 
-CMD ["uvicorn", "home_credit_default_risk.adapters.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "cp -r /app/mlflow_data_readonly /tmp/mlflow_data && exec uvicorn home_credit_default_risk.adapters.api.main:app --host 0.0.0.0 --port 8000"]

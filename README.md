@@ -168,8 +168,8 @@ flowchart TD
 
 ✅ **Milestone 1** (data understanding + baseline modeling) — complete.
 ✅ **Milestone 3** (feature engineering, modeling, error analysis) — complete.
-🚧 **Milestone 4** (MLOps & deployment — model registry, feature store,
-serving, monitoring, cloud deployment) — in progress, built one reviewed
+✅ **Milestone 4** (MLOps & deployment — model registry, feature store,
+serving, monitoring, cloud deployment) — complete, built and reviewed one
 chunk at a time. See [MLOps & deployment](#mlops--deployment-milestone-4).
 ⬜ Kaggle competition submission — not yet attempted (this project's scope so
 far is a rigorously validated local pipeline, not a leaderboard score).
@@ -689,37 +689,67 @@ application — plus a live one-page form to demo it.
   which `Dockerfile.lambda` bakes into the image at build time (Lambda
   containers have no bind mounts, unlike Compose). CI's synthetic
   `ci-fixture` model is never what gets deployed.
-- **Verified locally before touching AWS, the same discipline as every
-  other chunk**: `sam build` produces the real container image, then
-  `sam local start-api` emulates Lambda + API Gateway on the actual
-  built image and was hit with real requests — `GET /health`,
-  `POST /score` for a real known applicant (`SK_ID_CURR=100002`, scored
-  `0.83`, high risk), and `POST /apply` for a new applicant (scored
-  `0.13`, low risk). This caught two real container-sizing bugs before
-  they'd have cost money or failed silently in production:
-  - **OOM at the default 1024 MB** — `LocalFeatureStore` loads all
-    356,255 applicants into memory at startup; fixed by raising
-    `MemorySize` to 3008 MB in [`template.yaml`](template.yaml).
-  - **Cold start exceeding a 30s timeout** — loading the feature store
-    + opening the MLflow SQLite registry takes close to 30s on a cold
-    container; fixed by raising `Timeout` to 60s.
+- **Live**: https://50oifzq109.execute-api.eu-central-1.amazonaws.com/ —
+  open it directly for the one-page demo form (`HC-M4-23`), or:
+  ```bash
+  curl https://50oifzq109.execute-api.eu-central-1.amazonaws.com/health
+  curl -X POST https://50oifzq109.execute-api.eu-central-1.amazonaws.com/score \
+    -H "Content-Type: application/json" -d '{"sk_id_curr": 100002}'
+  ```
+  (If this stack has since been torn down with `sam delete` to stop
+  ongoing cost, see [`docs/aws_deployment.md`](docs/aws_deployment.md)
+  for how to redeploy it — the exact same steps that produced this URL.)
+- **Verified against the real deployment, not just locally** — every
+  earlier chunk in this project closed with real evidence, and this one
+  is no exception: `sam local start-api` emulates Lambda + API Gateway
+  locally, but doesn't enforce Lambda's read-only filesystem or API
+  Gateway's own timeout behavior, so two of the four bugs below only
+  surfaced by actually deploying and hitting the live endpoint:
+  - **OOM at the default 1024 MB** (caught locally) — `LocalFeatureStore`
+    loads all 356,255 applicants into memory at startup; fixed by
+    raising `MemorySize` to 3008 MB in [`template.yaml`](template.yaml).
+  - **Cold start too close to a 30s timeout** (caught locally) — eagerly
+    converting the whole feature store to a dict-of-dicts at startup
+    cost ~10.5s on its own; fixed in
+    [`local_store.py`](src/home_credit_default_risk/adapters/local_store.py)
+    by keeping it as an indexed DataFrame and looking up one row per
+    request instead (~5ms), rather than converting all 356k rows
+    upfront for the sake of a single lookup.
+  - **API Gateway's HTTP API integration timeout is hard-capped at 29s,
+    and it counts cold-start Init time** (only found on the real
+    deployment) — raising the Lambda's own `Timeout` to 60s did nothing,
+    since API Gateway gives up first regardless. This is why cold-start
+    time had to actually come down, not just get a longer budget.
+  - **`OSError: Read-only file system`** (only found on the real
+    deployment) — Lambda's filesystem is read-only everywhere except
+    `/tmp`, but `mlflow.pyfunc.load_model()` writes a metadata sidecar
+    file into the model's own artifact directory on every load, not
+    just on write (the same class of issue already hit and fixed for
+    Docker Compose's `:ro` mount, `HC-M4-11`). Fixed by copying
+    `mlflow_data` into `/tmp` at container startup
+    ([`Dockerfile.lambda`](Dockerfile.lambda)'s `CMD`) and retraining
+    with `working_dir: /tmp/mlflow_data` in the `lambda-fixture`
+    service — MLflow bakes each artifact's location as an absolute path
+    computed from the training-time CWD, the same "absolute path baked
+    in" class of issue this project has now hit three times, each at a
+    different target path.
+  - Real cold-start latency on the actual deployment, measured after
+    both fixes: **~20s** (comfortably under the 29s cap); warm requests:
+    **~180ms**.
 - **CD (`HC-M4-17`)**: a `deploy` job in
-  [`ci.yml`](.github/workflows/ci.yml), gated behind repo secrets that
-  don't exist yet (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
-  `AWS_REGION`, `LAMBDA_ARTIFACTS_BUCKET`), redeploys *code* changes on
-  every merge to `main`. It never retrains — the real model artifacts
-  live in a small S3 bucket (synced there manually alongside each real
-  `lambda-fixture` run) since `lambda_build/` itself is gitignored and
-  unreachable from a GitHub Actions checkout.
+  [`ci.yml`](.github/workflows/ci.yml), gated behind repo secrets
+  (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`,
+  `LAMBDA_ARTIFACTS_BUCKET`), redeploys *code* changes on every merge to
+  `main`. It never retrains — the real model artifacts live in a small
+  S3 bucket (synced there manually alongside each real `lambda-fixture`
+  run) since `lambda_build/` itself is gitignored and unreachable from a
+  GitHub Actions checkout.
 - Full step-by-step account setup (billing alarm, IAM user, `aws
   configure`, S3 bucket, repo secrets) and the actual `sam deploy` /
   teardown commands are in
   [`docs/aws_deployment.md`](docs/aws_deployment.md) — account creation,
   billing, and credential handling are all steps only the project owner
   can perform; nothing there was done on their behalf.
-- **Not yet done**: the actual `sam deploy` to a live AWS account (the
-  account itself doesn't exist yet) — once it happens, the real API
-  Gateway URL and a Cost Explorer screenshot will replace this line.
 
 ## Testing & CI
 
